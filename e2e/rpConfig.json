@@ -1,0 +1,19 @@
+{
+  "token": "c465ecf4-1ef1-4902-adca-56955ebfbef1",
+  "endpoint": "https://cxone-reportportal.niceincontact.com/api/v1",
+  "launch": "Suite-5",
+  "project": "CXQM",
+  "takeScreenshot": "onFailure",
+  "description": "Awesome launch description.",
+  "attributes": [
+    {
+      "key": "launchAttributeKey",
+      "value": "launchAttributeValue"
+    }
+  ],
+  "mode": "DEFAULT",
+  "debug": false,
+  "restClientConfig": {
+    "timeout": 0
+  }
+}
