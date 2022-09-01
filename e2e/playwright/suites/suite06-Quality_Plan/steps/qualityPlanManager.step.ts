@@ -17,7 +17,7 @@ import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
 import { AccountUtils } from "../../../../common/AccountUtils";
 
 const qualityPlanDetailsPO = new QualityPlanDetailsPO();
-const planManagerPO = new QualityPlanManagerPO(element(by.id('ng2-quality-plan-manager-page')));
+const planManagerPO = new QualityPlanManagerPO(Page.locator('ng2-quality-plan-manager-page'));
 let newGlobalTenantUtils = new GlobalTenantUtils();
 
 
@@ -44,7 +44,7 @@ let planNames = {
     four: 'Draft_Valid_Plan_Dup'
 };
 
-const omnibarPO = new OmnibarPO(element(by.tagName('cxone-omnibar')));
+const omnibarPO = new OmnibarPO(page.locator('cxone-omnibar'));
 let userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
 utils = new Utils(page);
 // let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());

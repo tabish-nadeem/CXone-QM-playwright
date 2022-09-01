@@ -39,9 +39,9 @@ newGlobalTenantUtils = new GlobalTenantUtils();
 const callDurationPO = new CallDurationPO();
 const sentimentsPO = new SentimentsPO();
 const agentBehaviourPO = new AgentBehaviorPO();
-const interactionPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
-const callDirectionPO = new CheckboxFilterPO(element(by.id('call-direction-filter')));
-const feedbackFilterPo = new FeedbackFilterPo(element(by.id('feedback-score-filter')));
+const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
+const callDirectionPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
+const feedbackFilterPo = new FeedbackFilterPo(page.locator('#feedback-score-filter'));
 utils=new Utils(page);
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
@@ -57,7 +57,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     userDetails=await newGlobalTenantUtils.getDefaultTenantCredentials();
 
     tmToken = await CommonNoUIUtils.login(protractorConfig.TM_LOGIN_EMAIL_ADDRESS, protractorConfig.TM_LOGIN_PASSWORD,true);
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP','ACD', 'WFM', 'RECORDING', 'SATMETRIX'], TM_TOKEN);
+    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP','ACD', 'WFM', 'RECORDING', 'SATMETRIX'], tmToken);
     userToken = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.MOCK_CATEGORIES, userDetails.orgName, userToken);
@@ -128,7 +128,7 @@ When("Step-1: should verify With Screen interaction button is selected by defaul
 
 Then("Step-2: should verify all the different types of interaction buttons can be selected", { timeout: 60 * 1000 }, async () => {
 
-    const checkboxFilterPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
+    const checkboxFilterPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await checkboxFilterPO.clickWithoutScreenInteractionButton();
     expect(await checkboxFilterPO.getSelectedInteractionButton()).toEqual('Without Screen');
     await checkboxFilterPO.clickAllInteractionsButton();
@@ -139,7 +139,7 @@ Then("Step-2: should verify all the different types of interaction buttons can b
 
 When("Step-1: should check that none of the channel type filters should be selected by default", { timeout: 60 * 1000 }, async () => {
 
-    const checkboxFilterPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
+    const checkboxFilterPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     expect(checkboxFilterPO.isChannelSelected('Voice')).toBeFalsy();
     expect(checkboxFilterPO.isChannelSelected('Chat')).toBeFalsy();
     expect(checkboxFilterPO.isChannelSelected('Email')).toBeFalsy();
@@ -147,7 +147,7 @@ When("Step-1: should check that none of the channel type filters should be selec
 
 Then("Step-2: should check that none of the direction type filters should be selected by default", { timeout: 60 * 1000 }, async () => {
 
-    const checkboxFilterPO = new CheckboxFilterPO(element(by.id('call-direction-filter')));
+    const checkboxFilterPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
     expect(checkboxFilterPO.isChannelDirectionSelected('Internal')).toBeFalsy();
     expect(checkboxFilterPO.isChannelDirectionSelected('Incoming')).toBeFalsy();
     expect(checkboxFilterPO.isChannelDirectionSelected('Outgoing')).toBeFalsy();
@@ -155,7 +155,7 @@ Then("Step-2: should check that none of the direction type filters should be sel
 
 Then("Step-3: should be able to set and clear channel type filters", { timeout: 60 * 1000 }, async () => {
 
-    const checkboxFilterPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
+    const checkboxFilterPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await checkboxFilterPO.toggleChannelByName('Voice');
     await checkboxFilterPO.toggleChannelByName('Chat');
     await checkboxFilterPO.toggleChannelByName('Email');
@@ -170,7 +170,7 @@ Then("Step-3: should be able to set and clear channel type filters", { timeout: 
 
 Then("Step-4: should be able to set and clear direction type filters", { timeout: 60 * 1000 }, async () => {
 
-    const checkboxFilterPO = new CheckboxFilterPO(element(by.id('call-direction-filter')));
+    const checkboxFilterPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
     await checkboxFilterPO.toggleCallDirectionByName('Internal');
     await checkboxFilterPO.toggleCallDirectionByName('Incoming');
     await checkboxFilterPO.toggleCallDirectionByName('Outgoing');
@@ -185,21 +185,21 @@ Then("Step-4: should be able to set and clear direction type filters", { timeout
 
 When("Step-1: should check that csat score checkbox should not be selected by default", { timeout: 60 * 1000 }, async () => {
 
-    const feedbackFilterPo = new FeedbackFilterPo(element(by.id('feedback-score-filter')));
+    const feedbackFilterPo = new FeedbackFilterPo(page.locator('#feedback-score-filter'));
     expect(feedbackFilterPo.isFeedbackCheckBoxSelected('csat-score-checkbox')).toBeFalsy();
 });
 
 Then("Step-2: should be able to select feedback score ranges", { timeout: 60 * 1000 }, async () => {
 
-    const feedbackFilterPo = new FeedbackFilterPo(element(by.id('feedback-score-filter')));
+    const feedbackFilterPo = new FeedbackFilterPo(page.locator('#feedback-score-filter'));
     await feedbackFilterPo.toggleFeedbackCheckBox('csat-score-checkbox');
     expect(feedbackFilterPo.isFeedbackCheckBoxSelected('csat-score-checkbox')).toBeTruthy();
     expect(await feedbackFilterPo.getMinValueScore('.csat-score-filter')).toEqual('0%');
     expect(await feedbackFilterPo.getMaxValueScore('.csat-score-filter')).toEqual('100%');
     expect(await feedbackFilterPo.getRangeText()).toEqual('0% to 100%');
-    await Utils.waitForTime(2000);
+    await utils.delay(2000);
     await feedbackFilterPo.moveFeedBackRangeSlider('.noUi-handle-lower',20);
-    await Utils.waitForTime(2000);
+    await utils.delay(2000);
     await feedbackFilterPo.moveFeedBackRangeSlider('.noUi-handle-upper',-20);
     expect(await feedbackFilterPo.getMinValueScore('.csat-score-filter')).toEqual('13%');
     expect(await feedbackFilterPo.getMaxValueScore('.csat-score-filter')).toEqual('87%');
@@ -410,9 +410,9 @@ Then("Step-3: should be able to change filters for a draft form and verify that 
 
 When("Step-1: should display interaction button filters and hide acd(email,chat) and voice channel filters when engage recording license is enabled", { timeout: 60 * 1000 }, async () => {
 
-    const recordedSegmentFilterPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
+    const recordedSegmentFilterPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ENGAGE_RECORDING'], TM_TOKEN);
+    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ENGAGE_RECORDING'], tmToken);
     console.log('Waiting for 125 second because qp service is using in-memory ft-cache which will update in every 2 min');
     await utils.delay(125000);
     await qualityPlanDetailsPO.refresh();
@@ -433,9 +433,9 @@ When("Step-1: should display interaction button filters and hide acd(email,chat)
 
 When("Step-1: should be showing only voice filter checkbox", { timeout: 60 * 1000 }, async () => {
 
-    const interactionPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
+    const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await qualityPlanDetailsPO.navigate();
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'RECORDING'], TM_TOKEN);
+    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'RECORDING'], tmToken);
     await qualityPlanDetailsPO.refresh();
     expect(await interactionPO.isChannelPresent('Voice')).toBeTruthy();
     expect(await interactionPO.isChannelPresent('Chat')).toBeFalsy();
@@ -444,9 +444,9 @@ When("Step-1: should be showing only voice filter checkbox", { timeout: 60 * 100
 
 Then("Step-2: should be showing only chat and email filter checkbox", { timeout: 60 * 1000 }, async () => {
 
-    const interactionPO = new CheckboxFilterPO(element(by.css('[id^=recorded-segment-filter]')));
+    const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await qualityPlanDetailsPO.navigate();
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD'], TM_TOKEN);
+    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD'], tmToken);
     await qualityPlanDetailsPO.refresh();
     expect(await interactionPO.isChannelPresent('Voice')).toBeFalsy();
     expect(await interactionPO.isChannelPresent('Chat')).toBeTruthy();
