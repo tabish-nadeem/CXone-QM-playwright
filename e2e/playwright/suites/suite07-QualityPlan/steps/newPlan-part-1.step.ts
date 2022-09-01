@@ -1,6 +1,6 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { AccountUtils } from '../../../../common/AccountUtils';
+import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { Utils } from '../../../../common/utils';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
@@ -126,6 +126,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      //! DataCreator.setToken(USER_TOKEN); // not got file
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName,response);
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, response);
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.userToken);
      response
 
 
