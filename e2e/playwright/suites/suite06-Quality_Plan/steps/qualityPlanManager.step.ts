@@ -102,7 +102,7 @@ Then("Step-2: Should be able to navigate to new plan page", { timeout: 180 * 100
 When("Step-1: Should check actions available on a particular plan", { timeout: 60 * 1000 }, async () => {
 
     response = await await AdminUtilsNoUI.getAllTeams(userToken);
-    team = response.teams.find(item => item.name === 'DefaultTeam');
+    team = response.teams.find((item:any) => item.name === 'DefaultTeam');
     group = await await CommonQMNoUIUtils.createGroup('User Group1', userToken);
     let agentDetails = {
         firstName: 'Alfred',

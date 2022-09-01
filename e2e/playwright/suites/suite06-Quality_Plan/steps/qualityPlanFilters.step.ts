@@ -14,7 +14,6 @@ import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
 import { LocalizationNoUI } from '../../../../common/LocalizationNoUI';
 import { Utils } from '../../../../common/utils';
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import { AccountUtils } from "../../../../common/AccountUtils";
 import {CallDurationPO} from "../../../../pageObjects/call-duration.po"
 import {CheckboxFilterPO} from "../../../../pageObjects/checkbox-filter.po"
 import {FeedbackFilterPo} from "../../../../pageObjects/feedback-filter.po"
@@ -74,6 +73,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await qualityPlanManagerPO.deleteAllPlans();
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
+    await loginPage.logout();
     await browser.close();
 });
 
