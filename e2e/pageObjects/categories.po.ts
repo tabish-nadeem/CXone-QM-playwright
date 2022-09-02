@@ -37,12 +37,12 @@ export class CategoriesPO {
     }
 
     public async getTotalSelectedCategories() {
-        return await Utils.getText(this.page.locator('.header-row span'));
+        return await this.utils.getText(this.page.locator('.header-row span'));
     }
 
     public async openCategoryModal() {
-        await Utils.click(this.page.locator('#add-categories-btn'));
-        await Utils.waitUntilVisible(this.page.locator('.category-list-modal-wrapper'));
+        await this.utils.click(this.page.locator('#add-categories-btn'));
+        await this.utils.waitUntilVisible(this.page.locator('.category-list-modal-wrapper'));
         await this.utils.delay(2000);
     }
 
@@ -65,7 +65,7 @@ export class CategoriesPO {
         if (await this.utils.isPresent(this.page.locator('#exit-yes-btn'))) {
             await this.utils.click(this.page.locator('#exit-yes-btn'));
         }
-        await Utils.waitUntilInvisible(this.page.locator('.category-list-modal-wrapper'));
+        await this.utils.waitUntilInvisible(this.page.locator('.category-list-modal-wrapper'));
         await this.utils.delay(2000);
     }
 
