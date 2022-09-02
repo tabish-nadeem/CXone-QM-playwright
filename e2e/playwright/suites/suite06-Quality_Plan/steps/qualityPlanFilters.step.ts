@@ -2,23 +2,19 @@ import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import {QualityPlanManagerPO} from "../../../../pageObjects/quality-plan-manager.po"
 import {QualityPlanDetailsPO} from "../../../../pageObjects/quality-plan-details.po"
-import {OmnibarPO} from 'cxone-components/omnibar.po';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
-import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
-import { LocalizationNoUI } from '../../../../common/LocalizationNoUI';
 import { Utils } from '../../../../common/utils';
-import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
 import {CallDurationPO} from "../../../../pageObjects/call-duration.po"
 import {CheckboxFilterPO} from "../../../../pageObjects/checkbox-filter.po"
 import {FeedbackFilterPo} from "../../../../pageObjects/feedback-filter.po"
 import {SentimentsPO} from "../../../../pageObjects/sentiment.po"
 import {AgentBehaviorPO} from "../../../../pageObjects/agent-behaviour.po"
+import {SELECTORS} from "../../../../playwright.helpers"
 
 
 let page: Page;
@@ -55,7 +51,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     loginPage = new LoginPage(page);
     userDetails=await newGlobalTenantUtils.getDefaultTenantCredentials();
 
-    tmToken = await CommonNoUIUtils.login(protractorConfig.TM_LOGIN_EMAIL_ADDRESS, protractorConfig.TM_LOGIN_PASSWORD,true);
+    tmToken = await CommonNoUIUtils.login(SELECTORS.TM_LOGIN_EMAIL_ADDRESS, SELECTORS.TM_LOGIN_PASSWORD,true);
     await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP','ACD', 'WFM', 'RECORDING', 'SATMETRIX'], tmToken);
     userToken = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);

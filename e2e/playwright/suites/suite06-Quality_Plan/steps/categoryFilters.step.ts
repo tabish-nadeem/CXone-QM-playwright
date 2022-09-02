@@ -2,25 +2,14 @@ import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import {QualityPlanManagerPO} from "../../../../pageObjects/quality-plan-manager.po"
 import {QualityPlanDetailsPO} from "../../../../pageObjects/quality-plan-details.po"
-import {OmnibarPO} from 'cxone-components/omnibar.po';
-import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
-import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
-import { LocalizationNoUI } from '../../../../common/LocalizationNoUI';
-import { Utils } from '../../../../common/utils';
-import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import {CallDurationPO} from "../../../../pageObjects/call-duration.po"
-import {CheckboxFilterPO} from "../../../../pageObjects/checkbox-filter.po"
-import {FeedbackFilterPo} from "../../../../pageObjects/feedback-filter.po"
-import {SentimentsPO} from "../../../../pageObjects/sentiment.po"
-import {AgentBehaviorPO} from "../../../../pageObjects/agent-behaviour.po"
 import {CategoriesPO} from "../../../../pageObjects/categories.po"
 import { DataCreator } from '../../../../../tests/protractor/common/data-creator';
+import {SELECTORS} from "../../../../playwright.helpers"
 
 let page: Page;
 let browser: any;
@@ -102,7 +91,7 @@ Then("Step-3: should be able to create new draft plan with category filters and 
 
 Then("Step-4: should not be able to see category filter when tenant has no QMA license", { timeout: 60 * 1000 }, async () => {
 
-    tmToken = await protractorConfig.testUtilsNoUI.login(protractorConfig.TM_LOGIN_EMAIL_ADDRESS, protractorConfig.TM_LOGIN_PASSWORD);
+    tmToken = await CommonNoUIUtils.login(SELECTORS.TM_LOGIN_EMAIL_ADDRESS, SELECTORS.TM_LOGIN_PASSWORD,true);
     await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD', 'WFM', 'RECORDING'], tmToken);
     await qualityPlanDetailsPO.refresh();
     expect(await categoriesPO.isFilterPresent()).toBeFalsy();
