@@ -248,7 +248,23 @@ export class AccountUtils {
     return error;
   }
 };
-
+static  getGroups =  async (token: any) =>{
+  try {
+    const response = await HttpUtils.sendRequest({
+      action: 'GET',
+      uri: '/group',
+      body: {
+        email: email,
+        password: password,
+        token: token
+      },
+      timeout: 60000
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
   static getRandomEmployeeDetails(seq ?: string) {
   return {
     employeeEmailAddress: 'ptor.' + (new Date().getTime()) + (seq || '') + '@wfosaas.com',

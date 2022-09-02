@@ -7,6 +7,22 @@ let strings: any
 const DEFAULT_WAIT_TIME = 25000;
 
 export class Utils {
+    static waitForTime(arg0: number) {
+         throw new Error('Method not implemented.');
+    }
+    static page: any;
+    static isSelected(arg0: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static isPresent(arg0: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static isEnabled(arg0: any): any {
+        throw new Error("Method not implemented.");
+    }
+    static waitUntilVisible(arg0: any) {
+        throw new Error('Method not implemented.');
+    }
     readonly page: Page;
    
     constructor(page: Page) {

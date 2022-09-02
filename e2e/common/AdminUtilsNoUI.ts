@@ -1,6 +1,9 @@
 import {HttpUtils} from './HttpUtils';
 
 export class AdminUtilsNoUI {
+    static getRandomEmail(arg0: number) {
+        throw new Error("Method not implemented.");
+    }
     static async createTeam (teamName, description, leadUserId, token) {
         try {
             const response: any = await HttpUtils.sendRequest({

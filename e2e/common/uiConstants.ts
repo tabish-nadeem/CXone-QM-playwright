@@ -2,6 +2,7 @@ export const FEATURE_TOGGLES = {
     MOCK_CATEGORIES: 'utility-QM-mockCategories-QM-6872',
     ANGULAR8_MIGRATION_SPRING20: 'utility-QM-angular8Upgrade-CXQM-12535',
     ANGULAR8_MIGRATION_SUMMER21: 'utility-QM-angular8Upgrade-CXQM-14354',
+    RELEASE_NAVIGATION_REDESIGN :  'release-navigation-redesign-CXCROSS-21',
     FT_EMPLOYEE_EVALUATION: 'release-QM-employee-evaluation-CXQM-18534',
     FT_EDIT_EVALUATOR: 'release-QM-QP-Edit-Evaluator-CXQM-18068',
     FT_QP_TIMEZONE_HANDLING: 'release-QM-QP-Timezone-handling-CXQM-18543',
