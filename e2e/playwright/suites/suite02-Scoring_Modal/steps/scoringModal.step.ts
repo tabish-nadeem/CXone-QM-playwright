@@ -23,6 +23,9 @@ import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { URLs } from '../../../../common/pageIdentifierURLs';
 import FormDesignerPagePO from '../../../../pageObjects/form-designer-page.po';
 import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
+import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-toolbar.component.po';
+import { ScoringModalComponentPo } from '../../../../pageObjects/scoring-modal.component.po';
+import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
 let _ = require('lodash');
 
 let formDesignerPage = new FormDesignerPagePO();
