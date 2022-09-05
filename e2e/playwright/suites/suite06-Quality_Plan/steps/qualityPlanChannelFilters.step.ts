@@ -2,8 +2,6 @@ import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import {QualityPlanManagerPO} from "../../../../pageObjects/quality-plan-manager.po"
 import {QualityPlanDetailsPO} from "../../../../pageObjects/quality-plan-details.po"
-import {OmnibarPO} from 'cxone-components/omnibar.po';
-import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
