@@ -33,7 +33,7 @@ export class fdUtils {
           return callbackFunction(text).isPresent();
      };
 
-     static isElementEnabled = async (callbackFunction, text: any) => {
+     static isElementEnabled = async (callbackFunction: (arg0: any) => any, text: any) => {
           //    var deferred = protractor.promise.defer();
           var element = callbackFunction(text);
           element.isEnabled().then(function (resp: any) {

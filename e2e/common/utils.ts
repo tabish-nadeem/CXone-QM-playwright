@@ -7,6 +7,18 @@ let strings: any
 const DEFAULT_WAIT_TIME = 25000;
 
 export class Utils {
+    static getAttribute(arg0: any, arg1: string) {
+        throw new Error('Method not implemented.');
+    }
+    static click(arg0: any) {
+         throw new Error('Method not implemented.');
+    }
+    static waitForSpinnerToDisappear() {
+        throw new Error("Method not implemented.");
+    }
+    static getText(arg0: any) {
+         throw new Error('Method not implemented.');
+    }
     static waitForTime(arg0: number) {
          throw new Error('Method not implemented.');
     }

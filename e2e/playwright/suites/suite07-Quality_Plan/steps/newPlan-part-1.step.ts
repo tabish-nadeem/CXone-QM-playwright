@@ -7,9 +7,15 @@ import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
+import {QualityPlanManagerPO} from "../../../../pageObjects/quality-plan-manager.po"
+import {QualityPlanDetailsPO} from "../../../../pageObjects/quality-plan-details.po"
+import {PlanSummaryPO} from '../../../../pageObjects/plan-summary.po'
+import {PlanDurationPO} from '../../../../pageObjects/plan-duration.po'
+import {SamplingPO}  from '../../../../pageObjects/sampling.po';
+
 import { LocalizationNoUI } from '../../../../common/LocalizationNoUI';
 import { Credentials } from "../../../../common/support";
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
 import { UserDefaultPermissions } from '../../../../common/userDefaultPermissions';
 import { TeamsAndGroupsPO } from '../quality-plan-details/teams-and-groups/teams-and-groups.po';
@@ -21,22 +27,17 @@ import { OnPrepare } from '../../../../playwright.config';
 import { Helpers } from '../../../../playwright.helpers';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { DataCreator } from "../../../../common/DataCreator";
 
 
 
-let page: Page;
+
 let browser: any;
 let context: BrowserContext;
-let loginPage: any;
-let responseDisInt: any;
-let responsePlanOcc: any;
-let utils: any;
-let plansMonitoringPO: any;
 let performanceMonitoring: any;
-let performanceDetails: any;
-let getAllTeams1: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let userDefaultPermissions = new UserDefaultPermissions();
+let USER_TOKEN: string;
+let page: Page;
 
 let localeString = 'en-US',
     dateFormat: any = {};
@@ -94,30 +95,32 @@ let testDataUsed: any = {
 
 
 let userDetails: any = {};
-let data: any;
-let responseCreatePlan: any;
-let response: any;
-let response2: any;
-let response3: any;
-let response4: any;
-let response5: any;
-let newOnPrepare: any;
-let getElementLists: any;
-let responseManager: any;
-let baseUrl: any;
-let rowElements1: any;
-let responseEvaluator: any;
-let rowElements2: any;
-let rowColumnValues1: any;
-let rowColumnValues2: any;
+// let data: any;
+// let responseCreatePlan: any;
+// let response: any;
+// let response2: any;
+// let response3: any;
+// let response4: any;
+// let response5: any;
+// let newOnPrepare: any;
+// let getElementLists: any;
+// let responseManager: any;
+// let baseUrl: any;
+// let rowElements1: any;
+// let responseEvaluator: any;
+// let rowElements2: any;
+// let rowColumnValues1: any;
+// let rowColumnValues2: any;
+
+const qualityPlanDetailsPO = new QualityPlanDetailsPO();
+const qualityPlanManagerPO = new QualityPlanManagerPO();
+const teamsAndGroupsPO = new TeamsAndGroupsPO();
+const planSummaryPO = new PlanSummaryPO(); 
+const samplingPO = new SamplingPO();
+const planDurationPO = new PlanDurationPO();
 
 
-let formDesignerPage = new FormDesignerPagePO();
-let formArea = new FormAreaComponentPo();
-let designerToolbar = new DesignerToolbarComponentPO();
-let scoringModal = new ScoringModalComponentPo();
-let elementAttributes = new ElementAttributesComponentPo();
-let manageFormsPO = new ManageFormsPO(element(by.id('ng2-manage-forms-page')));
+
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
     browser = await chromium.launch({
@@ -128,35 +131,27 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     page = await context.newPage();
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials(); //!
     console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
-    response = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
-    console.log("Response login", response);
+    USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
+    console.log("Response login", USER_TOKEN);
     //! DataCreator.setToken(USER_TOKEN); // not got file
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, response);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, response);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.userToken);
-    response
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
+    await CommonUIUtils.maximizeBrowserWindow();
+    await prepareData();
+});
 
 
-
-    const beforeEachFunction = async () => {
-        await formDesignerPage.navigateTo();
-        await Utils.waitUntilVisible(await formArea.getFormArea());
-    };
-    const onEnd = async () => {
-        await removeFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-
-        await CommonUIUtils.logout(true, 120000, userDetails.orgName, userToken);
-    };
     async function prepareData() {
-        form = {
+        const form = {
             formId: '',
             formName: 'SAMPLE_FORM' + moment(),
             formStatus: 'Published',
             formType: 'EVALUATION',
             workflowConfigType: 'AGENT_NO_REVIEW'
         };
-        groups = await DataCreator.createRandomGroups(2, 'qp');
-        teams = await DataCreator.createRandomTeams(3, 'qp');
+        const groups = await DataCreator.createRandomGroups(2, 'qp');
+        const teams = await DataCreator.createRandomTeams(3, 'qp');
         const userData = [
             {
                 email: 'ptor1' + AdminUtilsNoUI.getRandomEmail(2),
@@ -178,13 +173,26 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
         await DataCreator.createUser(userData[1].email, userData[1]);
         const formId = await DataCreator.createForm(form.formName, form.formStatus, form.formType, form.workflowConfigType);
         form.formId = formId;
-        await protractorConfig.adminUtilsNoUI.updateTeam(teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN);
+        await protractorConfig.tmUtils.updateTenantLicenses((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN);
+       
     }
 
+
+
+    // const beforeEachFunction = async () => {
+    //     await formDesignerPage.navigateTo();
+    //     await Utils.waitUntilVisible(await formArea.getFormArea());
+    // };
+    // const onEnd = async () => {
+    //     await removeFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
+
+    //     await CommonNoUIUtils.logout(true, 120000, userDetails.orgName, userToken);
+    //     //! logOUT // not found
+    // };
+   
+
     Given("Step 1: should click on save and activate and verify the error message that one team needs to be selected", { timeout: 60 * 1000 }, async () => {
-        const teamsAndGroupsPO = new TeamsAndGroupsPO();
-        const planSummaryPO = new PlanSummaryPO();  //! need to vrify
-        await performanceMonitoring.navigateTo(true);
+        await qualityPlanDetailsPO.navigate(true);
         await qualityPlanDetailsPO.saveAndActivate();
         expect(await teamsAndGroupsPO.getErrorMessage()).toEqual('You must select atleast one team');
 
@@ -209,7 +217,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
         await teamsAndGroupsPO.selectGroups([groups[0].groupName, groups[1].groupName]);
         await qualityPlanDetailsPO.saveAsDraft();
         await qualityPlanManagerPO.openQualityPlanByName('Teams and Groups Draft Plan');
-        await waitForSpinnerToDisappear();
+        await Utils.waitForSpinnerToDisappear();
         expect(await teamsAndGroupsPO.getSelectedTeams()).toEqual(`${teams[0].name}, ${teams[1].name}`);
         expect(await teamsAndGroupsPO.getSelectedGroups()).toEqual(`${groups[0].groupName}, ${groups[1].groupName}`);
         expect(await teamsAndGroupsPO.getUsersCount()).toEqual(2);
@@ -217,9 +225,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
 
 
     Given("STEP-8: Sampling and Evaluation Type Tests", { timeout: 180 * 1000 }, async () => {
-        const samplingPO = new SamplingPO();
-        const planDurationPO = new PlanDurationPO();
-        const evaluationTypePO = new EvaluationTypePO();
+      
         await performanceMonitoring.navigateTo(true);
         await qualityPlanDetailsPO.saveAndActivate();
     });
@@ -230,9 +236,9 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
         expect(await samplingPO.getIncludeInteractionsFromLastValue()).toEqual('2');
         expect(await evaluationTypePO.getSelectedEvaluationType()).toEqual('Standard');
         expect(await samplingPO.isIncludeInteractionsFromLastDropdownEnabled()).toBeFalsy();
-    }  
+    
 });
-Then("STEP-10: should check that info message popup if max-days-back value is greater than 7 and the Occurrence date change from month to weekly, { timeout: 180 * 1000 }, async () => {
+Then("STEP-10: should check that info message popup if max-days-back value is greater than 7 and the Occurrence date change from month to weekly", { timeout: 180 * 1000 }, async () => {
     await samplingPO.toggleIncludeInteractionsFromLast();
 await samplingPO.setIncludeInteractionsFromLastValue('10');
 await planDurationPO.setRecurringType('Weekly');
@@ -252,8 +258,7 @@ Then("STEP-11: should be able to save as draft plan and verify sampling after op
     expect(await evaluationTypePO.getSelectedEvaluationType()).toEqual('Collaborative');
 });
 Given("STEP-12: Plan Duration Tests", { timeout: 180 * 1000 }, async () => {
-    const planDurationPO = new PlanDurationPO();
-    const evaluationFormPO = new EvaluationFormPO();
+    
     await performanceMonitoring.navigateTo(true);
     await qualityPlanDetailsPO.saveAndActivate();
 });
@@ -306,3 +311,4 @@ Then("STEP-15: should be able to save as draft a one time plan", { timeout: 180 
     expect(await planDurationPO.getEndDate()).toEqual('Jan 10, 2021');
     expect(await evaluationFormPO.getEvaluationFormSelected()).toEqual(form.formName);
 });
+

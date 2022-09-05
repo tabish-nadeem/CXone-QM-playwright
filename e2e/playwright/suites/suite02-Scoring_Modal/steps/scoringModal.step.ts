@@ -21,6 +21,8 @@ import { OnPrepare } from '../../../../playwright.config';
 import * as _ from 'lodash';
 import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { URLs } from '../../../../common/pageIdentifierURLs';
+import FormDesignerPagePO from '../../../../pageObjects/form-designer-page.po';
+import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
 let _ = require('lodash');
 
 let formDesignerPage = new FormDesignerPagePO();
@@ -37,8 +39,8 @@ let userDetails : any = new GlobalTenantUtils;
 BeforeAll({ timeout: 300 * 1000 }, async () => {
     userToken = await CommonUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password);
     await CommonUIUtils.maximizeBrowserWindow();
-    await enablingFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await enablingFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken)
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken)
     await manageFormsPO.navigateTo();    
 });
 
@@ -47,8 +49,7 @@ const beforeEachFunction = async () => {
     await Utils.waitUntilVisible(await formArea.getFormArea());
 };
 const onEnd = async () => {
-    await removeFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await CommonUIUtils.logout(true, 120000, userDetails.orgName, userToken);
 };
 
