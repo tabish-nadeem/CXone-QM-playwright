@@ -13,6 +13,7 @@ import { URLs } from "../common/pageIdentifierURLs";
 import { DesignerToolbarComponentPO } from "./designer-toolbar.component.po";
 import { ElementAttributesComponentPo } from "./element-attributes.component.po";
 import { FormAreaComponentPo } from "./form-area.component.po";
+import { fdUtils } from "../common/FdUtils";
 
 // const protractorConfig = protHelper.getProtractorHelpers();
 
@@ -71,9 +72,9 @@ export default class FormDesignerPagePO {
 
     async navigateTo(quickly?: boolean) {
         if (quickly) {
-            await navigateQuicklyTo(protractorConfig.fdUtils.getPageIdentifierUrls('forms.form_Designer'), this.elements.sectionFormElement);
+            await navigateQuicklyTo(fdUtils.getPageIdentifierUrls('forms.form_Designer'), this.elements.sectionFormElement);
         } else {
-            await navigateTo(protractorConfig.fdUtils.getPageIdentifierUrls('forms.form_Designer'), this.elements.sectionFormElement);
+            await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Designer'), this.elements.sectionFormElement);
         }
     }
 

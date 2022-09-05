@@ -1,6 +1,5 @@
 import { Browser } from '@playwright/test';
 // import { async } from "@angular/core/testing";
-import { CommonNoUIUtils } from "./../../src/lib/commonNoUI/CommonNoUIUtils";
 // import { Browser } from "@playwright/test";
 import { EnvUtils } from "../common/EnvUtils";
 import { HttpUtils } from "../common/HttpUtils";
@@ -9,6 +8,7 @@ import { AccountUtils } from "./AccountUtils";
 import { Utils } from "./utils";
 import { expect } from "src";
 import { ApiUrl } from "src/ng2/assets/api-url";
+import { CommonNoUIUtils } from './CommonNoUIUtils';
 
 export class fdUtils {
      static waitABit(timeToWait: number){
