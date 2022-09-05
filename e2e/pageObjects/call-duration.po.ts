@@ -1,14 +1,16 @@
-import { by, element, ElementFinder } from 'protractor';
+import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
 import { QualityPlanDetailsPO } from '../../quality-plan-details.po';
 import { Utils } from '../../../../../../../tests/protractor/common/utils';
 
 export class CallDurationPO {
-    public ancestor: ElementFinder;
+    public ancestor: Locator;
+    readonly page:Page;
+    readonly utils: Utils;
     public elements: {
-        lowerInput: ElementFinder;
-        upperInput: ElementFinder;
+        lowerInput: Locator;
+        upperInput: Locator;
     }
     public filterCheckbox: CheckboxPO;
     public operationDropdown: SingleselectDropdownPO;
@@ -16,12 +18,12 @@ export class CallDurationPO {
 
     public constructor() {
         this.qualityPlanDetailsPO = new QualityPlanDetailsPO();
-        this.ancestor = element(by.css('.qp-call-duration-filter'));
+        this.ancestor = this.page.locator('.qp-call-duration-filter');
         this.filterCheckbox = new CheckboxPO('call-duration-checkbox');
         this.operationDropdown = new SingleselectDropdownPO('operation-dropdown');
         this.elements = {
-            lowerInput: this.ancestor.element(by.css('#duration-input-lower-value input')),
-            upperInput: this.ancestor.element(by.css('#duration-input-upper-value input'))
+            lowerInput: this.page.locator('#duration-input-lower-value input'),
+            upperInput: this.page.locator('#duration-input-upper-value input')
         };
     }
 
@@ -30,7 +32,7 @@ export class CallDurationPO {
     }
 
     public async isOperationDropdownEnabled() {
-        return !(await Utils.isPresent(this.ancestor.element(by.css('#operation-dropdown .dropdown-button.disabled'))));
+        return !(await Utils.isPresent(this.page.locator('#operation-dropdown .dropdown-button.disabled')));
     }
 
     public async isFilterChecked() {
@@ -60,17 +62,17 @@ export class CallDurationPO {
     public async setFirstCallDurationValue(value: string) {
         await this.elements.lowerInput.clear();
         await this.elements.lowerInput.sendKeys(value);
-        await Utils.click(this.qualityPlanDetailsPO.getPlanNamePageTitleElement());
+        await this.utils.click(this.qualityPlanDetailsPO.getPlanNamePageTitleElement());
     }
 
     public async setSecondCallDurationValue(value: string) {
         await this.elements.upperInput.clear();
         await this.elements.upperInput.sendKeys(value);
-        await Utils.click(this.qualityPlanDetailsPO.getPlanNamePageTitleElement());
+        await this.utils.click(this.qualityPlanDetailsPO.getPlanNamePageTitleElement());
     }
 
     public async getErrorText() {
-        return await Utils.getText(this.ancestor.element(by.css('.error-message')));
+        return await this.utils.getText(this.page.locator('.error-message'));
     }
 
 }

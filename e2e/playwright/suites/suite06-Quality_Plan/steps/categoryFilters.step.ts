@@ -10,6 +10,7 @@ import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import {CategoriesPO} from "../../../../pageObjects/categories.po"
 import { DataCreator } from '../../../../../tests/protractor/common/data-creator';
 import {SELECTORS} from "../../../../playwright.helpers"
+import { TmUtils } from 'cxone-playwright-test-utils';
 
 let page: Page;
 let browser: any;
@@ -19,10 +20,12 @@ let loginPage:any;
 let userDetails:any;
 let userToken:any;
 let tmToken:any;
+let tmUtils:any;
 
 const qualityPlanDetailsPO = new QualityPlanDetailsPO();
 const categoriesPO = new CategoriesPO();
 const qualityPlanManagerPO = new QualityPlanManagerPO();
+tmUtils = new TmUtils();
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
     browser = await chromium.launch({
@@ -92,7 +95,7 @@ Then("Step-3: should be able to create new draft plan with category filters and 
 Then("Step-4: should not be able to see category filter when tenant has no QMA license", { timeout: 60 * 1000 }, async () => {
 
     tmToken = await CommonNoUIUtils.login(SELECTORS.TM_LOGIN_EMAIL_ADDRESS, SELECTORS.TM_LOGIN_PASSWORD,true);
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD', 'WFM', 'RECORDING'], tmToken);
+    await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD', 'WFM', 'RECORDING'], tmToken);
     await qualityPlanDetailsPO.refresh();
     expect(await categoriesPO.isFilterPresent()).toBeFalsy();
     
