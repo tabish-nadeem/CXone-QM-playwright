@@ -1,13 +1,14 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { Utils } from "../../../../common/utils";
 import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
 import { DuplicateFormModalPO } from '../../../../pageObjects/duplicate-form-modal.po';
 import { OnPrepare } from "../../../../playwright.config";
 import { LoginPage } from "../../../../common/login";
+import { Utils } from '../../../../common/utils';
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
 import { LocalizationNoUI } from "../../../../common/LocalizationNoUI";
+import { ModuleExports } from "../../../../common/qmDefaultData";
 
 
 let browser: any;
@@ -19,9 +20,9 @@ let duplicateFormModalPO: any;
 let newOnPrepare:any;
 let loginPage: any;
 let userDetails: any;
-let userToken: any, dateFormat: any, localeString = 'en-US';
+let userToken: any, dateFormat: any, localString = 'en-US';
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let sampleFormData:any; // in prot file, let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
+let sampleFormData: any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -47,6 +48,7 @@ let currForm = {
 console.log('ANGULAR8: MANAGE FORMS DUPLICATE FORM MODAL TESTS');
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
+    
     browser = await chromium.launch({
         headless: false,
     });
@@ -57,6 +59,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();
+    sampleFormData = ModuleExports.getFormData();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);
     console.log('Form Names used :', formNames);
@@ -65,7 +68,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     await manageFormsPO.navigateTo();
     await CommonQMNoUIUtils.createForm(currForm, userToken);
     await manageFormsPO.navigateTo();
-    dateFormat = await LocalizationNoUI.getDateStringFormat(localeString, userToken, userDetails.orgName);
+    dateFormat = await LocalizationNoUI.getDateStringFormat(localString);
     console.log('DateTime formats to use', dateFormat);
     await CommonQMNoUIUtils.createForm(currForm, userToken);
     currForm.formName = formNames.formTwo;
