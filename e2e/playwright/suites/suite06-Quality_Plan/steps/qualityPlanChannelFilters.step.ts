@@ -9,25 +9,19 @@ import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
-import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
-import { LocalizationNoUI } from '../../../../common/LocalizationNoUI';
 import { Utils } from '../../../../common/utils';
-import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
 import {CallDurationPO} from "../../../../pageObjects/call-duration.po"
 import {CheckboxFilterPO} from "../../../../pageObjects/checkbox-filter.po"
-import {FeedbackFilterPo} from "../../../../pageObjects/feedback-filter.po"
-import {SentimentsPO} from "../../../../pageObjects/sentiment.po"
-import {AgentBehaviorPO} from "../../../../pageObjects/agent-behaviour.po"
 import {UserDetails } from '../../../../../tests/protractor/common/prots-utils';
 import moment from 'moment';
+import {SELECTORS} from "../../../../playwright.helpers"
 
 let page: Page;
 let browser: any;
 let context: BrowserContext;
 let newOnPrepare:any;
 let loginPage:any;
-let userDetails:any;
+let userDetails:UserDetails;
 let shouldUseTestCreds:any;
 let userToken:any;
 let planNameSuffix:any;
@@ -38,8 +32,8 @@ let utils:any;
 const qualityPlanDetailsPO = new QualityPlanDetailsPO();
 const qualityPlanManagerPO = new QualityPlanManagerPO();
 const callDurationPO = new CallDurationPO();
-    const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter2]'));
-    const callDirectionPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
+const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter2]'));
+const callDirectionPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
 utils=new Utils(Page);
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
@@ -95,7 +89,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
 
     };
 
-    shouldUseTestCreds = protractorConfig.AUTH_APP_URL.includes('test') ? true : false;
+    shouldUseTestCreds = SELECTORS.AUTH_APP_URL.includes('test') ? true : false;
     userDetails = shouldUseTestCreds ? brandEmbassyTenant.testCreds : brandEmbassyTenant.stagingCreds;
     planNameSuffix = moment().valueOf().toString();
     console.log(planNameSuffix);

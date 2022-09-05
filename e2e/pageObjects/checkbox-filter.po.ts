@@ -1,36 +1,38 @@
-import { by, element, ElementFinder } from 'protractor';
+import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
 import { Utils } from '../../../../../../../tests/protractor/common/utils';
 import { CategoryManagerPO } from 'cxone-qm-library/category-manager.po';
 
 export class CheckboxFilterPO {
-    public ancestor: ElementFinder;
+    ancestor: Locator;
+    readonly page:Page;
+    readonly utils: Utils;
     public highConfidenceCheckbox: CheckboxPO;
     public operationDropdown: SingleselectDropdownPO;
     public categoryManagerPO: CategoryManagerPO;
 
-    public constructor(ancestor?: ElementFinder) {
-        this.ancestor = ancestor || element(by.css('.checkbox-filter'));
+    public constructor(ancestor?: Locator) {
+        this.ancestor = ancestor || this.page.locator('.checkbox-filter');
         this.highConfidenceCheckbox = new CheckboxPO('enable-duration-checkbox');
         this.operationDropdown = new SingleselectDropdownPO('operation-dropdown');
-        this.categoryManagerPO = new CategoryManagerPO(element(by.css('.category-list-modal-wrapper')));
+        this.categoryManagerPO = new CategoryManagerPO(this.page.locator('.category-list-modal-wrapper'));
     }
 
     public async clickWithScreenInteractionButton() {
-        await Utils.click(this.ancestor.element(by.id('interaction-with-screen')));
+        await this.utils.click(this.page.locator('#interaction-with-screen'));
     }
 
     public async clickWithoutScreenInteractionButton() {
-        await Utils.click(this.ancestor.element(by.id('interaction-without-screen')));
+        await this.utils.click(this.page.locator('#interaction-without-screen'));
     }
 
     public async clickAllInteractionsButton() {
-        await Utils.click(this.ancestor.element(by.id('all-interaction')));
+        await this.utils.click(this.page.locator('#all-interaction'));
     }
 
     public async getSelectedInteractionButton() {
-        return await Utils.getText(this.ancestor.element(by.css('.interaction-buttons-wrapper button.active')));
+        return await this.utils.getText(this.page.locator('.interaction-buttons-wrapper button.active'));
     }
 
     public async toggleChannelByName(channelTypeLabel: string) {
@@ -45,7 +47,7 @@ export class CheckboxFilterPO {
 
     public async isChannelPresent(channelTypeLabel: string) {
         const channelCheckbox = new CheckboxPO(`QpMediaTypeMapper-checkbox-${channelTypeLabel.toUpperCase()}`);
-        return await Utils.isPresent(element(by.css(channelCheckbox.selector)));
+        return await this.utils.isPresent(this.page.locator(channelCheckbox.selector));
     }
 
     public async toggleCallDirectionByName(directionLabel: string) {
@@ -61,7 +63,7 @@ export class CheckboxFilterPO {
     }
 
     public async clearFilter() {
-        return await Utils.click(this.ancestor.element(by.css('button.filter-clear-btn')));
+        return await this.utils.click(this.page.locator('button.filter-clear-btn'));
     }
 
     private getDirectionTypeSelector(directionLabel: string) {

@@ -18,7 +18,7 @@ export class FormAreaComponentPo {
             formArea: this.page.locator('#form-designer-form-area'),
             sectionDroppableArea: this.page.locator('.section-droppable-area section-style'),
             dropAreaForm: this.page.locator('#droppable-area'),
-            inlineToolbar: this.page.locator('xpath=//*[contains(@class,"fr-toolbar") and contains(@style, "display: block")]')),
+            inlineToolbar: this.page.locator('xpath=//*[contains(@class,"fr-toolbar") and contains(@style, "display: block")]'),
             formQuestionElements: this.page.locator('.form-element-div'),
             sectionQuestionElements: this.page.locator('.section-form-element-div'),
             elementsTooltipBody: this.page.locator('.popover-body'),
@@ -138,8 +138,7 @@ export class FormAreaComponentPo {
     async clickQuestionTextOfAnElement(elementText:string, elementType:string): Promise<any> {
         let elem = await this.getElementOnFormArea(elementText, elementType);
         await expect(elem).toBeVisible(10000);
-        //FIXME:
-        return elem.element(this.elementLocators.questionText).element(by.css('.froala-element .fr-wrapper')).click() as Promise<any>;
+        return elem.element(this.elementLocators.questionText).locator('.froala-element .fr-wrapper').click() as Promise<any>;
     }
 
     async getAddRulesIcon(elementText:string, elementType:string): Promise<Locator> {
@@ -428,24 +427,22 @@ export class FormAreaComponentPo {
         await this.selectQuestionText();
         await this.elements.froalaColorPicker.click();
         await expect(this.elements.froalaColorInputField).toBeVisible(10000);
-        //FIXME:
-        await browser.executeScript('arguments[0].value=""', this.elements.froalaColorInputField);
-        await browser.executeScript('arguments[0].value="' + colorHexCode + '"', this.elements.froalaColorInputField);
+        await this.page.evaluate('arguments[0].value=""', this.elements.froalaColorInputField);
+        await this.page.evaluate('arguments[0].value="' + colorHexCode + '"', this.elements.froalaColorInputField);
         await this.elements.froalaColorCodeSubmit.click();
         await this.utils.delay(500);
     }
 
     async getElementCssProperties(questionText, type): Promise<any> {
         const elem = await this.getElementOnFormArea(questionText, type);
-        //FIXME:        
         return {
-            alignment: await elem.element(by.css('.element-info-question .froala-element p')).getCssValue('text-align'),
-            fontFamily: await elem.element(by.css('.element-info-question .froala-element span')).getCssValue('font-family'),
-            fontSize: await elem.element(by.css('.element-info-question .froala-element span')).getCssValue('font-size'),
-            color: await elem.element(by.css('.element-info-question .froala-element span')).getCssValue('color'),
-            isBold: await elem.element(by.css('.element-info-question .froala-element strong')).isPresent(),
-            isItalic: await elem.element(by.css('.element-info-question .froala-element em')).isPresent(),
-            isUnderlined: await elem.element(by.css('.element-info-question .froala-element u')).isPresent()
+            alignment: await elem.locator('.element-info-question .froala-element p').getCssValue('text-align'),
+            fontFamily: await elem.locator('.element-info-question .froala-element span').getCssValue('font-family'),
+            fontSize: await elem.locator('.element-info-question .froala-element span').getCssValue('font-size'),
+            color: await elem.locator('.element-info-question .froala-element span').getCssValue('color'),
+            isBold: await elem.locator('.element-info-question .froala-element strong').isPresent(),
+            isItalic: await elem.locator('.element-info-question .froala-element em').isPresent(),
+            isUnderlined: await elem.locator('.element-info-question .froala-element u').isPresent()
         };
     }
 
