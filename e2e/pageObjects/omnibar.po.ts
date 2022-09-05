@@ -32,6 +32,10 @@ export class OmnibarPO {
     }
 
     async getItemCountLabel() {
-        // return await this.itemsCountLabel.textContent();
+        return await this.elements.itemsCountLabel.getText();
+    };
+
+    typeSearchQuery(formName: any) {
+        // need to define
     }
 }
