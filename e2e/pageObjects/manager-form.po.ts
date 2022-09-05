@@ -6,19 +6,29 @@ import { CommonUIUtils } from "cxone-playwright-test-utils";
 
 export class ManageFormsPO {
     readonly page: Page;
-    readonly newCalibration: Locator;
-    readonly pageTitle: Locator;
-    readonly itemsCountLabel: Locator;
-    readonly popOverMsg: Locator;
-    readonly searchInput: Locator;
+    readonly defaultTimeoutInMillis: number;
+    readonly elements: any;
 
-    constructor(page: Page) {
-        this.page = page;
-        this.newCalibration = page.locator(`button[id="new-calibration"]`);
-        this.pageTitle = page.locator(`div[id="calibrations-page-title"]`);
-        this.itemsCountLabel = page.locator(`#itemsCountLbl .count-wrapper`);
-        this.popOverMsg = page.locator(`.popover-content > span`);
-        this.searchInput = page.locator(`.search-wrapper input`);
+    constructor(pageElement?: Page, defaultTimeoutInMillis = 20000){
+        this.defaultTimeoutInMillis = defaultTimeoutInMillis;
+        this.page = pageElement || this.page.locator(`#ng2-manage-forms-page`)
+        this.elements = {
+            container: this.page.locator(`#ng2-manage-forms-page`),
+            gridComponent: this.page.locator(`cxone-grid`),
+            itemsCountLabel: this.page.locator(`<need to mention>`),
+            header: this.page.locator(`#manage-forms-page-title`),
+            newFormBtn: this.page.locator(`#createForm`),
+            currentUserName: this.page.locator(`#simple-dropdown div.titleText`),
+            publishBtn: this.page.locator(`#bulk-btn-activate`),
+            unpublishBtn: this.page.locator(`#bulk-btn-deactivate`),
+            bulkDeleteBtn: this.page.locator(`#bulk-btn-delete`),
+            spinner: this.page.locator(`.cxonespinner .spinner.spinner-bounce-middle`),
+            delPublishFormPopover: this.page.locator(`popover-container.tooltip-popover-style`),
+            clickConfirmDelete: this.page.locator(`button:has-text("Yes")`),
+            confirmCancelBtn: this.page.locator(`#popup-cancel`),
+            row: this.page.locator(`#manage-forms-grid div.ag-center-cols-viewport div[row-index]`),
+            noMatchfoundMsg: this.page.locator(`#manage-forms-grid span.no-rows-overlay-text`)
+        }
     }
 
     public async refresh() {
@@ -36,11 +46,11 @@ export class ManageFormsPO {
         // return await waitForPageToLoad(element(by.css('#ng2-manage-forms-page #manage-forms-grid')));
     }
 
-    public getNewFormButton(): ElementFinder {
+    public getNewFormButton(): Page {
         // return this.elements.newFormBtn;
     }
 
-    public async getHeaderText(): Promise<string> {
+    public async getHeaderText(): Promise<any> {
         // return await this.elements.header.getText();
     }
 
@@ -61,7 +71,7 @@ export class ManageFormsPO {
         // return this.getGridRow(+rowIndex);
     }
 
-    public async getGridRowTexts(row: number | ElementFinder) {
+    public async getGridRowTexts(row: number | Page) {
         // let cells;
         // if (typeof row === 'number') {
         //     cells = await element.all(by.css(`div.ag-center-cols-container div.ag-row[row-index="${row}"] div.ag-cell`));
@@ -88,16 +98,16 @@ export class ManageFormsPO {
         // };
     }
 
-    public getTodaysDate(format): string {
+    public getTodaysDate(format:any): any {
         // return moment().utc().format(format);
     }
 
-    public async getCurrentUserName(): Promise<string> {
+    public async getCurrentUserName(): Promise<any> {
         // await browser.wait(ExpectedConditions.visibilityOf(element(by.css('header.nice-header'))), this.defaultTimeoutInMillis);
         // return await this.elements.currentUserName.getText();
     }
 
-    public async getBulkOperationsButtonEnabledStates(): Promise<{ activate: boolean; deactivate: boolean; delete: boolean }> {
+    public async getBulkOperationsButtonEnabledStates(): Promise<any> {
         // const obj = {
         //     activate: await this.elements.publishBtn.isEnabled(),
         //     deactivate: await this.elements.publishBtn.isEnabled(),
@@ -179,7 +189,7 @@ export class ManageFormsPO {
         // return visibilityOptions;
     }
 
-    public async verifyMessageMouseHoverDelOfPublishedForm(value) {
+    public async verifyMessageMouseHoverDelOfPublishedForm(value: any) {
         // try {
         //     const row = await this.getGridRowOfMatchingText(value);
         //     const actionDelete = row.element(by.css('button.action-btn.action-delete svg'));
@@ -196,7 +206,7 @@ export class ManageFormsPO {
         // return this.elements.bulkDeleteBtn.click();
     }
 
-    public async clickConfirmDeleteBtn(skipWaitForSpinner?) {
+    public async clickConfirmDeleteBtn(skipWaitForSpinner?: any) {
         // await protractorConfig.testUtils.waitUntilDisplayed(this.elements.clickConfirmDelete);
         // await this.elements.clickConfirmDelete.click();
         // if (!skipWaitForSpinner) {
@@ -306,5 +316,9 @@ export class ManageFormsPO {
         // await browser.wait(ExpectedConditions.visibilityOf(element(by.css('cxone-omnibar'))), 5000);
         // await omnibarPO.typeSearchQuery(formName);
         // await protractorConfig.fdUtils.waitABit(1000);
+    }
+
+    async getItemCountLabel() {
+        // return await this.itemsCountLabel.textContent();
     }
 }
