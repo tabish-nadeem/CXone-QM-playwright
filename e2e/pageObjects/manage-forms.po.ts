@@ -13,14 +13,13 @@ import { RenameFormModalPO } from "./rename-form-modal.po";
 //     waitForSpinnerToDisappear,
 //     waitForPageToLoad
 // } from '../../../../tests/protractor/common/prots-utils';
-// import { Utils } from '../../../../tests/protractor/common/utils';
 
 
 
 export class ManageFormsPO {
     public ancestor: Locator;
     public defaultTimeoutInMillis: number;
-    public elements;
+    public elements:any;
     public utils:Utils;
     public readonly page:Page;
 
@@ -86,7 +85,7 @@ export class ManageFormsPO {
     }
 
     public async getGridRowTexts(row: number | Locator) {
-        let cells;
+        let cells: any;
         if (typeof row === 'number') {
             cells = await this.page.locator(`div.ag-center-cols-container div.ag-row[row-index="${row}"] div.ag-cell`);
         } else {
@@ -113,7 +112,7 @@ export class ManageFormsPO {
         };
     }
 
-    public getTodaysDate(format): string {
+    public getTodaysDate(format:any): string {
         return moment().utc().format(format);
     }
 
@@ -131,13 +130,13 @@ export class ManageFormsPO {
         return obj;
     }
 
-    public async selectParticularForm(formName): Promise<any> {
+    public async selectParticularForm(formName: any): Promise<any> {
         let row: Locator = this.ancestor.locator('xpath=.//*[text()="' + formName + '"]/../../..');
         let checkboxToSelect = row.locator('span.ag-selection-checkbox .ag-icon.ag-icon-checkbox-unchecked');
         return await checkboxToSelect.click();
     }
 
-    public async openParticularForm(formName): Promise<any> {
+    public async openParticularForm(formName: any): Promise<any> {
         await Utils.click(this.ancestor.locator('xpath=.//*[text()="' + formName + '"]/../../..'));
         await Utils.waitForSpinnerToDisappear();
         await Utils.waitForTime(2000);
@@ -160,7 +159,7 @@ export class ManageFormsPO {
         return await this.elements.bulkDeleteBtn.click();
     }
 
-    public async clickConfirmBtn(btnName) {
+    public async clickConfirmBtn(btnName: any) {
         let btn = this.page.locator('#popup-' + btnName + '');
         Utils.waitUntilVisible(btn);
         await btn.click();
@@ -168,16 +167,19 @@ export class ManageFormsPO {
     }
 
     public async waitForSpinnerToDisappear(timeToWait?: number) {
-        await waitForSpinnerToDisappear(timeToWait);
+        if (!timeToWait) {
+            timeToWait = 60000;
+        }
+        return await protractor.testUtils.waitUntilNotVisible(this.elements.spinner, timeToWait);
     }
 
-    public async verifyHamburgerMenu(value) {
+    public async verifyHamburgerMenu(value: any) {
         const row = await this.getGridRowOfMatchingText(value);
         const actionMore = row.locator('button.action-btn.action-more');
         return actionMore.isPresent();
     }
 
-    public async verifyDeleteOption(value) {
+    public async verifyDeleteOption(value: any) {
         const row = await this.getGridRowOfMatchingText(value);
         const actionDelete = row.locator('button.action-btn.action-delete');
         return actionDelete.isPresent();
@@ -206,7 +208,7 @@ export class ManageFormsPO {
         return visibilityOptions;
     }
 
-    public async verifyMessageMouseHoverDelOfPublishedForm(value) {
+    public async verifyMessageMouseHoverDelOfPublishedForm(value: any) {
         try {
             const row = await this.getGridRowOfMatchingText(value);
             const actionDelete = row.locator('button.action-btn.action-delete svg');
@@ -224,7 +226,7 @@ export class ManageFormsPO {
         return this.elements.bulkDeleteBtn.click();
     }
 
-    public async clickConfirmDeleteBtn(skipWaitForSpinner?) {
+    public async clickConfirmDeleteBtn(skipWaitForSpinner?: any) {
         await Utils.waitUntilVisible(this.elements.clickConfirmDelete);
         // await protractorConfig.testUtils.waitUntilDisplayed(this.elements.clickConfirmDelete);
         await this.elements.clickConfirmDelete.click();
