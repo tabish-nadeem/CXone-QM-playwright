@@ -1,13 +1,15 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
+import { Utils } from '../../../../common/utils';
 import { AccountUtils } from '../../../../common/AccountUtils';
-import { Utils } from "../../../../common/utils";
-import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
-import { OnPrepare } from "../../../../playwright.config";
-import { LoginPage } from "../../../../common/login";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
 import { LocalizationNoUI } from "../../../../common/LocalizationNoUI";
+import { LoginPage } from "../../../../common/login";
+import { ModuleExports } from "../../../../common/qmDefaultData";
+import { OnPrepare } from "../../../../playwright.config";
+import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
+import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
 
 
 let browser: any;
@@ -15,14 +17,15 @@ let context: BrowserContext;
 let page: Page;
 let utils: any;
 let manageFormsPO:any;
+let omnibarPO: any;
 let newOnPrepare:any;
 let loginPage: any;
 let userDetails: any;
 let formDetails: any;
-let userToken: any, dateFormat: any, localeString = 'en-US';
+let userToken: any, dateFormat: any, localString = 'en-US';
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let createForms: any = [];
-let sampleFormData:any; // in prot file, let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
+let sampleFormData: any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -62,10 +65,12 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
+    omnibarPO = new OmnibarPO(page.locator('cxone-omnibar'));
     manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();
+    sampleFormData = ModuleExports.getFormData();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);
     console.log('Form Names used :', formNames);
@@ -73,7 +78,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.navigation_redesign, true, userDetails.orgName, userToken)
     await CommonQMNoUIUtils.createForm(currForm, userToken);
     await manageFormsPO.navigateTo();
-    dateFormat = await LocalizationNoUI.getDateStringFormat(localeString, userToken, userDetails.orgName);
+    dateFormat = await LocalizationNoUI.getDateStringFormat(localString);
     console.log('DateTime formats to use', dateFormat);
 })
 
@@ -88,7 +93,7 @@ Given("Step-1: P2: verify page title, form count and create form button", { time
         wd: false
     };
     let response:any = await CommonQMNoUIUtils.getForms(attributes, userToken);
-    expect(await manageFormsPO.getItemCountLabel()).toEqual([response.length + ' form']);
+    expect(await omnibarPO.getItemCountLabel()).toEqual([response.length + ' form']);
     expect(await manageFormsPO.getNewFormButton().getText()).toEqual(utils.getExpectedString('manageFormsPage.createForm'));
 });
 
