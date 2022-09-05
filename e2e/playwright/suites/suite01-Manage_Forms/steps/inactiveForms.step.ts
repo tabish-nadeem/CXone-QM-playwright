@@ -1,11 +1,12 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
+import { Utils } from '../../../../common/utils';
+import { AccountUtils } from '../../../../common/AccountUtils';
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
-import { Utils } from "../../../../common/utils";
 import { LoginPage } from "../../../../common/login";
+import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OnPrepare } from "../../../../playwright.config";
-import { AccountUtils } from '../../../../common/AccountUtils';
 import { ManageFormsPO } from '../../../../pageObjects/manager-form.po';
 
 let browser: any;
@@ -16,7 +17,7 @@ let loginPage: any;
 let userDetails: any;
 let newOnPrepare:any;
 let performanceMonitoring: any;
-let sampleFormData:any; // in prot file, let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
+let sampleFormData: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let createForms:any = [];
 let manageFormsPO:any;
@@ -65,9 +66,9 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();
+    sampleFormData = ModuleExports.getFormData();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);
-    // performanceMonitoring = new PerformanceMonitoringPo(page);
     console.log('Form Names used :', formNames);
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     let userToken = await loginPage.login(userDetails.email, userDetails.password);
