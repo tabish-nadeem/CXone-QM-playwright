@@ -15,6 +15,7 @@ import {FeedbackFilterPo} from "../../../../pageObjects/feedback-filter.po"
 import {SentimentsPO} from "../../../../pageObjects/sentiment.po"
 import {AgentBehaviorPO} from "../../../../pageObjects/agent-behaviour.po"
 import {SELECTORS} from "../../../../playwright.helpers"
+import { TmUtils } from 'cxone-playwright-test-utils';
 
 
 let page: Page;
@@ -27,6 +28,7 @@ let userToken:any;
 let tmToken:any;
 let utils:any;
 let newGlobalTenantUtils:any;
+let tmUtils:any;
 
 const qualityPlanDetailsPO = new QualityPlanDetailsPO();
 const qualityPlanManagerPO = new QualityPlanManagerPO();
@@ -38,6 +40,7 @@ const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-f
 const callDirectionPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
 const feedbackFilterPo = new FeedbackFilterPo(page.locator('#feedback-score-filter'));
 utils=new Utils(page);
+tmUtils = new TmUtils();
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
     browser = await chromium.launch({
@@ -52,7 +55,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     userDetails=await newGlobalTenantUtils.getDefaultTenantCredentials();
 
     tmToken = await CommonNoUIUtils.login(SELECTORS.TM_LOGIN_EMAIL_ADDRESS, SELECTORS.TM_LOGIN_PASSWORD,true);
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP','ACD', 'WFM', 'RECORDING', 'SATMETRIX'], tmToken);
+    await tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP','ACD', 'WFM', 'RECORDING', 'SATMETRIX'], tmToken);
     userToken = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.MOCK_CATEGORIES, userDetails.orgName, userToken);
@@ -63,7 +66,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
     await qualityPlanDetailsPO.refresh();
-    protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMA', 'ACD', 'WFM', 'RECORDING'], tmToken);
+    tmUtils.updateTenantLicenses(userDetails.orgName, ['QMA', 'ACD', 'WFM', 'RECORDING'], tmToken);
     await qualityPlanManagerPO.navigate();
     console.log('Deleting created plans...');
     await qualityPlanManagerPO.deleteAllPlans();
@@ -408,7 +411,7 @@ When("Step-1: should display interaction button filters and hide acd(email,chat)
 
     const recordedSegmentFilterPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ENGAGE_RECORDING'], tmToken);
+    await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ENGAGE_RECORDING'], tmToken);
     console.log('Waiting for 125 second because qp service is using in-memory ft-cache which will update in every 2 min');
     await utils.delay(125000);
     await qualityPlanDetailsPO.refresh();
@@ -423,7 +426,7 @@ When("Step-1: should display interaction button filters and hide acd(email,chat)
     expect(await recordedSegmentFilterPO.getSelectedInteractionButton()).toEqual('All');
     await recordedSegmentFilterPO.clickWithScreenInteractionButton();
     expect(await recordedSegmentFilterPO.getSelectedInteractionButton()).toEqual('With Screen')
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMA', 'ACD', 'WFM', 'RECORDING'], tmToken);
+    await tmUtils.updateTenantLicenses(userDetails.orgName, ['QMA', 'ACD', 'WFM', 'RECORDING'], tmToken);
 
 });
 
@@ -431,7 +434,7 @@ When("Step-1: should be showing only voice filter checkbox", { timeout: 60 * 100
 
     const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await qualityPlanDetailsPO.navigate();
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'RECORDING'], tmToken);
+    await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'RECORDING'], tmToken);
     await qualityPlanDetailsPO.refresh();
     expect(await interactionPO.isChannelPresent('Voice')).toBeTruthy();
     expect(await interactionPO.isChannelPresent('Chat')).toBeFalsy();
@@ -442,7 +445,7 @@ Then("Step-2: should be showing only chat and email filter checkbox", { timeout:
 
     const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await qualityPlanDetailsPO.navigate();
-    await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD'], tmToken);
+    await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD'], tmToken);
     await qualityPlanDetailsPO.refresh();
     expect(await interactionPO.isChannelPresent('Voice')).toBeFalsy();
     expect(await interactionPO.isChannelPresent('Chat')).toBeTruthy();
