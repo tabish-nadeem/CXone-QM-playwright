@@ -1,45 +1,40 @@
 import * as protHelper from '../../../../playwright.helpers';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { FEATURE_TOGGLES } from '../../../src/ng2/assets/letANTS';
-import { PlansMonitoringPagePO } from '../../../../pageObjects';
-import { AccountUtils } from '../../../../common/AccountUtils';
-import { Strings } from '../../../../common/strings_en_US';
 import { Utils } from '../../../../common/utils';
 import * as moment from 'moment';
-import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
-import { LoginPage } from "../../../../common/login";
-import { UIletants, FEATURE_TOGGLES } from "../../../../common/uiletants";
+import { FEATURE_TOGGLES } from "../../../../common/uiletants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
-import { LocalizationNoUI } from '../../../../common/LocalizationNoUI';
-import { Helpers } from '../../../../playwright.helpers';
-import { Credentials } from "../../../../common/support";
-import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import { OnPrepare } from '../../../../playwright.config';
 import * as _ from 'lodash';
 import { CommonUIUtils } from "cxone-playwright-test-utils";
-import { URLs } from '../../../../common/pageIdentifierURLs';
 import FormDesignerPagePO from '../../../../pageObjects/form-designer-page.po';
 import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
 import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-toolbar.component.po';
 import { ScoringModalComponentPo } from '../../../../pageObjects/scoring-modal.component.po';
 import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
+import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
 let _ = require('lodash');
 
-let formDesignerPage = new FormDesignerPagePO();
-let formArea = new FormAreaComponentPo();
-let designerToolbar = new DesignerToolbarComponentPO();
-let scoringModal = new ScoringModalComponentPo();
-let elementAttributes = new ElementAttributesComponentPo();
-let manageFormsPO = new ManageFormsPO(element(by.id('ng2-manage-forms-page')));
+let page: Page;
+let formDesignerPage;
+let formArea;
+let designerToolbar;
+let scoringModal;
+let elementAttributes;
+let manageFormsPO;
 
 let userToken: any ;
 let userDetails : any = new GlobalTenantUtils;
 
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
+    formDesignerPage = new FormDesignerPagePO();
+    formArea = new FormAreaComponentPo();
+    designerToolbar = new DesignerToolbarComponentPO();
+    scoringModal = new ScoringModalComponentPo();
+    elementAttributes = new ElementAttributesComponentPo();
+    manageFormsPO = new ManageFormsPO(page.locator('#ng2-manage-forms-page'));
     userToken = await CommonUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password);
     await CommonUIUtils.maximizeBrowserWindow();
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken)

@@ -1,8 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 import { Strings } from './strings_en_US';
 
-let strings: any
-
+let strings: any;
 
 const DEFAULT_WAIT_TIME = 25000;
 
