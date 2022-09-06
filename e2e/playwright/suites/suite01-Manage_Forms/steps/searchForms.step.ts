@@ -11,20 +11,20 @@ import { LoginPage } from "../../../../common/login";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OnPrepare } from '../../../../playwright.config';
 
+let browser: any,
+    userToken:any,
+    userDetails:any,
+    loginPage: any,
+    sampleFormData: any,
+    newOnPrepare:any,
+    formDetails:any,
+    utils:any,
+    manageFormsPO: any,
+    omnibarPO: any,
+    formNames: any = {},
+    createForms :any= []
 let page: Page;
-let browser: any;
 let context: BrowserContext;
-let userToken:any;
-let userDetails:any;
-let loginPage: any;
-let formNames: any = {};
-let createForms :any= [];
-let sampleFormData: any;
-let newOnPrepare:any;
-let formDetails:any;
-let utils:any;
-let manageFormsPO: any;
-let omnibarPO: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 
 const FEATURE_TOGGLES = {
