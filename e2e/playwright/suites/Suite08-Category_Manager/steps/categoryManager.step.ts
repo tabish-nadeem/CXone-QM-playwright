@@ -54,7 +54,7 @@ const categories = {
 };
 
 const setFeatureToggleForMockCategories = async () => {
-    return await protractor.featureToggleTestUtils.turnOnFeatureToggleForTenant(FEATURE_TOGGLES.MOCK_CATEGORIES, userDetails.orgName, userDetails.adminCreds.token);
+    return await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.MOCK_CATEGORIES, userDetails.orgName, userDetails.adminCreds.token);
 };
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
