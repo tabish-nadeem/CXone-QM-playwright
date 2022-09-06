@@ -67,7 +67,6 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     newOnPrepare = new OnPrepare();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);
-    
 
     userDetails.adminCreds = newGlobalTenantUtils.getDefaultTenantCredentials().adminCreds;
     userDetails.orgName = newGlobalTenantUtils.getDefaultTenantCredentials().orgName;
