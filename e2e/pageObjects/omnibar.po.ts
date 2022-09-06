@@ -1,4 +1,4 @@
-import { Page, Locator } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { Utils } from "../common/utils";
 import { URLs } from '../common/pageIdentifierURLs';
 import { Helpers } from "../playwright.helpers";
@@ -32,10 +32,11 @@ export class OmnibarPO {
     }
 
     async getItemCountLabel() {
-        return await this.elements.itemsCountLabel.getText();
+        return await this.elements.itemsCountLabel.textContent();
     };
 
-    typeSearchQuery(formName: any) {
+    // need to define this function
+    async typeSearchQuery(formName: any) {
         // need to define
-    }
+    };
 }
