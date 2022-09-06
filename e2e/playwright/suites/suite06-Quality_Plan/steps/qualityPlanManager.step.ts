@@ -47,7 +47,7 @@ let planNames = {
 const omnibarPO = new OmnibarPO(page.locator('cxone-omnibar'));
 let userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
 utils = new Utils(page);
-// let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
+let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
     browser = await chromium.launch({
