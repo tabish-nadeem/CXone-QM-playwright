@@ -1,5 +1,8 @@
+import { Page } from '@playwright/test';
+import { ExpectedCondition as EC } from 'expected-condition-playwright';
 import { Locator, Page } from '@playwright/test';
 import { Strings } from './strings_en_US';
+import { FeatureToggleUtils } from './FeatureToggleUtils';
 
 let strings: any
 
@@ -7,6 +10,12 @@ let strings: any
 const DEFAULT_WAIT_TIME = 25000;
 
 export class Utils {
+     static waitUntilInvisible(arg0: any) {
+          throw new Error('Method not implemented.');
+     }
+     static enablingFeatureToggle(ENHANCED_EVALUATOR_MODAL_FT: string, orgName: any, USER_TOKEN: string) {
+          throw new Error('Method not implemented.');
+     }
     static getAttribute(arg0: any, arg1: string) {
         throw new Error('Method not implemented.');
     }
@@ -16,7 +25,7 @@ export class Utils {
     static waitForSpinnerToDisappear() {
         throw new Error("Method not implemented.");
     }
-    static getText(arg0: any) {
+    static getText(arg0: any[]) {
          throw new Error('Method not implemented.');
     }
     static waitForTime(arg0: number) {
@@ -75,6 +84,61 @@ export class Utils {
         // }
         return await toast.textContent();
     };
+
+    
+   async refresh () {
+    await this.page.refresh();
+    
+};
+  async refreshpage (elementVisibilityToWaitFor: undefined) {
+    await this.page.refresh()
+    await this.waitForPageToLoad(elementVisibilityToWaitFor);
+}
+
+
+ async waitUntilDisplayed (elem: any) {
+    var timeToWait = 10000;
+    setTimeout(()=>{
+
+    },timeToWait)
+    
     
 }
+
+ async waitForPageToLoad (element: Locator) {
+    await this.page.wait(EC.visibilityOf(element), 60000);
+    this. waitForSpinnerToDisappear();
+};
+ async enablingFeatureToggle (toggleName: string, tenantName: string, token: any, retryCount: number = 1) {
+    console.log(`ADDING FEATURE TOGGLE ${toggleName} for ${tenantName}`);
+    if (!(await FeatureToggleUtils.isFeatureToggleTurnedOnForTenant(toggleName, tenantName, token))) {
+        await FeatureToggleUtils.addTenantToFeature(toggleName, tenantName, token);
+        const featureToggleStatus = await FeatureToggleUtils.isFeatureToggleTurnedOnForTenant(toggleName, tenantName, token);
+        if (!featureToggleStatus && retryCount <= 5) {
+            console.log(`Feature toggle not yet enabled across all instances. Retry Count ${retryCount}`);
+            await this.page.delay(10000);
+            await this.enablingFeatureToggle(toggleName, tenantName, token, retryCount + 1);
+        } else if (retryCount > 5) {
+            console.log('Failed to add feature toggle from config manager. Failing Test Case.');
+            throw 'Failed to get updated feature toggle from config manager. Failing Test Case.';
+        } else {
+            console.log('Feature toggle added successfully.');
+        }
+    }
+};
+
+ 
+async waitUntilInvisible(element: any, timeToWait?: number): Promise<void> {
+    try {
+      const waitTime = timeToWait ? timeToWait : DEFAULT_WAIT_TIME;
+      await this.page.wait(EC.invisibilityOf(element), waitTime);
+    } catch (ex) {
+      console.error('failed while waiting for element to be invisible');
+      throw ex;
+    }
+  }
+
+
+}
+
 
