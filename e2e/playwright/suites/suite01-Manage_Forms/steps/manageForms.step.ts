@@ -11,21 +11,22 @@ import { OnPrepare } from "../../../../playwright.config";
 import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
 import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
 
-
-let browser: any;
-let context: BrowserContext;
+let browser: any,
+    utils: any,
+    manageFormsPO: any,
+    omnibarPO: any,
+    newOnPrepare: any,
+    loginPage: any,
+    userDetails: any,
+    formDetails: any,
+    userToken: any,
+    dateFormat: any,
+    createForms: any,
+    sampleFormData: any
 let page: Page;
-let utils: any;
-let manageFormsPO:any;
-let omnibarPO: any;
-let newOnPrepare:any;
-let loginPage: any;
-let userDetails: any;
-let formDetails: any;
-let userToken: any, dateFormat: any, localString = 'en-US';
+let localString = 'en-US';
+let context: BrowserContext;
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let createForms: any = [];
-let sampleFormData: any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -56,7 +57,7 @@ const getCurrentUserName = async () => {
     await button.click();
     let profile = await page.locator('#myProfile');
     await profile.click();
-    return await page.locator('.first-last-name').getText();
+    return await page.locator('.first-last-name').textContent();
 };
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
@@ -94,7 +95,7 @@ Given("Step-1: P2: verify page title, form count and create form button", { time
     };
     let response:any = await CommonQMNoUIUtils.getForms(attributes, userToken);
     expect(await omnibarPO.getItemCountLabel()).toEqual([response.length + ' form']);
-    expect(await manageFormsPO.getNewFormButton().getText()).toEqual(utils.getExpectedString('manageFormsPage.createForm'));
+    expect(await manageFormsPO.getNewFormButton().textContent()).toEqual(utils.getExpectedString('manageFormsPage.createForm'));
 });
 
 When("Step-2: P1: should reflect timestamp and user name for last modification", { timeout: 180 * 1000 }, async () => {
