@@ -7,7 +7,9 @@ export const FEATURE_TOGGLES = {
     FT_EDIT_EVALUATOR: 'release-QM-QP-Edit-Evaluator-CXQM-18068',
     FT_QP_TIMEZONE_HANDLING: 'release-QM-QP-Timezone-handling-CXQM-18543',
     RBAC_PERFMONITORING_TEAMLIST: 'release-rbac-evaluation-CXQM-19735',
-    FT_EXCLUDE_INACTIVE_USERS: 'release-QM-exclude-inactive-user-planMonitoringUI-CXQM-17187'
+    FT_EXCLUDE_INACTIVE_USERS: 'release-QM-exclude-inactive-user-planMonitoringUI-CXQM-17187',
+    ENHANCED_EVALUATOR_MODAL_FT: 'release-QM-performance-improvement-for-50k-users-CXQM-18051',
+    QP_EDIT_EVALUATOR_FT: 'release-QM-QP-Edit-Evaluator-CXQM-18068',
 };
 
 export const FORM_STATES = {

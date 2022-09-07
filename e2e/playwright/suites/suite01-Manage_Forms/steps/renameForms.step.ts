@@ -1,14 +1,15 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import { BrowserContext, Page, expect, chromium } frbrowser.waitom "@playwright/test";
-import { Utils } from "../../../../common/utils";
+import { BrowserContext, Page, expect, chromium } from "@playwright/test";
+import { Utils } from '../../../../common/utils';
 import { AccountUtils } from '../../../../common/AccountUtils';
-import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
-import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
-import {RenameFormModalPO} from '../../../../pageObjects/rename-form-modal.po';
-import { OnPrepare } from "../../../../playwright.config";
-import { LoginPage } from "../../../../common/login";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
+import { LoginPage } from "../../../../common/login";
+import { ModuleExports } from "../../../../common/qmDefaultData";
+import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
+import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
+import { RenameFormModalPO } from '../../../../pageObjects/rename-form-modal.po';
+import { OnPrepare } from "../../../../playwright.config";
 
 let browser: any;
 let context: BrowserContext;
@@ -23,7 +24,7 @@ let userDetails: any;
 let formDetails: any;
 let userToken: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let sampleFormData:any; // in prot file, let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
+let sampleFormData: any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -58,6 +59,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();
+    sampleFormData = ModuleExports.getFormData();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);
     console.log('Form Names used :', formNames);
@@ -119,7 +121,27 @@ Given("Step-1: should open the rename form modal and verify the components on th
     formDetails.forEach((currForm: any) => createForms.push(CommonQMNoUIUtils.createForm(currForm, userToken)));
     await Promise.all(createForms);
     await manageFormsPO.refresh();
-});
+    await manageFormsPO.searchFormInGrid(formNames.formOne);
+        let menuItem = await manageFormsPO.getHamburgerMenuItem(formNames.formOne, 'Rename');
+        await menuItem.click();
+        await browser.wait(page.locator('cxone-modal').isVisible(), 20000);
+        expect(await renameFormModalPO.verifyRenameModalHeaderText()).toEqual(utils.getExpectedString('renameFormModal.header'));
+        expect(await renameFormModalPO.verifyRenameModalSubHeading()).toEqual(utils.getExpectedString('renameFormModal.subHeading'));
+        expect(await renameFormModalPO.verifyTextBox()).toBeTruthy();
+        expect(await renameFormModalPO.checkChangeBtn()).toBeTruthy();
+        expect(await renameFormModalPO.checkCancelBtn()).toBeTruthy();
+        expect(await renameFormModalPO.checkCloseBtn()).toBeTruthy();
+        await renameFormModalPO.clickCancelBtn();
+        await manageFormsPO.searchFormInGrid(formNames.formOne);
+        menuItem = await manageFormsPO.getHamburgerMenuItem(formNames.formOne, 'Rename');
+        await menuItem.click();
+        await browser.wait(page.locator('cxone-modal').isVisible(), 20000);
+        await renameFormModalPO.clickChangeBtn();
+        await manageFormsPO.waitForSpinnerToDisappear();
+        await renameFormModalPO.clickCancelBtn();
+        await manageFormsPO.searchFormInGrid(formNames.formOne);
+        expect(await omnibarPO.getItemCountLabel()).toEqual(['1 form']);
+    });
 
 When("Step-2: should give a new name and save the form, rename it again : P1", { timeout: 180 * 1000 }, async () => {
     let beforeCount: any;

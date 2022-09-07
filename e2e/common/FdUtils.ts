@@ -1,4 +1,4 @@
-import { Browser } from '@playwright/test';
+import { Browser } from "@playwright/test";
 // import { async } from "@angular/core/testing";
 // import { Browser } from "@playwright/test";
 import { EnvUtils } from "../common/EnvUtils";
@@ -11,13 +11,13 @@ import { ApiUrl } from "src/ng2/assets/api-url";
 import { CommonNoUIUtils } from './CommonNoUIUtils';
 
 export class fdUtils {
-     static waitABit(timeToWait: number){
+     static waitABit(timeToWait: number) {
           return new Promise<void>((resolve) => {
                setTimeout(() => {
                     resolve();
                }, timeToWait);
           });
-     };
+     }
 
      static clearCache = async () => {
           await Browser.executeScript("window.localStorage.clear();");
@@ -33,7 +33,10 @@ export class fdUtils {
           return callbackFunction(text).isPresent();
      };
 
-     static isElementEnabled = async (callbackFunction: (arg0: any) => any, text: any) => {
+     static isElementEnabled = async (
+          callbackFunction: (arg0: any) => any,
+          text: any
+     ) => {
           //    var deferred = protractor.promise.defer();
           var element = callbackFunction(text);
           element.isEnabled().then(function (resp: any) {
@@ -42,7 +45,11 @@ export class fdUtils {
      };
 
      static getElementAttribute = async (
-          callbackFunction: (arg0: any) => { (): any; new(): any; getAttribute: { (arg0: any): any; new(): any; }; },
+          callbackFunction: (arg0: any) => {
+               (): any;
+               new(): any;
+               getAttribute: { (arg0: any): any; new(): any };
+          },
           attributeName: any,
           text: any
      ) => {
@@ -82,18 +89,13 @@ export class fdUtils {
      };
 
      static getPageIdentifierUrls = async (keyValue: string) => {
-          var expectedString = eval("protractor.pageIdentifierUrls." + keyValue);
+          var expectedString = eval("playWrite.pageIdentifierUrls." + keyValue);
           return expectedString;
      };
 
      static getRandomEmployeeDetails = async (seq: any) => {
-          return {
-               employeeEmailAddress:
-                    "ptor." + new Date().getTime() + (seq || "") + "@wfosaas.com",
-               employeePassword: "Password1",
-               firstName: "Luke",
-               lastName: "Skywalker" + AccountUtils.getRandomString(),
-          };
+          
+          
      };
 
      static getToastMessageWithExtraWait = async () => {
@@ -146,9 +148,7 @@ export class fdUtils {
      static addInteractionsToElement = async (
           elementObj: any,
           searchString: any
-     ) => {
-
-     };
+     ) => { };
 
      static removeAllUsers = async (token: any, ids: any) => {
           var usersIds = ids;
@@ -179,34 +179,7 @@ export class fdUtils {
      };
      removeAllGroups = async (token: any, ids: any) => {
           //! wont work
-          //    var groupsIds = ids;
-          //    if (this.isEmpty(ids)) {
-          //        AccountUtils.getGroups(token).then(function (groups) { // commonnoUI
-          //            return _.map(groups, 'id');
-          //        }).then(function (groupIds) {
-          //            if (_.isEmpty(groupIds)) {
-          //                deferred.fulfill();
-          //            } else {
-          //                return protractor.testUtilsNoUI.deleteGroups(groupIds, token);
-          //            }
-          //        }).then(function () {
-          //            deferred.fulfill();
-          //        });
-          //    } else {
-          //        protractor.testUtilsNoUI.deleteGroups(groupsIds, token).then(function () {
-          //            console.log('all groups removed: ', groupsIds);
-          //            deferred.fulfill();
-          //        });
-          //    }
-          //    return deferred.promise;
      };
-     static removeEvaluationPlans = async () => {
-
-     };
-     static clickOnWarning = async () => {
-          //         var warningElement = element(by.css('.nice-message-modal-wrapper [ng-click="$ctrl.primaryBtnClick()"]'));
-          //         await protractor.testUtils.waitUntilVisible(warningElement, 40000);
-          //         return await warningElement.click();
-          //     }
-     };
+     static removeEvaluationPlans = async () => { };
+     static clickOnWarning = async () => { };
 }
