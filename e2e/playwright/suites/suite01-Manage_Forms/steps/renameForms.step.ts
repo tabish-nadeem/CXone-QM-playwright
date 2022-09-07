@@ -67,14 +67,14 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     userToken = await loginPage.login(userDetails.email, userDetails.password);
     await CommonQMNoUIUtils.createForm(currForm, userToken);
     await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.navigation_redesign, true, userDetails.orgName, userToken)
-    await manageFormsPO.navigateTo();
+    await manageFormsPO.navigate();
 })
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("Step-1: should open the rename form modal and verify the components on the modal :P1", { timeout: 60 * 1000 }, async () => {
+Given("should open the rename form modal and verify the components on the modal :P1", { timeout: 60 * 1000 }, async () => {
     let createForms : any = [];
     formDetails = [
         {
@@ -144,7 +144,7 @@ Given("Step-1: should open the rename form modal and verify the components on th
         expect(await omnibarPO.getItemCountLabel()).toEqual(['1 form']);
 });
 
-When("Step-2: should give a new name and save the form, rename it again : P1", { timeout: 180 * 1000 }, async () => {
+When("should give a new name and save the form, rename it again : P1", { timeout: 180 * 1000 }, async () => {
     let beforeCount: any;
     let afterCount: any;
     await manageFormsPO.refresh();
@@ -161,7 +161,7 @@ When("Step-2: should give a new name and save the form, rename it again : P1", {
     expect(afterCount).toEqual(beforeCount);
 });
 
-Then("Step-3: should verify that the rename option is not present for Published/Unpublished Form : P1", { timeout: 180 * 1000 }, async () => {
+Then("should verify that the rename option is not present for Published/Unpublished Form : P1", { timeout: 180 * 1000 }, async () => {
     formNames['renameFormThree'] = 'ReForm3 ' + formNames['formThree'];
     await manageFormsPO.renameForm(formNames['formThree'], formNames['renameFormThree']);
     await manageFormsPO.refresh();
@@ -173,7 +173,7 @@ Then("Step-3: should verify that the rename option is not present for Published/
     expect((await manageFormsPO.verifyHamburgerMenuOptions(formNames['renameFormThree'])).rename).toBeFalsy();
 });
 
-Then("Step-4: should verify form name field validation : P3", { timeout: 180 * 1000 }, async () => {
+Then("should verify form name field validation : P3", { timeout: 180 * 1000 }, async () => {
     let nameValidationErrorMsg = utils.getExpectedStringg('renameFormModal.nameValidation');
     await manageFormsPO.searchFormInGrid(formNames['specialCharacterFormName']);
     const menuItem = await manageFormsPO.getHamburgerMenuItem(formNames['specialCharacterFormName'], 'Rename');
