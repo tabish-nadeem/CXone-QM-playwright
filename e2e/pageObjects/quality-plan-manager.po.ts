@@ -1,6 +1,7 @@
 
 import { OmnibarPO } from 'cxone-components/omnibar.po';
 import { SpinnerPO } from 'cxone-components/spinner.po';
+import { ExpectedCondition as EC } from 'expected-condition-playwright';
 import { DuplicatePlanModalPO } from './modals/duplicate-plan-modal/duplicate-plan-modal.po';
 import { QualityPlanDetailsPO } from '../pageObjects/quality-plan-details.po';
 import { fdUtils } from '../common/fdUtils';
@@ -132,7 +133,7 @@ export class QualityPlanManagerPO {
         const row = await this.getGridRowOfMatchingText(value);
         const actionMore = row.Page.locator(('button.action-btn.action-more'));
         await actionMore.click();
-        await page.wait(ExpectedConditions.visibilityOf(page.locator(by.css('popover-container .more-option-popover'))), 5000);
+        await page.wait(EC.invisibilityOf(page.locator(('popover-container .more-option-popover'))), 5000);
         return Page.locator((`popover-container .more-option-popover .clickable.${action.toLowerCase()}`));
     }
 
@@ -140,7 +141,7 @@ export class QualityPlanManagerPO {
         const row = await this.getGridRowOfMatchingText(planName);
         const actionMore = row.Page.locator(('button.action-btn.action-more'));
         await actionMore.click();
-        await page.wait(ExpectedConditions.visibilityOf(page.locator(by.css('popover-container .more-option-popover'))), 5000);
+        await page.wait(EC.invisibilityOf(page.locator(('popover-container .more-option-popover'))), 5000);
         const visibilityOptions = {
             activate: await Page.locator(('popover-container .more-option-popover .clickable.activate')).isPresent(),
             duplicate: await Page.locator(('popover-container .more-option-popover .clickable.duplicate')).isPresent(),
@@ -215,7 +216,7 @@ export class QualityPlanManagerPO {
     public async openQualityPlanByName(planName: string): Promise<any> {
         const qpDetailsPO = new QualityPlanDetailsPO();
         await this.searchPlan(planName);
-        await Utils.waitUntilVisible(this.ancestor.page.locator(('xpath=.//*[text()="' + planName + '"]/..')));
+        await this.page.waitForSelector('xpath=.//*[text()="' + planName + '"]/..');
         await Utils.click(this.ancestor.page.locator(('xpath=.//*[text()="' + planName + '"]/..')));
         await utils. waitForSpinnerToDisappear();
         await utils.waitForPageToLoad(qpDetailsPO.container);  //!

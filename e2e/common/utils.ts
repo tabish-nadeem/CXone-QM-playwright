@@ -1,52 +1,53 @@
 import { Page } from '@playwright/test';
 import { ExpectedCondition as EC } from 'expected-condition-playwright';
-import { Locator, Page } from '@playwright/test';
 import { Strings } from './strings_en_US';
-import { FeatureToggleUtils } from './FeatureToggleUtils';
 
 let strings: any;
 
 const DEFAULT_WAIT_TIME = 25000;
 
 export class Utils {
-     static waitUntilInvisible(arg0: any) {
-          throw new Error('Method not implemented.');
-     }
-     static enablingFeatureToggle(ENHANCED_EVALUATOR_MODAL_FT: string, orgName: any, USER_TOKEN: string) {
-          throw new Error('Method not implemented.');
-     }
+    static page: any;
+    readonly page: Page;
+
+    constructor(page: Page) {
+        this.page = page;
+    }
+
     static getAttribute(arg0: any, arg1: string) {
         throw new Error('Method not implemented.');
     }
+
     static click(arg0: any) {
          throw new Error('Method not implemented.');
     }
+
     static waitForSpinnerToDisappear() {
         throw new Error("Method not implemented.");
     }
-    static getText(arg0: any[]) {
+
+    static getText(arg0: any) {
          throw new Error('Method not implemented.');
     }
+
     static waitForTime(arg0: number) {
          throw new Error('Method not implemented.');
     }
-    static page: any;
+
     static isSelected(arg0: any): any {
         throw new Error("Method not implemented.");
     }
+
     static isPresent(arg0: any): any {
         throw new Error("Method not implemented.");
     }
+
     static isEnabled(arg0: any): any {
         throw new Error("Method not implemented.");
     }
+
     static waitUntilVisible(arg0: any) {
         throw new Error('Method not implemented.');
-    }
-    readonly page: Page;
-   
-    constructor(page: Page) {
-        this.page = page;
     }
 
     async waitForSpinnerToDisappear() {
@@ -84,60 +85,61 @@ export class Utils {
         return await toast.textContent();
     };
 
-    
-   async refresh () {
-    await this.page.refresh();
-    
-};
-  async refreshpage (elementVisibilityToWaitFor: undefined) {
-    await this.page.refresh()
-    await this.waitForPageToLoad(elementVisibilityToWaitFor);
-}
+    async waitForItemToBeClickable (elem: any, timeout: any) {
+        var time = timeout || 5000;
+        await this.page.waitForFunction(EC.elementToBeClickable(elem), elem, { timeout: time });
+    }
 
+    // need to define
+    async waitUntilVisible (elem: any, time: any) {
+        // var deferred = protractor.promise.defer();
+        // var timeToWait = 10000;
+        // if (time) {
+        //     timeToWait = time;
+        // }
+        // browser.wait(EC.presenceOf(elem), timeToWait).then(function () {
+        //     deferred.fulfill();
+        // }, function () {
+        //     console.log(waitTimeOutMessage(elem, timeToWait, 'Until Visible'));
+        //     deferred.fulfill();
+        // });
+        // return deferred.promise;
+    }
 
- async waitUntilDisplayed (elem: any) {
-    var timeToWait = 10000;
-    setTimeout(()=>{
+    // need to define
+    async waitUntilNotVisible (elem: any, time: any) {
+        // var deferred = protractor.promise.defer();
+        // var timeToWait = 10000;
+        // if (time) {
+        //     timeToWait = time;
+        // }
+        // browser.wait(function () {
+        //     return elem.isPresent().then(function (isVisible) {
+        //         return !isVisible;
+        //     });
+        // }, timeToWait).then(function () {
+        //     deferred.fulfill();
+        // }, function () {
+        //     console.log(waitTimeOutMessage(elem, timeToWait, 'Until Not Visible'));
+        //     deferred.fulfill();
+        // });
+        // return deferred.promise;
+    }
 
-    },timeToWait)
-    
-    
-}
-
- async waitForPageToLoad (element: Locator) {
-    await this.page.wait(EC.visibilityOf(element), 60000);
-    this. waitForSpinnerToDisappear();
-};
- async enablingFeatureToggle (toggleName: string, tenantName: string, token: any, retryCount: number = 1) {
-    console.log(`ADDING FEATURE TOGGLE ${toggleName} for ${tenantName}`);
-    if (!(await FeatureToggleUtils.isFeatureToggleTurnedOnForTenant(toggleName, tenantName, token))) {
-        await FeatureToggleUtils.addTenantToFeature(toggleName, tenantName, token);
-        const featureToggleStatus = await FeatureToggleUtils.isFeatureToggleTurnedOnForTenant(toggleName, tenantName, token);
-        if (!featureToggleStatus && retryCount <= 5) {
-            console.log(`Feature toggle not yet enabled across all instances. Retry Count ${retryCount}`);
-            await this.page.delay(10000);
-            await this.enablingFeatureToggle(toggleName, tenantName, token, retryCount + 1);
-        } else if (retryCount > 5) {
-            console.log('Failed to add feature toggle from config manager. Failing Test Case.');
-            throw 'Failed to get updated feature toggle from config manager. Failing Test Case.';
-        } else {
-            console.log('Feature toggle added successfully.');
+    async waitUntilInvisible(element: any, timeToWait?: number): Promise<void> {
+        try {
+          const waitTime = timeToWait ? timeToWait : DEFAULT_WAIT_TIME;
+          await this.delay(waitTime);
+        } catch (ex) {
+          console.error('failed while waiting for element to be invisible');
+          throw ex;
         }
     }
-};
 
- 
-async waitUntilInvisible(element: any, timeToWait?: number): Promise<void> {
-    try {
-      const waitTime = timeToWait ? timeToWait : DEFAULT_WAIT_TIME;
-      await this.page.wait(EC.invisibilityOf(element), waitTime);
-    } catch (ex) {
-      console.error('failed while waiting for element to be invisible');
-      throw ex;
-    }
-  }
-
-
+    async waitForPageToLoad (element: any) {
+        await this.page.wait(EC.visibilityOf(element), 60000);
+        this.waitForSpinnerToDisappear();
+    };
+    
 }
-
 

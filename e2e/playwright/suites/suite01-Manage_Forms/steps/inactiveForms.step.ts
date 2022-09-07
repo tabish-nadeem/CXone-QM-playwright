@@ -4,23 +4,24 @@ import { Utils } from '../../../../common/utils';
 import { AccountUtils } from '../../../../common/AccountUtils';
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { LoginPage } from "../../../../common/login";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OnPrepare } from "../../../../playwright.config";
 import { ManageFormsPO } from '../../../../pageObjects/manager-form.po';
 
-let browser: any;
-let context: BrowserContext;
+let browser : any,
+    utils : any,
+    loginPage : any,
+    userDetails : any,
+    newOnPrepare : any,
+    performanceMonitoring : any,
+    sampleFormData : any,
+    manageFormsPO : any, 
+    createForms: any = [];
 let page: Page;
-let utils: any;
-let loginPage: any;
-let userDetails: any;
-let newOnPrepare:any;
-let performanceMonitoring: any;
-let sampleFormData: any;
+let context: BrowserContext;
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let createForms:any = [];
-let manageFormsPO:any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -112,7 +113,7 @@ Then("Step-4: should verify user is be able to deactivate multiple activated for
 
 Then("Step-5: should verify user is be able to delete a inactive form : P1", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.deleteForm(formNames.formThree);
-    await manageFormsPO.waitForSpinnerToDisappear();
+    await CommonUIUtils.waitUntilIconLoaderDone(page);
     expect(await manageFormsPO.verifyFormPresence(formNames.formThree)).toBeFalsy();
 });
 

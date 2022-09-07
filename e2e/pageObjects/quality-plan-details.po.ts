@@ -17,11 +17,10 @@ export class QualityPlanDetailsPO {
     readonly planStatus: any;
 
     public constructor() {
-        // this.qualityPlanManager = new QualityPlanManagerPO();
-        // this.ancestor = element(by.id('ng2-quality-plan-details-page'));
+     
         this.ancestor = page.locator(`id="ng2-quality-plan-details-page"`);
         this.container = page.locator(`div[class=".filters-container"]`);
-        // this.container = this.ancestor.element(by.css('.filters-container'));
+       
     }
     async navigate() {
         console.log('Coming to Navigate')

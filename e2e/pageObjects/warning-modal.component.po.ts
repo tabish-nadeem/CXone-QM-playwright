@@ -1,10 +1,7 @@
-
 /* eslint-disable */
-import { Utils } from '../common/utils';
+import { Page } from "@playwright/test";
 import { ExpectedCondition as EC } from 'expected-condition-playwright';
-import { Page, Locator } from "@playwright/test";
-import { Helpers } from "../playwright.helpers";
-import { URLs } from "../common/pageIdentifierURLs";
+import { Utils } from '../common/utils';
 
 let browser: any;
 let page: Page;
@@ -22,7 +19,7 @@ export class WarningModalComponentPo {
 
     async getModalTitle() {
         await page.wait(EC.visibilityOf(this.elements.modalTitle), 10000);
-        return await this.elements.modalTitle.getText();
+        return await this.elements.modalTitle.textContent();
     }
 
     getModal() {
@@ -30,22 +27,22 @@ export class WarningModalComponentPo {
     }
 
     async getMessage(Choice: any) {
-        return await this.elements.message.sendKeys(Choice);
+        return await this.elements.message.type(Choice);
     }
 
     async clickYesButton(): Promise<any> {
         await Utils.click(this.elements.yesBtn);
-        await Utils.waitUntilInvisible(this.getModal());
+        await utils.waitUntilInvisible(this.getModal());
     }
 
     async clickNoButton(): Promise<any> {
         await Utils.click(this.elements.noBtn);
-        await Utils.waitUntilInvisible(this.getModal());
+        await utils.waitUntilInvisible(this.getModal());
     }
 
     async clickCloseButton(): Promise<any> {
         await Utils.click(this.elements.closeButton);
-        await Utils.waitUntilInvisible(this.getModal());
+        await utils.waitUntilInvisible(this.getModal());
     }
 
     async isVisible(): Promise<boolean> {

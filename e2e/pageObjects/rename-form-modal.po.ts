@@ -25,12 +25,12 @@ export class RenameFormModalPO {
     // Function to verify header title of Rename Modal window
     public async verifyRenameModalHeaderText() {
         await this.elements.renameModalTitle.isPresent();
-        return await this.elements.renameModalTitle.getText();
+        return await this.elements.renameModalTitle.textContent();
     }
     // Function to verify sub text
     public async verifyRenameModalSubHeading() {
         await this.elements.subHeading.isPresent();
-        return await this.elements.subHeading.getText();
+        return await this.elements.subHeading.textContent();
     }
 
     // Function to verify text box is present
@@ -47,7 +47,7 @@ export class RenameFormModalPO {
 
     // Function to enter contents in text box
     public async enterName(formName : any) {
-        return await this.elements.formTextBox.clear().sendKeys(formName);
+        return await this.elements.formTextBox.type(formName);
     }
 
     // Function to check validation message
@@ -57,7 +57,7 @@ export class RenameFormModalPO {
 
     // Function to get validation message
     public async getValidation() {
-        return await this.elements.validationMsg.getText();
+        return await this.elements.validationMsg.textContent();
     }
 
     // Function to check change button
@@ -83,7 +83,7 @@ export class RenameFormModalPO {
 
     //Function to check the name validation message
     public async checkNameValidation() {
-        return await this.elements.nameValidationMsg.getText();
+        return await this.elements.nameValidationMsg.textContent();
     }
 
     public async clickCancelBtn() {

@@ -4,6 +4,7 @@ import { Utils } from '../../../../common/utils';
 import { AccountUtils } from '../../../../common/AccountUtils';
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { LoginPage } from "../../../../common/login";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
@@ -11,20 +12,20 @@ import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
 import { RenameFormModalPO } from '../../../../pageObjects/rename-form-modal.po';
 import { OnPrepare } from "../../../../playwright.config";
 
-let browser: any;
-let context: BrowserContext;
+let browser: any,
+    utils: any,
+    omnibarPO: any,
+    manageFormsPO:any,
+    renameFormModalPO: any,
+    newOnPrepare:any,
+    loginPage: any,
+    userDetails: any,
+    formDetails: any,
+    userToken: any,
+    sampleFormData: any;
 let page: Page;
-let utils: any;
-let omnibarPO: any;
-let manageFormsPO:any;
-let renameFormModalPO: any;
-let newOnPrepare:any;
-let loginPage: any;
-let userDetails: any;
-let formDetails: any;
-let userToken: any;
+let context: BrowserContext;
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let sampleFormData: any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -137,11 +138,11 @@ Given("Step-1: should open the rename form modal and verify the components on th
         await menuItem.click();
         await browser.wait(page.locator('cxone-modal').isVisible(), 20000);
         await renameFormModalPO.clickChangeBtn();
-        await manageFormsPO.waitForSpinnerToDisappear();
+        await CommonUIUtils.waitUntilIconLoaderDone(page);
         await renameFormModalPO.clickCancelBtn();
         await manageFormsPO.searchFormInGrid(formNames.formOne);
         expect(await omnibarPO.getItemCountLabel()).toEqual(['1 form']);
-    });
+});
 
 When("Step-2: should give a new name and save the form, rename it again : P1", { timeout: 180 * 1000 }, async () => {
     let beforeCount: any;
