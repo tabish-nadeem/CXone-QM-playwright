@@ -22,6 +22,7 @@ import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component
 import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
 import { ScoringModalComponentPo } from "../../../../pageObjects/scoring-modal.component.po";
 import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
+import { EvaluatorsPO } from "../../../../pageObjects/evaluators.po";
 
 
 
@@ -101,6 +102,7 @@ let formArea = new FormAreaComponentPo();
 let designerToolbar = new DesignerToolbarComponentPO();
 let scoringModal = new ScoringModalComponentPo();
 let elementAttributes = new ElementAttributesComponentPo();
+const evaluatorsPO = new EvaluatorsPO();
 
 
 

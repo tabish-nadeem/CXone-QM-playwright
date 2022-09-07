@@ -101,7 +101,6 @@ let testDataUsed: any = {
 
 let userDetails: any = {}
 const planSummaryPO = new PlanSummaryPO();
-// const protractorConfig = protHelper.getProtractorHelpers();
 const qualityPlanDetailsPO = new QualityPlanDetailsPO();
 const qualityPlanManagerPO = new QualityPlanManagerPO();
 const teamsAndGroupsPO = new TeamsAndGroupsPO();
@@ -114,12 +113,7 @@ let designerToolbar = new DesignerToolbarComponentPO();
 let scoringModal = new ScoringModalComponentPo();
 let elementAttributes = new ElementAttributesComponentPo();
 let warningPageModalPO = new WarningModalComponentPo();
-// const evaluationFormPO = new EvaluationFormPO();
-// const teamsAndGroupsPO = new TeamsAndGroupsPO();
-// const evaluatorsPO = new EvaluatorsPO();
-// const enhancedEvaluatorsPO = new EnhancedEvaluatorsPO();
-// const evaluationTypePO = new EvaluationTypePO();
-// const callDurationPO = new CallDurationPO();
+
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
      browser = await chromium.launch({
@@ -146,7 +140,7 @@ const beforeEachFunction = async () => {
      await Utils.waitUntilVisible(await formArea.getFormArea());
 };
 const onEnd = async () => {
-     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
      await CommonUIUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
 };
 
@@ -468,4 +462,8 @@ Then("Step-20 should verify that user is able to continue on page after clicking
 
 
 
+
+function userToken(ANGULAR8_MIGRATION_SPRING20: string, orgName: any, userToken: any) {
+     throw new Error('Function not implemented.');
+}
 
