@@ -10,6 +10,7 @@ export const FEATURE_TOGGLES = {
     FT_EXCLUDE_INACTIVE_USERS: 'release-QM-exclude-inactive-user-planMonitoringUI-CXQM-17187',
     ENHANCED_EVALUATOR_MODAL_FT: 'release-QM-performance-improvement-for-50k-users-CXQM-18051',
     QP_EDIT_EVALUATOR_FT: 'release-QM-QP-Edit-Evaluator-CXQM-18068',
+    RESTRICT_QUESTION_LENGTH_FT: 'utility-QM-restrict-form-data-question-title-CXQM-18756',
 };
 
 export const FORM_STATES = {
@@ -88,7 +89,9 @@ export const EVALUATOR_STATUS = {
     2: 'New',
     3: 'Removed'
 };
-
+export const CHARACTER_LIMIT = {
+    questionLength : 2048
+};
 export class UIConstants {
     constants = {
         groupName: 'QM_Execution',

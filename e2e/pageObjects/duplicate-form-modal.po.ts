@@ -63,12 +63,12 @@ export class DuplicateFormModalPO {
     /* Function to enter form name in text box
      * Parameter - formName - send the form name*/
     public enterFormName(formName : any) {
-        return this.elements.formNameTextBox.clear().sendKeys(formName);
+        return this.elements.formNameTextBox.type(formName);
     }
 
     // Function to get save error message
     public verifySaveErrorMsg() {
-        return this.elements.formSaveErrorMsg.getText();
+        return this.elements.formSaveErrorMsg.textContent();
     }
 
     public getFormNameTextBox() {

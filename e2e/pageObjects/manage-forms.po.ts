@@ -1,62 +1,65 @@
-import {expect, Locator, Page} from "@playwright/test";
-import moment from 'moment';
-import { CommonNoUIUtils } from "../common/CommonNoUIUtils";
 
+import { expect, Locator, Page } from "@playwright/test";
+import moment from "moment";
 import { fdUtils } from "../common/FdUtils";
 import { Utils } from "../common/utils";
-import { DuplicateFormModalPO } from "./duplicate-form-modal.po";
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { OmnibarPO } from "./omnibar.po";
 import { RenameFormModalPO } from "./rename-form-modal.po";
-// import {
-//     navigateTo,
-//     navigateQuicklyTo,
-//     waitForSpinnerToDisappear,
-//     waitForPageToLoad
-// } from '../../../../tests/protractor/common/prots-utils';
-
-
+import { WarningModalComponentPo } from "./warning-modal.component.po";
+import { DuplicateFormModalPO } from "./duplicate-form-modal.po";
 
 export class ManageFormsPO {
-    public ancestor: Locator;
-    public defaultTimeoutInMillis: number;
-    public elements:any;
-    public utils:Utils;
-    public readonly page:Page;
+  public ancestor: Locator;
+  public defaultTimeoutInMillis: number;
+  public elements;
+  public utils: Utils;
+  public readonly page: Page;
 
-    public constructor(ancestorElement?: Locator, defaultTimeoutInMillis = 20000) {
+  public async refresh() {
+    return await navigateQuicklyTo(
+      fdUtils.getPageIdentifierUrls("forms.form_Manager"),
+      this.page.locator("#ng2-manage-forms-page #manage-forms-grid"),
+      fdUtils.getPageIdentifierUrls("qp.qpPlanManager")
+    );
+  }
+
+  public async navigateTo() {
+    return await navigateTo(
+      fdUtils.getPageIdentifierUrls("forms.form_Manager"),
+      this.page.locator("#ng2-manage-forms-page #manage-forms-grid")
+    );
+  }
+
+
+    public constructor(pageElement?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
-        this.ancestor = ancestorElement || this.page.locator('#ng2-manage-forms-page');
+        this.page = pageElement || this.page.locator('#ng2-manage-forms-page');
+        this.utils = new Utils(this.page);
         this.elements = {
-            container: this.ancestor.locator('#ng2-manage-forms-page'),
-            gridComponent: this.ancestor.locator('cxone-grid'),
-            header: this.ancestor.locator('#manage-forms-page-title'),
-            newFormBtn: this.ancestor.locator('#createForm'),
+            container: this.page.locator('#ng2-manage-forms-page'),
+            gridComponent: this.page.locator('cxone-grid'),
+            header: this.page.locator('#manage-forms-page-title'),
+            newFormBtn: this.page.locator('#createForm'),
             currentUserName: this.page.locator('#simple-dropdown div.titleText'),
-            publishBtn: this.ancestor.locator('#bulk-btn-activate'),
-            unpublishBtn: this.ancestor.locator('#bulk-btn-deactivate'),
-            bulkDeleteBtn: this.ancestor.locator('#bulk-btn-delete'),
+            publishBtn: this.page.locator('#bulk-btn-activate'),
+            unpublishBtn: this.page.locator('#bulk-btn-deactivate'),
+            bulkDeleteBtn: this.page.locator('#bulk-btn-delete'),
             spinner: this.page.locator('.cxonespinner .spinner.spinner-bounce-middle'),
             delPublishFormPopover: this.page.locator('popover-container.tooltip-popover-style'),
             clickConfirmDelete: this.page.locator('button, input[type="button"], input[type="submit"] >> text = "Yes"'),
             confirmCancelBtn: this.page.locator('#popup-cancel'),
-            row: this.ancestor.locator('#manage-forms-grid div.ag-center-cols-viewport div[row-index]'),
-            noMatchfoundMsg: this.ancestor.locator('#manage-forms-grid span.no-rows-overlay-text')
+            row: this.page.locator('#manage-forms-grid div.ag-center-cols-viewport div[row-index]'),
+            noMatchfoundMsg: this.page.locator('#manage-forms-grid span.no-rows-overlay-text')
         };
     }
 
-    public async refresh() {
-        return await navigateQuicklyTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'),fdUtils.getPageIdentifierUrls('qp.qpPlanManager'));
-    }
-
-    public async navigateTo() {        
-        return await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
-    }
 
     public async navigateToWithWarningModal() {
         const warningModalComponentPo = new WarningModalComponentPo();
         await this.page.goto(fdUtils.getPageIdentifierUrls('forms.form_Manager'));        
         await warningModalComponentPo.clickYesButton();
-        return await waitForPageToLoad(this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
+        return await this.utils.waitForPageToLoad(this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
     }
 
     public getNewFormButton(): Locator {
@@ -64,7 +67,7 @@ export class ManageFormsPO {
     }
 
     public async getHeaderText(): Promise<string> {
-        return await this.elements.header.getText();
+        return await this.elements.header.textContent();
     }
 
     public getGridRow(rowIndex: number) {
@@ -75,11 +78,11 @@ export class ManageFormsPO {
         if (shouldSearch) {
             await this.searchFormInGrid(formName);
         }
-        return this.ancestor.locator('xpath=.//*[text()="' + formName + '"]/..').isPresent();
+        return this.page.locator('xpath=.//*[text()="' + formName + '"]/..').isPresent();
     }
 
     public async getGridRowOfMatchingText(text: string) {
-        let row: Locator = await this.ancestor.locator('xpath=.//*[text()="' + text + '"]/../../..');
+        let row: Locator = await this.page.locator('xpath=.//*[text()="' + text + '"]/../../..');
         const rowIndex = await row.getAttribute('row-index');
         return this.getGridRow(+rowIndex);
     }
@@ -92,23 +95,23 @@ export class ManageFormsPO {
             cells = await this.page.locator('div.ag-cell');
         }
         return {
-            version: await cells[2].getText(),
-            lastModified: await cells[3].getText(),
-            modifiedBy: await cells[4].getText(),
-            status: await cells[5].getText()
+            version: await cells[2].textContent(),
+            lastModified: await cells[3].textContent(),
+            modifiedBy: await cells[4].textContent(),
+            status: await cells[5].textContent()
         };
     }
 
-    public async getFormRowElements(value): Promise<any> {
-        let columns = await this.ancestor.locator('xpath=.//*[text()="' + value + '"]/../../../*');
-        await Utils.waitUntilVisible(columns[0]);
+    public async getFormRowElements(value: any): Promise<any> {
+        let columns = await this.page.locator('xpath=.//*[text()="' + value + '"]/../../../*');
+        await this.page.waitForSelector(columns[0])
         
         return {
-            version: await columns[2].getText(),
-            lastModified: await columns[3].getText(),
-            modifiedBy: await columns[4].getText(),
-            status: await columns[5].getText(),
-            actions: await columns[6].getText()
+            version: await columns[2].textContent(),
+            lastModified: await columns[3].textContent(),
+            modifiedBy: await columns[4].textContent(),
+            status: await columns[5].textContent(),
+            actions: await columns[6].textContent()
         };
     }
 
@@ -118,7 +121,7 @@ export class ManageFormsPO {
 
     public async getCurrentUserName(): Promise<string> {
         await expect(this.page.locator('header.nice-header')).toBeVisible(this.defaultTimeoutInMillis);
-        return await this.elements.currentUserName.getText();
+        return await this.elements.currentUserName.textContent();
     }
 
     public async getBulkOperationsButtonEnabledStates(): Promise<{ activate: boolean; deactivate: boolean; delete: boolean }> {
@@ -131,14 +134,14 @@ export class ManageFormsPO {
     }
 
     public async selectParticularForm(formName: any): Promise<any> {
-        let row: Locator = this.ancestor.locator('xpath=.//*[text()="' + formName + '"]/../../..');
+        let row: Locator = this.page.locator('xpath=.//*[text()="' + formName + '"]/../../..');
         let checkboxToSelect = row.locator('span.ag-selection-checkbox .ag-icon.ag-icon-checkbox-unchecked');
         return await checkboxToSelect.click();
     }
 
     public async openParticularForm(formName: any): Promise<any> {
-        await Utils.click(this.ancestor.locator('xpath=.//*[text()="' + formName + '"]/../../..'));
-        await Utils.waitForSpinnerToDisappear();
+        await Utils.click(this.page.locator('xpath=.//*[text()="' + formName + '"]/../../..'));
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await Utils.waitForTime(2000);
     }
 
@@ -161,16 +164,16 @@ export class ManageFormsPO {
 
     public async clickConfirmBtn(btnName: any) {
         let btn = this.page.locator('#popup-' + btnName + '');
-        Utils.waitUntilVisible(btn);
+        this.page.waitForSelector('#popup-' + btnName + '')
         await btn.click();
-        return this.waitForSpinnerToDisappear();
+        return CommonUIUtils.waitUntilIconLoaderDone(this.page);
     }
 
     public async waitForSpinnerToDisappear(timeToWait?: number) {
         if (!timeToWait) {
             timeToWait = 60000;
         }
-        return await protractor.testUtils.waitUntilNotVisible(this.elements.spinner, timeToWait);
+        return await this.utils.waitUntilNotVisible(this.elements.spinner, timeToWait);
     }
 
     public async verifyHamburgerMenu(value: any) {
@@ -212,26 +215,24 @@ export class ManageFormsPO {
         try {
             const row = await this.getGridRowOfMatchingText(value);
             const actionDelete = row.locator('button.action-btn.action-delete svg');
-            await browser.actions().mouseMove(actionDelete).perform();
+            await actionDelete.hover();
             await expect(this.elements.delPublishFormPopover).toBeVisible(10000);
-            return this.elements.delPublishFormPopover.getText();
+            return this.elements.delPublishFormPopover.textContent();
         } catch (ex) {
             console.error('Failed to get hover message', ex);
         }
     }
 
     public async bulkDelete() {
-        await Utils.waitUntilVisible(this.elements.bulkDeleteBtn);
-        // await protractorConfig.testUtils.waitUntilDisplayed(this.elements.bulkDeleteBtn);
+        await this.page.waitForSelector('#bulk-btn-delete');
         return this.elements.bulkDeleteBtn.click();
     }
 
     public async clickConfirmDeleteBtn(skipWaitForSpinner?: any) {
-        await Utils.waitUntilVisible(this.elements.clickConfirmDelete);
-        // await protractorConfig.testUtils.waitUntilDisplayed(this.elements.clickConfirmDelete);
+        await this.page.waitForSelector('button, input[type="button"], input[type="submit"] >> text = "Yes"')
         await this.elements.clickConfirmDelete.click();
         if (!skipWaitForSpinner) {
-            await this.waitForSpinnerToDisappear();
+            await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         }
     }
 
@@ -240,12 +241,11 @@ export class ManageFormsPO {
     }
 
     public async getNoMatchFoundMsg() {
-        return await this.elements.noMatchfoundMsg.getText();
+        return await this.elements.noMatchfoundMsg.textContent();
     }
 
     public async clickConfirmCancel() {
-        await Utils.waitUntilVisible(this.elements.confirmCancelBtn);
-        // await protractorConfig.testUtils.waitUntilDisplayed(this.elements.confirmCancelBtn);
+        await this.page.waitForSelector('#popup-cancel');
         return this.elements.confirmCancelBtn.click();
     }
 
@@ -253,11 +253,11 @@ export class ManageFormsPO {
         for (let i = 0; i < formNames.length; i++) {
             await this.selectParticularForm(formNames[i]);
         }
-        await protractorConfig.testUtils.waitForItemToBeClickable(this.elements.publishBtn);
+        await this.utils.waitForItemToBeClickable(this.elements.publishBtn, 5000);
         await this.elements.publishBtn.click();
         await expect(this.page.locator('popover-container.bulk-operations')).toBeVisible(5000);
         await this.clickConfirmBtn('publish');
-        return this.waitForSpinnerToDisappear();
+        return CommonUIUtils.waitUntilIconLoaderDone(this.page);
     }
 
     public async bulkDeactivateForms(formNames: string[]) {
@@ -271,7 +271,7 @@ export class ManageFormsPO {
         await this.elements.unpublishBtn.click();
         await expect(this.page.locator('popover-container.bulk-operations')).toBeVisible(5000);
         await this.clickConfirmBtn('unpublish');
-        return this.waitForSpinnerToDisappear();
+        return CommonUIUtils.waitUntilIconLoaderDone(this.page);
     }
 
     public async bulkDeleteForms(formNames: string[]) {
@@ -281,7 +281,7 @@ export class ManageFormsPO {
         await this.clickBulkDeleteButton();
         await expect(this.page.locator('popover-container.bulk-operations')).toBeVisible(5000);
         await this.clickConfirmBtn('delete');
-        return this.waitForSpinnerToDisappear();
+        return CommonUIUtils.waitUntilIconLoaderDone(this.page);
     }
 
     public async duplicateForm(oldFormName: string, newFormName: string) {
@@ -292,7 +292,7 @@ export class ManageFormsPO {
         await expect(this.page.locator('cxone-modals')).toBeVisible(this.defaultTimeoutInMillis);
         await duplicateFormModalPO.enterFormName(newFormName);
         await duplicateFormModalPO.clickSaveButton();
-        await this.waitForSpinnerToDisappear();
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await this.searchFormInGrid('');
     }
 
@@ -304,7 +304,7 @@ export class ManageFormsPO {
         await expect(this.page.locator('cxone-modals')).toBeVisible(this.defaultTimeoutInMillis);
         await renameFormModalPO.enterName(newFormName);
         await renameFormModalPO.clickChangeBtn();
-        await this.waitForSpinnerToDisappear();
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await this.searchFormInGrid('');
     }
 
@@ -312,7 +312,7 @@ export class ManageFormsPO {
         await this.searchFormInGrid(formName);
         const menuItem = await this.getHamburgerMenuItem(formName, 'Activate');
         await menuItem.click();
-        await this.waitForSpinnerToDisappear();
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await this.searchFormInGrid('');
     }
 
@@ -322,14 +322,14 @@ export class ManageFormsPO {
         await row.locator('button.action-btn.action-delete').click();
         await expect(this.page.locator('popover-container div.confirmBtns button[id="popup-single-delete"]')).toBeVisible(5000);
         await this.page.locator('popover-container div.confirmBtns button[id="popup-single-delete"]').click();
-        return this.waitForSpinnerToDisappear();
+        return CommonUIUtils.waitUntilIconLoaderDone(this.page);
     }
 
     public async deactivateForm(formName: string) {
         await this.searchFormInGrid(formName);
         const menuItem = await this.getHamburgerMenuItem(formName, 'Unpublish');
         await menuItem.click();
-        await this.waitForSpinnerToDisappear();
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await this.searchFormInGrid('');
     }
 

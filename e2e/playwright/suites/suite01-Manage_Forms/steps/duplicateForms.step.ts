@@ -7,22 +7,24 @@ import { LoginPage } from "../../../../common/login";
 import { Utils } from '../../../../common/utils';
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { LocalizationNoUI } from "../../../../common/LocalizationNoUI";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 
-
-let browser: any;
-let context: BrowserContext;
+let browser : any, 
+    utils : any, 
+    manageFormsPO : any, 
+    duplicateFormModalPO : any, 
+    newOnPrepare : any, 
+    loginPage : any, 
+    userDetails : any, 
+    userToken : any, 
+    dateFormat: any, 
+    sampleFormData: any;
 let page: Page;
-let utils: any;
-let manageFormsPO:any;
-let duplicateFormModalPO: any;
-let newOnPrepare:any;
-let loginPage: any;
-let userDetails: any;
-let userToken: any, dateFormat: any, localString = 'en-US';
+let localString = 'en-US';
+let context: BrowserContext;
 let newGlobalTenantUtils = new GlobalTenantUtils();
-let sampleFormData: any;
 
 const FEATURE_TOGGLES = {
     navigation_redesign: 'release-navigation-redesign-CXCROSS-21'
@@ -93,7 +95,7 @@ Given("Step-1: should create a duplicate form of existing form;Also should verif
     await duplicateFormModalPO.enterFormName(formNames.duplicateFormOne);
     expect(await duplicateFormModalPO.checkSaveButton()).toBe(true);
     await duplicateFormModalPO.clickSaveButton();
-    await manageFormsPO.waitForSpinnerToDisappear();
+    await CommonUIUtils.waitUntilIconLoaderDone(page);
     expect(await manageFormsPO.verifyFormPresence(formNames.duplicateFormOne)).toBeTruthy();
     expect((await manageFormsPO.getFormRowElements(formNames.duplicateFormOne)).status).toEqual('Draft');
 });
