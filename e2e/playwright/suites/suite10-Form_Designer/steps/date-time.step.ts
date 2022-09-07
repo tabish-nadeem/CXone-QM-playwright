@@ -1,6 +1,6 @@
 import * as protHelper from '../../../../playwright.helpers';
-import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import { BrowserContext, Page, expect, chromium } from "@playwright/test";
+import { Given, When, BeforeAll } from "cucumber";
+import { Page, expect } from "@playwright/test";
 import { Utils } from '../../../../common/utils';
 import * as moment from 'moment';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
@@ -19,11 +19,7 @@ let globalTenantUtils:GlobalTenantUtils;
 let formDesignerPagePO;
 let formAreaComponentPo;
 let dateTimePropertiesComponentPo;
-let designerToolbar;
-let scoringModal;
-let elementAttributes;
 let manageFormsPO;
-let utils: Utils;
 
 BeforeAll({timeout: 300 * 1000},async ()=>{
         formAreaComponentPo = new FormAreaComponentPo();
