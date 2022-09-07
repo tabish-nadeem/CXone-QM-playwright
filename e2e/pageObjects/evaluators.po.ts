@@ -1,7 +1,4 @@
 import { OmnibarPO } from 'cxone-components/omnibar.po';
-<<<<<<< HEAD
-
-=======
 import { Utils } from '../common/utils';
 import { Page, Locator } from "@playwright/test";
 
@@ -109,5 +106,4 @@ export class EvaluatorsPO {
      public async getSelectiveFieldsEditMsgText() {
           return this.ancestor.page.locator(('.can-edit-message')).getText();
      }
->>>>>>> ebc0ce36673cfeb12581961f94cff8b8aa00f36b
 }
