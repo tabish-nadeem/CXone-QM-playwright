@@ -1,8 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
-import { QualityPlanDetailsPO } from '../../quality-plan-details.po';
-import { Utils } from '../../../../../../../tests/protractor/common/utils';
+import { QualityPlanDetailsPO } from '../pageObjects/quality-plan-details.po';
+import { Utils } from '../common/utils';
 
 export class CallDurationPO {
     public ancestor: Locator;
@@ -72,7 +72,7 @@ export class CallDurationPO {
     }
 
     public async getErrorText() {
-        return await this.utils.getText(this.page.locator('.error-message'));
+        return await this.page.locator('.error-message').textContent();
     }
 
 }

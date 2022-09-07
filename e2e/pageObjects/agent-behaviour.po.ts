@@ -1,6 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
-import { Utils } from '../../../../../../../tests/protractor/common/utils';
+import { Utils } from '../common/utils';
+import {ExpectedCondition} from 'expected-condition-playwright';
 
 export class AgentBehaviorPO {
     public ancestor: Locator;
@@ -19,7 +20,7 @@ export class AgentBehaviorPO {
     }
 
     public async isFilterPresent() {
-        return await this.utils.isPresent(this.ancestor);
+        return await Utils.isPresent(this.ancestor);
     }
 
     public async setAgentBehaviorType(abTypeName: any,index: any) {
@@ -43,17 +44,17 @@ export class AgentBehaviorPO {
     }
 
     public async selectScore(abScore: string, index: number) {
-        await browser.wait(ExpectedConditions.presenceOf(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`)), 10000);
-        await browser.executeScript('arguments[0].click();', this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`));
+        await this.page.wait(ExpectedCondition.presenceOf(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`)), 10000);
+        await this.page.executeScript('arguments[0].click();', this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`));
     }
 
     public async deSelectScore(abScore: string, index: number) {
-        await Utils.click(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`));
+        Utils.click(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`));
     }
 
     public async addMoreAgentBehavior(index: any) {
-        await browser.wait(ExpectedConditions.presenceOf(this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon')), 10000);
-        await browser.executeScript('arguments[0].click();', this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon'));
+        await this.page.wait(ExpectedCondition.presenceOf(this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon')), 10000);
+        await this.page.executeScript('arguments[0].click();', this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon'));
     }
 
     public async deleteAgentBehavior(index: any) {
