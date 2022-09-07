@@ -6,13 +6,13 @@ import * as moment from 'moment';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { FEATURE_TOGGLES } from "../../../../common/uiletants";
 import * as _ from 'lodash';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
 import FormDesignerPagePO from '../../../../pageObjects/form-designer-page.po';
 import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import { ELEMENT_TYPES } from '../../../../common/uiConstants';
+import { LoginPage } from '../../../../common/login';
 
 let page: Page;
 let globalTenantUtils:GlobalTenantUtils;
@@ -20,19 +20,20 @@ let formDesignerPagePO;
 let formAreaComponentPo;
 let dateTimePropertiesComponentPo;
 let manageFormsPO;
+let loginPage:LoginPage;
 
 BeforeAll({timeout: 300 * 1000},async ()=>{
         formAreaComponentPo = new FormAreaComponentPo();
         formDesignerPagePO = new FormDesignerPagePO();
         dateTimePropertiesComponentPo = new DateTimePropertiesComponentPo();
         manageFormsPO = new ManageFormsPO(page.locator('#ng2-manage-forms-page'));
+        loginPage = new LoginPage(page);
         let userToken;
 
         let userDetails = globalTenantUtils.getDefaultTenantCredentials();
 
         const onStart = async () => {
-            await CommonUIUtils.maximizeBrowserWindow();
-            userToken = await CommonUIUtils.login(globalTenantUtils.userDetails.email, globalTenantUtils.userDetails.password);
+            userToken = await loginPage.login(globalTenantUtils.userDetails.email, globalTenantUtils.userDetails.password);
             await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, globalTenantUtils.userDetails.orgName, userToken)
             await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, globalTenantUtils.userDetails.orgName, userToken)
             await manageFormsPO.navigateTo();
@@ -43,7 +44,7 @@ BeforeAll({timeout: 300 * 1000},async ()=>{
 
         const onEnd = async () => {
             await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, globalTenantUtils.userDetails.orgName, userToken);
-            await CommonUIUtils.logout(true, 120000, globalTenantUtils.userDetails.orgName, userToken);
+            await loginPage.logout();
             
         };
 });

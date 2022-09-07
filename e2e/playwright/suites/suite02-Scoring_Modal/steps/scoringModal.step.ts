@@ -14,6 +14,7 @@ import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-too
 import { ScoringModalComponentPo } from '../../../../pageObjects/scoring-modal.component.po';
 import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
 import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import { LoginPage } from '../../../../common/login';
 let _ = require('lodash');
 
 let page: Page;
@@ -23,7 +24,7 @@ let designerToolbar;
 let scoringModal;
 let elementAttributes;
 let manageFormsPO;
-
+let loginPage:LoginPage;
 let userToken: any ;
 let userDetails : any = new GlobalTenantUtils;
 
@@ -35,8 +36,8 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     scoringModal = new ScoringModalComponentPo();
     elementAttributes = new ElementAttributesComponentPo();
     manageFormsPO = new ManageFormsPO(page.locator('#ng2-manage-forms-page'));
-    userToken = await CommonUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password);
-    await CommonUIUtils.maximizeBrowserWindow();
+    loginPage = new LoginPage(page);
+    userToken = await loginPage.login(userDetails.adminCreds.email, userDetails.adminCreds.password);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken)
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken)
     await manageFormsPO.navigateTo();    
@@ -44,11 +45,11 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
 
 const beforeEachFunction = async () => {
     await formDesignerPage.navigateTo();
-    await Utils.waitUntilVisible(await formArea.getFormArea());
+    await page.waitForSelector(await formArea.getFormArea());
 };
 const onEnd = async () => {
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await CommonUIUtils.logout(true, 120000, userDetails.orgName, userToken);
+    await loginPage.logout();
 };
 
 Given("Step 1: Scoring modal should open after clicking on scoring button and Should close after clicking on set/cancel button",{timeout: 60 * 1000 }, async () => {

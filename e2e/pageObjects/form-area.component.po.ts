@@ -222,7 +222,8 @@ export class FormAreaComponentPo {
     async mouseHoverOnElement(elementType): Promise<any> {
         let elem = '.components-panel *[element-type="' + elementType + '"]';
         await expect(this.page.locator(elem)).toBeVisible(30000);
-        await await this.page.mouse.move(this.page.locator(elem));
+        await this.page.mouse.move(this.page.locator(elem));
+        await this.page.locator(elem).hover();
     }
 
     async getElementTooltipTitle(): Promise<string> {
@@ -312,22 +313,16 @@ export class FormAreaComponentPo {
 
     async selectQuestionText(): Promise<any> {
         await this.utils.delay(1000);
-
         await this.page.mouse.down()
-        //FIXME:
-        await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('a').perform();
-
+        await this.page.keyboard.down('Control+a');
         await expect(this.elements.inlineToolbar).toBeVisible(10000);
-
-        //FIXME:
-        return browser.actions().keyUp(protractor.Key.CONTROL).perform() as Promise<any>;
+        return await this.page.keyboard.up('Control') as Promise<any>;
     }
 
     async setLabel(elementText:string, newElementText:string, elementType:string): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        //FIXME:
-        return browser.actions().sendKeys(newElementText).perform() as Promise<any>;
+        return await this.page.keyboard.insertText(newElementText) as Promise<any>;
     }
 
     async getMandatoryText(): Promise<any> {
@@ -367,8 +362,7 @@ export class FormAreaComponentPo {
     async froalaSetLabel(elementText:string, newElementText:string, elementType:string): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        //FIXME:
-        await browser.actions().sendKeys(newElementText).perform();
+        await this.page.keyboard.insertText(newElementText) as Promise<any>;
 
         await this.utils.delay(500);
     }
@@ -417,7 +411,7 @@ export class FormAreaComponentPo {
     }
 
     private async selectFromFroalaDropdown(optionToSelect:any): Promise<any> {
-        let elem = this.page.locator('.fr-dropdown-list *[role="option"][title="' + optionToSelect + '"]'));
+        let elem = this.page.locator('.fr-dropdown-list *[role="option"][title="' + optionToSelect + '"]');
         await expect(elem).toBeVisible(10000);
         await elem.click();
     }
