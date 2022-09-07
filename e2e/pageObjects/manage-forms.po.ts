@@ -1,6 +1,5 @@
-
-import { expect, Locator, Page } from "@playwright/test";
-import moment from "moment";
+import {expect, Locator, Page} from "@playwright/test";
+import moment from 'moment';
 import { fdUtils } from "../common/FdUtils";
 import { Utils } from "../common/utils";
 import { CommonUIUtils } from "cxone-playwright-test-utils";
@@ -8,34 +7,23 @@ import { OmnibarPO } from "./omnibar.po";
 import { RenameFormModalPO } from "./rename-form-modal.po";
 import { WarningModalComponentPo } from "./warning-modal.component.po";
 import { DuplicateFormModalPO } from "./duplicate-form-modal.po";
+import { UIConstants } from "../common/uiConstants"
+import { URLs } from "../common/pageIdentifierURLs"
+
+
 
 export class ManageFormsPO {
-  public ancestor: Locator;
-  public defaultTimeoutInMillis: number;
-  public elements;
-  public utils: Utils;
-  public readonly page: Page;
-
-  public async refresh() {
-    return await navigateQuicklyTo(
-      fdUtils.getPageIdentifierUrls("forms.form_Manager"),
-      this.page.locator("#ng2-manage-forms-page #manage-forms-grid"),
-      fdUtils.getPageIdentifierUrls("qp.qpPlanManager")
-    );
-  }
-
-  public async navigateTo() {
-    return await navigateTo(
-      fdUtils.getPageIdentifierUrls("forms.form_Manager"),
-      this.page.locator("#ng2-manage-forms-page #manage-forms-grid")
-    );
-  }
-
+    readonly defaultTimeoutInMillis: number;
+    readonly elements:any;
+    readonly utils:Utils;
+    readonly page:Page;
+    readonly uiConstants: UIConstants;
 
     public constructor(pageElement?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
         this.page = pageElement || this.page.locator('#ng2-manage-forms-page');
         this.utils = new Utils(this.page);
+        this.uiConstants = new UIConstants();
         this.elements = {
             container: this.page.locator('#ng2-manage-forms-page'),
             gridComponent: this.page.locator('cxone-grid'),
@@ -54,6 +42,13 @@ export class ManageFormsPO {
         };
     }
 
+    async navigate() {
+        let baseUrl = this.uiConstants.URLS.LOCALHOST
+        await this.page.goto(baseUrl + URLs.qualityManagement.manageforms);
+        await this.page.waitForURL('**\/#/manageForms');
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
+        await this.page.waitForSelector(`#ng2-manage-forms-page`);
+    }
 
     public async navigateToWithWarningModal() {
         const warningModalComponentPo = new WarningModalComponentPo();
