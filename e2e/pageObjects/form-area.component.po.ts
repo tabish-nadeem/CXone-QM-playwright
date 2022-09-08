@@ -1,19 +1,19 @@
 // import {Locator, element, by, browser, ExpectedConditions, protractor, WebElement} from 'protractor';
 import {SpinnerPO} from 'cxone-components/spinner.po';
 import {expect, Locator, Page} from "@playwright/test";
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { Utils } from '../common/utils';
 
 
 export class FormAreaComponentPo {
-    ancestor: Locator;
-    public elements: any;
+    readonly elements: any;
     readonly page: Page;
-    public elementLocators: any;
+    readonly elementLocators: any;
     readonly utils: Utils;
-    public spinner = new SpinnerPO('.apphttpSpinner .cxonespinner');
+    readonly spinner = new SpinnerPO('.apphttpSpinner .cxonespinner');
 
     constructor() {
-        this.ancestor = this.page.locator('.form-area-wrapper')
+        this.page  = this.page.locator('.form-area-wrapper')
         this.elements = {
             formArea: this.page.locator('#form-designer-form-area'),
             sectionDroppableArea: this.page.locator('.section-droppable-area section-style'),
@@ -71,7 +71,7 @@ export class FormAreaComponentPo {
     * @return(s) Locator
     * s*/
     async getElementOnFormArea(elementText:string, elementType:string): Promise<any> {
-        let currentElement;
+        let currentElement: any;
         let finalElemType = (elementType.toLowerCase() === 'date' || elementType.toLowerCase() === 'time')
             ? 'datetime' : elementType.toLowerCase();
         let allElements = await this.elements.formArea.all(this.page.locator('[class*="form-element-div"][element-type=' + finalElemType + ']'));

@@ -4,9 +4,9 @@ import { SingleselectDropdownPO } from "./singleselect-dropdown.po";
 
 
 export class TestFormModalComponentPo {
-    public readonly page:Page;
-    public elements:any;
-    public locators:any;
+    readonly page:Page;
+    readonly elements:any;
+    readonly locators:any;
 
     constructor(){
 
@@ -50,7 +50,7 @@ export class TestFormModalComponentPo {
         let allElements = await this.elements.formElements;
         for (let elem of allElements) {
             if (elem.isDisplayed()) {
-                if ((await elem.element(this.locators.elementText).getText()).replace(/\n/g, ' ').includes(questionText)) {
+                if ((await elem.element(this.locators.elementText).textContent()).replace(/\n/g, ' ').includes(questionText)) {
                     await this.page.evaluate('arguments[0].scrollIntoView()', elem.getWebElement());
                     return elem as Promise<Locator>;
                 }
@@ -77,7 +77,7 @@ export class TestFormModalComponentPo {
     }
 
     async getHeaders(): Promise<string> {
-        let headers = await this.elements.headers.getText();
+        let headers = await this.elements.headers.textContent();
         // @ts-ignore
         return headers.map(header => {
             return header.replace('\n', '');
@@ -87,25 +87,25 @@ export class TestFormModalComponentPo {
     async selectDate(questionText, date): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
         await elem.element(this.locators.datePicker).clear();
-        await elem.element(this.locators.datePicker).sendKeys(date);
+        await elem.element(this.locators.datePicker).type(date);
     }
 
     async selectTime(questionText, time): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
         await elem.element(this.locators.datePicker).clear();
-        await elem.element(this.locators.datePicker).sendKeys(time);
+        await elem.element(this.locators.datePicker).type(time);
     }
 
     async enterShortText(questionText, text): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
         await elem.element(this.locators.shortText).clear();
-        await elem.element(this.locators.shortText).sendKeys(text);
+        await elem.element(this.locators.shortText).type(text);
     }
 
     async enterTextArea(questionText, text): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
         await elem.element(this.locators.textArea).clear();
-        await elem.element(this.locators.textArea).sendKeys(text);
+        await elem.element(this.locators.textArea).type(text);
     }
 
     async clickHyperLink(questionText): Promise<any> {
@@ -115,7 +115,7 @@ export class TestFormModalComponentPo {
 
     async getErrorMessage(questionText): Promise<string> {
         const elem = await this.getQuestionElement(questionText);
-        return elem.element(this.locators.errorMessage).getText();
+        return elem.element(this.locators.errorMessage).textContent();
     }
 
     async selectSingleSelectDropDown(questionText, labelToSelect): Promise<any> {
@@ -136,12 +136,12 @@ export class TestFormModalComponentPo {
     }
 
     async getScore() {
-        return this.elements.score.getText();
+        return this.elements.score.textContent();
     }
 
     async getSectionScore(questionText) {
         const elem = await this.getQuestionElement(questionText);
-        return elem.element(this.locators.sectionScore).getText();
+        return elem.element(this.locators.sectionScore).textContent();
 
     }
 }

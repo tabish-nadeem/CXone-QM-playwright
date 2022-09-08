@@ -9,33 +9,32 @@ import { ImageUploadComponentPo } from "./image-upload.component.po";
 import { LogicPropertiesComponentPo } from "./logic-properties.component.po";
 
 export class ElementAttributesComponentPo {
-    ancestor: Locator;
     readonly page:Page;
-    addMultipleModal = new AddMultipleModalPo();
-    choicePropertiesElementAttributes = new ChoiceListPropertiesComponentPo();
-    headerPropertiesAttributes = new HeaderPropertiesComponentPo();
-    logicPropertiesAttributes = new LogicPropertiesComponentPo();
-    imageUploadComponentPo = new ImageUploadComponentPo();
-    public elements : any;
+    readonly addMultipleModal = new AddMultipleModalPo();
+    readonly choicePropertiesElementAttributes = new ChoiceListPropertiesComponentPo();
+    readonly headerPropertiesAttributes = new HeaderPropertiesComponentPo();
+    readonly logicPropertiesAttributes = new LogicPropertiesComponentPo();
+    readonly imageUploadComponentPo = new ImageUploadComponentPo();
+    readonly elements : any;
 
     constructor() {
-        this.ancestor = this.page.locator('.cxone-element-attributes');
+        this.page = this.page.locator('.cxone-element-attributes');
         this.elements = {
-            title: this.ancestor.locator('#element-display-name'),
-            instructions: this.ancestor.locator('#form-designer-subtext-text * input'),
+            title: this.page.locator('#element-display-name'),
+            instructions: this.page.locator('#form-designer-subtext-text * input'),
             requiredCheckbox: this.page.locator('#form-designer-mandatory-text'),
-            hyperlink: this.ancestor.locator('#form-designer-input-hyperlink-url * input'),
-            hintText: this.ancestor.locator('#hint-text-container * input'),
-            characterLimitCheckbox: this.ancestor.locator('#form-designer-limit-character-checkbox'),
-            characterLimitTextBox: this.ancestor.locator('#form-designer-limit-character-text-box * input'),
-            multipleSelectionRadio: this.ancestor.locator('#form-designer-multi-select-dropdown'),
-            singleSelectionRadio: this.ancestor.locator('#form-designer-single-select-dropdown'),
-            verticalLayoutRadio: this.ancestor.locator('#form-designer-vertical * input'),
-            horizontalLayoutRadio: this.ancestor.locator('#form-designer-horizontal * input'),
-            addMultipleValuesButton: this.ancestor.locator('#form-designer-add-multiple'),
-            backgroundColorTextBox: this.ancestor.locator('.cxone-color-picker * input'),
-            criticalQuestionHelpText: this.ancestor.locator('.form-designer-critical-question-help-text'),
-            criticalQuestionAnswerNotSelectedError: this.ancestor.locator('.critical-question-invalid')
+            hyperlink: this.page.locator('#form-designer-input-hyperlink-url * input'),
+            hintText: this.page.locator('#hint-text-container * input'),
+            characterLimitCheckbox: this.page.locator('#form-designer-limit-character-checkbox'),
+            characterLimitTextBox: this.page.locator('#form-designer-limit-character-text-box * input'),
+            multipleSelectionRadio: this.page.locator('#form-designer-multi-select-dropdown'),
+            singleSelectionRadio: this.page.locator('#form-designer-single-select-dropdown'),
+            verticalLayoutRadio: this.page.locator('#form-designer-vertical * input'),
+            horizontalLayoutRadio: this.page.locator('#form-designer-horizontal * input'),
+            addMultipleValuesButton: this.page.locator('#form-designer-add-multiple'),
+            backgroundColorTextBox: this.page.locator('.cxone-color-picker * input'),
+            criticalQuestionHelpText: this.page.locator('.form-designer-critical-question-help-text'),
+            criticalQuestionAnswerNotSelectedError: this.page.locator('.critical-question-invalid')
 
         };
     }
@@ -43,7 +42,7 @@ export class ElementAttributesComponentPo {
     async getTitle(): Promise<string> {
         let elem = this.elements.title;
         await expect(elem).toBeVisible(10000);
-        return elem.getText();
+        return elem.textContent();
     }
 
     async getInstructionsTextBox(): Promise<Locator> {
@@ -53,7 +52,7 @@ export class ElementAttributesComponentPo {
     }
 
     async enterInstructions(text:string): Promise<any> {
-        return (await this.getInstructionsTextBox()).sendKeys(text) as Promise<any>;
+        return (await this.getInstructionsTextBox()).type(text) as Promise<any>;
     }
 
     async getRequiredCheckbox(): Promise<Locator> {
@@ -73,7 +72,7 @@ export class ElementAttributesComponentPo {
     }
 
     async enterHyperlink(text:string): Promise<any> {
-        return (await this.getHyperlinkTextBox()).sendKeys(text) as Promise<any>;
+        return (await this.getHyperlinkTextBox()).type(text) as Promise<any>;
     }
 
     async getHintTextTextBox(): Promise<Locator> {
@@ -83,7 +82,7 @@ export class ElementAttributesComponentPo {
     }
 
     async enterHintText(text:string): Promise<any> {
-        return (await this.getHintTextTextBox()).sendKeys(text) as Promise<any>;
+        return (await this.getHintTextTextBox()).type(text) as Promise<any>;
     }
 
     async getCharacterLimitCheckbox(): Promise<Locator> {
@@ -103,7 +102,7 @@ export class ElementAttributesComponentPo {
     }
 
     async enterCharacterLimitTextBox(text:string): Promise<any> {
-        return (await this.getCharacterLimitTextBox()).sendKeys(text) as Promise<any>;
+        return (await this.getCharacterLimitTextBox()).type(text) as Promise<any>;
     }
 
     async getMultipleSelectionRadio(): Promise<Locator> {
@@ -165,17 +164,17 @@ export class ElementAttributesComponentPo {
 
     async enterBackgroundColor(colorCode:any): Promise<any> {
         await (await this.getBackgroundColorTextBox()).clear();
-        return (await this.getBackgroundColorTextBox()).sendKeys(colorCode) as Promise<any>;
+        return (await this.getBackgroundColorTextBox()).type(colorCode) as Promise<any>;
     }
 
     async getCriticalQuestionHelpText(): Promise<any> {
         await expect(this.elements.criticalQuestionHelpText).toBeVisible(10000);
-        return await this.elements.criticalQuestionHelpText.getText();
+        return await this.elements.criticalQuestionHelpText.textContent();
     }
 
     async getCriticalQuestionAnswerNotSelectedError(): Promise<any> {
         await expect(this.elements.criticalQuestionAnswerNotSelectedError).toBeVisible(10000);
-        return await this.elements.criticalQuestionAnswerNotSelectedError.getText();
+        return await this.elements.criticalQuestionAnswerNotSelectedError.textContent();
     }
 
     async clickLogicAttributesSection() {

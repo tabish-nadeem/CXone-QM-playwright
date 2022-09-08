@@ -48,7 +48,7 @@ export class ScoringModalComponentPo {
     }
 
     async getValidationMessages(): Promise<string> {
-        return this.elements.scoringValidationMsg.getText();
+        return this.elements.scoringValidationMsg.textContent();
     }
 
     async getResetButton(): Promise<Locator> {
@@ -132,7 +132,7 @@ export class ScoringModalComponentPo {
         let displayTextBox = this.page.locator('#form-designer-rank-display-text-' + index + ' * input');
         await expect(displayTextBox).toBeVisible(10000);
         await displayTextBox.clear();
-        await displayTextBox.sendKeys(displayText);
+        await displayTextBox.type(displayText);
     }
 
     async clickRemoveRangeButton(index:any): Promise<any> {
@@ -155,24 +155,24 @@ export class ScoringModalComponentPo {
 
     async getRangeValues(index:any): Promise<string[]> {
         let values: string[] = [];
-        values.push(await this.page.locator('#form-designer-rank-from-drop-down-' + index + ' * .button-text').getText());
-        values.push(await this.page.locator('#form-designer-rank-to-drop-down-' + index + ' * .button-text').getText());
+        values.push(await this.page.locator('#form-designer-rank-from-drop-down-' + index + ' * .button-text').textContent());
+        values.push(await this.page.locator('#form-designer-rank-to-drop-down-' + index + ' * .button-text').textContent());
         values.push(await this.page.locator('#form-designer-rank-display-text-' + index + ' * input').getAttribute('value'));
         return values;
     }
 
     async getAllFromRangeSelections(): Promise<any> {
-        return this.page.locator('[id*="form-designer-rank-from-drop-down"] *.button-text').getText();
+        return this.page.locator('[id*="form-designer-rank-from-drop-down"] *.button-text').textContent();
     }
 
     async getAllToRangeSelections(): Promise<any> {
-        return this.page.locator('[id*="form-designer-rank-from-drop-down"] *.button-text').getText();
+        return this.page.locator('[id*="form-designer-rank-from-drop-down"] *.button-text').textContent();
     }
 
     private async getQuestionElement(questionText:string): Promise<Locator> {
         let allElements = await this.elements.formElements;
         for (let elem of allElements) {
-            if ((await elem.element(this.locators.questionText).getText()).replace(/\n/g, ' ').includes(questionText)) {
+            if ((await elem.element(this.locators.questionText).textContent()).replace(/\n/g, ' ').includes(questionText)) {
                 return elem as Promise<Locator>;
             }
         }
@@ -205,8 +205,8 @@ export class ScoringModalComponentPo {
       await this.page.evaluate('arguments[0].scrollIntoView()', questionElement.getWebElement());
       await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].click();
       //FIXME:
-      await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].sendKeys(Key.chord(Key.CONTROL, 'a'));
-      await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].sendKeys(score);
+      await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].keyboard.press('Control+A');
+      await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].type(score);
     }
     async getScoringOfQuestionOption(questionText:string, optionIndex:any): Promise<any> {
         let questionElement = await this.getQuestionElement(questionText);
@@ -216,12 +216,12 @@ export class ScoringModalComponentPo {
 
     async getMaxPointsOfQuestion(questionText:string): Promise<string> {
         let questionElement = await this.getQuestionElement(questionText);
-        return questionElement.element(this.locators.maxPointSeletionLabel).getText();
+        return questionElement.element(this.locators.maxPointSeletionLabel).textContent();
     }
 
     async getSectionScoreAndPointsValue(sectionText:string): Promise<string> {
         let sectionElement = await this.getQuestionElement(sectionText);
-        return sectionElement.all(this.locators.sectionScore).getText();
+        return sectionElement.all(this.locators.sectionScore).textContent();
     }
 
     async clickSetRecordingTab(): Promise<any> {
@@ -236,11 +236,11 @@ export class ScoringModalComponentPo {
     }
 
     async getCalculatedScore(): Promise<string> {
-        return (await this.elements.calculatedScore.getText()).replace(/\n/g, ' ');
+        return (await this.elements.calculatedScore.textContent()).replace(/\n/g, ' ');
     }
 
     async getCurrentPoints(): Promise<string> {
-        return (await this.elements.currentPoints.getText()).replace(/\n/g, ' ');
+        return (await this.elements.currentPoints.textContent()).replace(/\n/g, ' ');
     }
 
     async clickQuestionOption(questionText:string, optionIndex:any): Promise<any> {

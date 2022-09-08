@@ -49,7 +49,7 @@ export class QuestionBankComponentPo {
         // await browser.wait(ExpectedConditions.visibilityOf(this.elements.searchBox), 10000);
         await this.page.waitForFunction(EC.invisibilityOf(this.elements.searchBox), { timeout: 10000 });
         await this.elements.searchBox.clear();
-        // await this.elements.searchBox.sendKeys(questionText);
+        // await this.elements.searchBox.type(questionText);
         await this.page.keyboard.press(questionText);
         await Utils.delay(3000);
     }
