@@ -118,12 +118,15 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
-    await CommonUIUtils.maximizeBrowserWindow();
     await prepareData();
 });
 
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
+    await qualityPlanManagerPO.navigate();
+    await qualityPlanManagerPO.deleteAllPlans();
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.QP_EDIT_EVALUATOR_FT, userDetails.orgName, USER_TOKEN);
     await browser.close();
 });
 
@@ -183,7 +186,7 @@ When("Step-2: should verify user is able to successfully select specific teams a
 });
 
 Then("STEP-3: should be able to save teams and groups data and verify after opening draft plan", { timeout: 180 * 1000 }, async () => {
-    await qualityPlanDetailsPO.refresh();
+    await qualityPlanDetailsPO.navigate();
     await teamsAndGroupsPO.waitUntilVisible();
     await qualityPlanDetailsPO.enterPlanName('Teams and Groups Draft Plan');
     await teamsAndGroupsPO.selectTeams([teams[0].name, teams[1].name]);
@@ -218,7 +221,7 @@ Then("STEP-5: should check that info message popup if max-days-back value is gre
     expect(await samplingPO.getErrorMessage()).toEqual('Plan duration is 7 days. Select from 1 to 6 days.');
 });
 Then("STEP-6: should be able to save as draft plan and verify sampling after opening the plan'", { timeout: 180 * 1000 }, async () => {
-    await qualityPlanDetailsPO.refresh();
+    await qualityPlanDetailsPO.navigate();
     await qualityPlanDetailsPO.enterPlanName('Sampling Draft Plan');
     await evaluationTypePO.setCollaborativeEvaluationType();
     await samplingPO.toggleIncludeInteractionsFromLast();
@@ -269,7 +272,7 @@ Then("STEP-10: should be able to save as draft a recurring weekly plan'", { time
 });
 
 Then("STEP-11: should be able to save as draft a one time plan", { timeout: 180 * 1000 }, async () => {
-    await qualityPlanDetailsPO.refresh();
+    await qualityPlanDetailsPO.navigate();
     await qualityPlanDetailsPO.enterPlanName('Plan Duration One Time Draft Plan');
     await planDurationPO.setOneTime();
     await planDurationPO.setStartDate(new Date(2021, 0, 5, 0, 0, 0, 0));

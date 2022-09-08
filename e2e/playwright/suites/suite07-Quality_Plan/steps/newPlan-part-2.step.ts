@@ -132,18 +132,15 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
-     await CommonUIUtils.maximizeBrowserWindow();
      await prepareData();
 });
 
-const beforeEachFunction = async () => {
-     await formDesignerPage.navigateTo();
-     await Utils.waitUntilVisible(await formArea.getFormArea());
-};
-const onEnd = async () => {
-     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-     await CommonUIUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
-};
+
+AfterAll({ timeout: 60 * 1000 }, async () => {
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
+     await qualityPlanDetailsPO.navigate();
+     await browser.close();
+ });
 
 
 async function prepareData() {
@@ -209,7 +206,7 @@ When("Step-2: should verify plan days and interactions per agent", { timeout: 18
 });
 
 Then("Step-3: should verify total interactions and interactions per day per evaluator", { timeout: 180 * 1000 }, async () => {
-     await qualityPlanDetailsPO.refresh();
+     await qualityPlanDetailsPO.navigate();
      await qualityPlanDetailsPO.enterPlanName('Plan Summary 2');
      await teamsAndGroupsPO.selectTeams(['DefaultTeam']);
      await Utils.waitForSpinnerToDisappear();
@@ -269,7 +266,6 @@ Then("Step-6 should not be able to add or delete evaluators for activated plan",
 When("Step-7: should open new plan and verify that no evaluators are selected by default'", { timeout: 180 * 1000 }, async () => {
      await Utils.enablingFeatureToggle(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
      await qualityPlanDetailsPO.navigate();
-     await qualityPlanDetailsPO.refresh();
      expect(await enhancedEvaluatorsPO.getSelectedEvaluatorsCount()).toEqual(0);
 });
 
@@ -395,7 +391,7 @@ Then("Step-18 should open new plan, press cancel, Press  and check that the page
      expect(await browser.getCurrentUrl()).toEqual(page.baseUrl + fdUtils.getPageIdentifierUrls('qp.qpPlanDetails'));
 });
 Then("Step-19 should open new plan, press cancel without changing any plan details and check that we return to plan manager", { timeout: 180 * 1000 }, async () => {
-     await qualityPlanDetailsPO.refresh();
+     await qualityPlanDetailsPO.navigate();
      await qualityPlanDetailsPO.cancel();
      expect(await browser.getCurrentUrl()).toEqual(page.baseUrl + fdUtils.getPageIdentifierUrls('qp.qpPlanManager'));
 });

@@ -15,19 +15,19 @@ export class EvaluatorsPO {
      };
 
      public constructor() {
-          this.ancestor = page.locator(('.evaluators-container'));
-          this.modal = page.locator(('add-evaluators-modal'));
+          this.page = this.page.locator(('.evaluators-container'));
+          this.modal = this.page.locator(('add-evaluators-modal'));
           this.elements = {
-               error: this.ancestor.page.locator(('.header-row .error-message'))
+               error: this.page.locator(('.header-row .error-message'))
           };
      }
 
      public async getSelectedEvaluatorsCount() {
-          return +(await Utils.getText(this.ancestor.page.locator(('.evaluators-count .count')))).trim();
+          return +(await Utils.getText(this.page.locator(('.evaluators-count .count'))));
      }
 
      public async clickAddEvaluatorsButton() {
-          await Utils.click(this.ancestor.page.locator(('add-evaluators-btn')));
+          await Utils.click(this.page.locator(('add-evaluators-btn')));
           await Utils.waitUntilVisible(this.modal);
           await Utils.waitForTime(2000);
      }
@@ -57,22 +57,22 @@ export class EvaluatorsPO {
      }
 
      private getRow(evaluatorName: string, ancestor: Locator) {
-          //    return ancestor.page.locator(('.cxone-grid .ag-center-cols-container .ag-row', evaluatorName));
+             return this.page.locator(('.cxone-grid .ag-center-cols-container .ag-row'));
      }
 
      public async modalSubmit() {
           await Utils.click(this.modal.page.locator(('.save-btn')));
-          await Utils.waitUntilInvisible(this.modal);
+          await Utils.waitUntilVisible(this.modal);
      }
 
      public async modalCancel() {
           await Utils.click(this.modal.page.locator(('.cancel-btn')));
-          await Utils.waitUntilInvisible(this.modal);
+          await Utils.waitUntilVisible(this.modal);
      }
 
      public async deleteEvaluator(evaluatorName: string) {
           const row = this.getRow(evaluatorName, this.ancestor);
-          await Utils.click(row.page.locator(('[col-id="action"] cxone-svg-sprite-icon')));
+          await Utils.click(row.this.page.locatorr(('[col-id="action"] cxone-svg-sprite-icon')));
           await Utils.waitForTime(1000);
      }
 
@@ -89,21 +89,21 @@ export class EvaluatorsPO {
      }
 
      public async isAddEvaluatorsButtonEnabled() {
-          return await Utils.isEnabled(this.ancestor.page.locator(('add-evaluators-btn')));
+          return await Utils.isEnabled(this.page.locator(('add-evaluators-btn')));
      }
      public async isEditEvaluatorInfoIconVisible() {
-          return await Utils.isPresent(this.ancestor.page.locator(('.edit-evaluator-info-message-box')));
+          return await Utils.isPresent(this.page.locator(('.edit-evaluator-info-message-box')));
      }
 
      public async clickEditEvaluatorInfoIcon() {
-          await Utils.click(this.ancestor.page.locator(('.edit-evaluator-info-message-box')));
+          await Utils.click(this.page.locator(('.edit-evaluator-info-message-box')));
      }
 
      public async getEditEvaluatorInfoIconTooltipText() {
-          //    return this.ancestor.page.locator(('.cxone-popover .popover-content', 'affect the plan distribution')).getText();
+             return this.page.locator(('.cxone-popover .popover-content')).textContent();
      }
 
      public async getSelectiveFieldsEditMsgText() {
-          return this.ancestor.page.locator(('.can-edit-message')).getText();
+          return this.page.locator(('.can-edit-message'))
      }
 }

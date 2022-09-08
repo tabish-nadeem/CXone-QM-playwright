@@ -9,10 +9,13 @@ import { Page, Locator } from "@playwright/test";
 import { Helpers } from "../playwright.helpers";
 import { URLs } from "../common/pageIdentifierURLs";
 import { Utils } from '../common/utils';
+import { UIConstants } from '../common/uiConstants';
+import { CommonUIUtils } from "cxone-playwright-test-utils"
 
 // const protractorConfig = protHelper.getProtractorHelpers();
 let page: Page;
 let utils = new Utils(page);
+
 export class QualityPlanManagerPO {
      waitForPageToLoad() {
           throw new Error("Method not implemented.");
@@ -22,37 +25,34 @@ export class QualityPlanManagerPO {
     readonly ancestor:Locator ;
     readonly defaultTimeoutInMillis: number;
     readonly elements: { newPlanBtn: any; gridComponent: any; header: any; breadCrumbLink: any; clickConfirmDelete: any; row: any; noMatchfoundMsg?: any; confirmCancelBtn: any; activeWarning: any; container: any; spinner?: any; optionsPlanPopover?: any; };
+    readonly uiConstants: UIConstants;
 
     public constructor(ancestorElement?: any, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
-        this.ancestor = ancestorElement || page.locator((`div[id="ng2-quality-plan-manager-page"]`));
+        this.page = ancestorElement ||this.page.locator((`div[id="ng2-quality-plan-manager-page"]`));
         this.elements = {
-            container: this.ancestor.Page.locator((`div[id="quality-plan-grid-container"]`)),
-            gridComponent: this.ancestor.Page.locator(('cxone-grid')).textContent(),
-            header: this.ancestor.Page.locator((`div[id='quality-plans-page-title']`)),
-            newPlanBtn: this.ancestor.Page.locator(('#newPlan')),
-            spinner:Page.locator(('.cxonespinner div.spinner.spinner-bounce-middle')),
-            optionsPlanPopover: Page.locator(('popover-container.tooltip-popover-style')),
-            clickConfirmDelete:Page.locator(('#popup-single-delete')),
-            confirmCancelBtn:Page.locator(('#popup-cancel')),
-            row: this.ancestor.all(('#quality-plan-grid-container div.ag-center-cols-viewport div[row-index]')),
-            activeWarning: Page.locator(('.active-warning')),
-            breadCrumbLink: Page.locator(('.breadcrumb-item a'))
+            container: this.page.locator.locator((`div[id="quality-plan-grid-container"]`)),
+            gridComponent: this.page.locator.locator(('cxone-grid')).textContent(),
+            header: this.page.locator.locator((`div[id='quality-plans-page-title']`)),
+            newPlanBtn:this.page.locator.locator(('#newPlan')),
+            spinner:this.page.locator.locator(('.cxonespinner div.spinner.spinner-bounce-middle')),
+            optionsPlanPopover: this.page.locator.locator(('popover-container.tooltip-popover-style')),
+            clickConfirmDelete:this.page.locator.locator(('#popup-single-delete')),
+            confirmCancelBtn:this.page.locator.locator(('#popup-cancel')),
+            row: this.page.locator(('#quality-plan-grid-container div.ag-center-cols-viewport div[row-index]')),
+            activeWarning: this.page.locator.locator(('.active-warning')),
+            breadCrumbLink: this.page.locator.locator(('.breadcrumb-item a'))
         };
     }
 
    async navigate(quickly?: boolean) {
-    console.log('Coming to Navigate')
-    await this.page.waitForLoadState('load');
-    let BaseUrl = await Helpers.getBaseUrl();
-    await this.page.goto(BaseUrl + URLs.myZone.planMonitoring);
-    // await CommonUIUtils.waitUntilIconLoaderDone(this.page);
-    await this.page.waitForTimeout(3000);
+    let baseUrl = this.uiConstants.URLS.LOCALHOST
+    await this.page.goto(baseUrl + URLs.myZone.planMonitoring);
+    await this.page.waitForURL('**\/#/qualityplan');
+    await CommonUIUtils.waitUntilIconLoaderDone(this.page);
+    await this.page.waitForSelector(`#ng2-quality-plan-details-page`);
     }
 
-     async refresh() {
-        await utils.refreshpage(Page.locator(('quality-plan-grid-container')));
-    }
 
     async getNewPlanButton() {
         return this.elements.newPlanBtn;
@@ -67,7 +67,7 @@ export class QualityPlanManagerPO {
     }
 
     async getGridRow(rowIndex: number) {
-        return Page.locator((`div.ag-center-cols-container div.ag-row[row-index="${rowIndex}"]`));
+        return this.page.locator((`div.ag-center-cols-container div.ag-row[row-index="${rowIndex}"]`));
     }
 
      async searchPlan(planName: string) {
@@ -80,17 +80,17 @@ export class QualityPlanManagerPO {
         if (shouldSearch) {
             await this.searchPlan(planName);
         }
-        return this.ancestor.Page.locator(('xpath=.//*[text()="' + planName + '"]/..'));
+        return this.ancestor.this.page.locator(('xpath=.//*[text()="' + planName + '"]/..'));
     }
 
     async getGridRowOfMatchingText(text: string) {
-        let row = await this.ancestor.Page.locator(('xpath=.//*[text()="' + text + '"]/..'));
+        let row = await this.ancestor.this.page.locator(('xpath=.//*[text()="' + text + '"]/..'));
         const rowIndex = await row.getAttribute('row-index');
         return this.getGridRow(+rowIndex);
     }
 
      async getPlanRowElements(value: string): Promise<any> {
-        let columns = await this.ancestor.all(('xpath=.//*[text()="' + value + '"]/../*'));
+        let columns = await this.page(('xpath=.//*[text()="' + value + '"]/../*'));
         await utils.waitUntilDisplayed(columns[0]);
         return {
             evaluationType: await columns[1].getText(),
@@ -101,7 +101,7 @@ export class QualityPlanManagerPO {
     }
 
      async clickConfirmBtn(btnName: string) {
-        await Utils.click(Page.locator(('#popup-' + btnName + '')));
+        await Utils.click(this.page.locator(('#popup-' + btnName + '')));
         await this.waitForSpinnerToDisappear();
     }
 
@@ -119,33 +119,33 @@ export class QualityPlanManagerPO {
 
   async verifyHamburgerMenu(value: string) {
         const row = await this.getGridRowOfMatchingText(value);
-        const actionMore = row.Page.locator(('button.action-btn.action-more'));
+        const actionMore = row.this.page.locator(('button.action-btn.action-more'));
         return actionMore.isPresent();
     }
 
   async verifyDeleteOption(value: string) {
         const row = await this.getGridRowOfMatchingText(value);
-        const actionDelete = row.Page.locator(('button.action-btn.action-delete'));
+        const actionDelete = row.this.page.locator(('button.action-btn.action-delete'));
         return actionDelete.isPresent();
     }
 
      async getHamburgerMenuItem(value: string, action: string) {
         const row = await this.getGridRowOfMatchingText(value);
-        const actionMore = row.Page.locator(('button.action-btn.action-more'));
+        const actionMore = row.this.page.locator(('button.action-btn.action-more'));
         await actionMore.click();
-        await page.wait(EC.invisibilityOf(page.locator(('popover-container .more-option-popover'))), 5000);
+        await page.wait(EC.invisibilityOf(this.page.locator(('popover-container .more-option-popover'))), 5000);
         return Page.locator((`popover-container .more-option-popover .clickable.${action.toLowerCase()}`));
     }
 
      async verifyHamburgerMenuOptions(planName: string) {
         const row = await this.getGridRowOfMatchingText(planName);
-        const actionMore = row.Page.locator(('button.action-btn.action-more'));
+        const actionMore = row.this.page.locator(('button.action-btn.action-more'));
         await actionMore.click();
         await page.wait(EC.invisibilityOf(page.locator(('popover-container .more-option-popover'))), 5000);
         const visibilityOptions = {
-            activate: await Page.locator(('popover-container .more-option-popover .clickable.activate')).isPresent(),
-            duplicate: await Page.locator(('popover-container .more-option-popover .clickable.duplicate')).isPresent(),
-            deactivate: await Page.locator(('popover-container .more-option-popover .clickable.deactivate')).isPresent()
+            activate: await this.page.locator(('popover-container .more-option-popover .clickable.activate')).isPresent(),
+            duplicate: await this.page.locator(('popover-container .more-option-popover .clickable.duplicate')).isPresent(),
+            deactivate: await this.page.locator(('popover-container .more-option-popover .clickable.deactivate')).isPresent()
         };
         return visibilityOptions;
     }
@@ -180,7 +180,7 @@ export class QualityPlanManagerPO {
         await this.searchPlan(oldPlanName);
         const menuItem = await this.getHamburgerMenuItem(oldPlanName, 'Duplicate');
         await menuItem.click();
-        await page.wait(ExpectedConditions.visibilityOf(page.locator(('.cxone-modal-wrapper'))), this.defaultTimeoutInMillis);
+        await page.wait(ExpectedConditions.visibilityOf(this.page.locator(('.cxone-modal-wrapper'))), this.defaultTimeoutInMillis);
         await duplicateFormModalPO.enterPlanName(newPlanName);
         await duplicateFormModalPO.clickSaveButton();
         await this.waitForSpinnerToDisappear();
@@ -198,9 +198,9 @@ export class QualityPlanManagerPO {
    async deletePlan(planName: string) {
         await this.searchPlan(planName);
         const row = await this.getGridRowOfMatchingText(planName);
-        await row.page.locator(('button.action-btn.action-delete')).click();
-        await page.wait(ExpectedConditions.visibilityOf(page.locator(('popover-container div.confirmBtns button[id="popup-single-delete"]'))), 5000);
-        await page.locator(('popover-container div.confirmBtns button[id="popup-single-delete"]')).click();
+        await row.this.page.locator(('button.action-btn.action-delete')).click();
+        await page.wait(ExpectedConditions.visibilityOf(this.page.locator(('popover-container div.confirmBtns button[id="popup-single-delete"]'))), 5000);
+        await this.page.locator(('popover-container div.confirmBtns button[id="popup-single-delete"]')).click();
         await this.waitForSpinnerToDisappear();
     }
 
@@ -217,14 +217,14 @@ export class QualityPlanManagerPO {
         const qpDetailsPO = new QualityPlanDetailsPO();
         await this.searchPlan(planName);
         await this.page.waitForSelector('xpath=.//*[text()="' + planName + '"]/..');
-        await Utils.click(this.ancestor.page.locator(('xpath=.//*[text()="' + planName + '"]/..')));
+        await Utils.click(this.page.locator(('xpath=.//*[text()="' + planName + '"]/..')));
         await utils. waitForSpinnerToDisappear();
         await utils.waitForPageToLoad(qpDetailsPO.container);  //!
     } 
 
     public async deleteAllPlans() {
         await this.searchPlan('');
-        const allPlansElements = this.ancestor.all(('#quality-plan-grid-container div.ag-center-cols-viewport div[row-index] div[col-id="planName"]'));
+        const allPlansElements = this.page(('#quality-plan-grid-container div.ag-center-cols-viewport div[row-index] div[col-id="planName"]'));
         const allPlanNames: string[] = await allPlansElements.map((el: { getText: () => any; }) => {
             return el.getText();
         });
