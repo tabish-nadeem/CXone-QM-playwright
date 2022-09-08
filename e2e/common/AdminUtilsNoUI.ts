@@ -35,4 +35,9 @@ export class AdminUtilsNoUI {
             body:{}
         })
     }
+
+    static async updateTeam (token: any) {
+     
+       
+    }
 }

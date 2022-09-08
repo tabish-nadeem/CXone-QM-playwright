@@ -7,6 +7,12 @@ let strings: any;
 const DEFAULT_WAIT_TIME = 25000;
 
 export class Utils {
+    static enablingFeatureToggle(ENHANCED_EVALUATOR_MODAL_FT: string, orgName: any, USER_TOKEN: string) {
+         throw new Error('Method not implemented.');
+    }
+    static delay(arg0: number) {
+        throw new Error('Method not implemented.');
+    }
     static page: any;
     readonly page: Page;
 

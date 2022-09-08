@@ -16,6 +16,11 @@ import * as _ from "lodash";
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
 import { ManageFormsPO } from "../../../manage-forms/manage-forms.po";
+import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
+import { FormLogoComponentPo } from "../../../../pageObjects/form-logo.component.po";
+import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
+import { DisableProtUtils } from "../../../../common/disableProtUtil";
+import { ModuleExports } from "../../../../common/qmDefaultData";
 
 let browser: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
@@ -30,6 +35,7 @@ const formArea = new FormAreaComponentPo();
 const designerToolbar = new DesignerToolbarComponentPO();
 const formLogoComponentPo = new FormLogoComponentPo();
 const elementAttributes = new ElementAttributesComponentPo();
+let newDisableProtUtils = new DisableProtUtils();
 const getElementList = () => {
      return [
           {
@@ -102,39 +108,33 @@ const getElementList = () => {
 };
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-     const protractorConfig = protHelper.getProtractorHelpers();
-     // ! this file is need to check
-     if (disableProtUtil.disableExecutionOnEnv(protractorConfig.envToDisable)) {
-          userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-          const manageFormsPO = new ManageFormsPO(
-               page.locator("ng2-manage-forms-page")
-          );
-          newOnPrepare = new OnPrepare();
-          await newOnPrepare.OnStart();
-          getElementLists = getElementList();
-          USER_TOKEN = await CommonNoUIUtils.login(
-               userDetails.adminCreds.email,
-               userDetails.adminCreds.password,
-               true
-          );
-          await FeatureToggleUtils.addTenantToFeature(
-               FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20,
-               userDetails.orgName,
-               USER_TOKEN
-          );
-          await FeatureToggleUtils.removeTenantFromFeature(
-               FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT,
-               userDetails.orgName,
-               USER_TOKEN
-          );
-          await manageFormsPO.navigateTo();
-     }
+     const protractorConfig = ModuleExports.getFormData();
+     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
+     const manageFormsPO = new ManageFormsPO(
+          page.locator("ng2-manage-forms-page")
+     );
+     newOnPrepare = new OnPrepare();
+     await newOnPrepare.OnStart();
+     getElementLists = getElementList();
+     USER_TOKEN = await CommonNoUIUtils.login(
+          userDetails.adminCreds.email,
+          userDetails.adminCreds.password,
+          true
+     );
+     await FeatureToggleUtils.addTenantToFeature(
+          FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20,
+          userDetails.orgName,
+          USER_TOKEN
+     );
+     await FeatureToggleUtils.removeTenantFromFeature(
+          FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT,
+          userDetails.orgName,
+          USER_TOKEN
+     );
+     await manageFormsPO.navigateTo();
+
 });
 
-// const onEnd = async () => {
-//      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-//      await CommonUIUtils.testUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
-//  };
 
 //! need to ask
 AfterAll({ timeout: 60 * 1000 }, async () => {
@@ -208,7 +208,7 @@ When("Step-2: should verify undo redo for copy action", { timeout: 180 * 1000 },
      await designerToolbar.redo(2);
      expect(await formArea.getCountOfElementsInForm()).toEqual(3);
      expect(await designerToolbar.isRedoButtonDisabled()).toBeTruthy();
-    
+
 
 });
 
@@ -220,11 +220,14 @@ Then("Step-3: should able to undo and redo a deleted element with keyboard short
      await formArea.clickDeleteElementIcon('2. Set question', 'yesno');
      expect(await formArea.getCountOfElementsInForm()).toEqual(1);
      await designerToolbar.undo(1);
-     await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('z').keyUp(protractor.Key.CONTROL).perform();
+     // await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('z').keyUp(protractor.Key.CONTROL).perform();
+     await page.keyboard.down('CONTROL+ z').up('CONTROL')
+
      await page.keyboard.press('CONTROL');
      expect(await formArea.getCountOfElementsInForm()).toEqual(3);
      await designerToolbar.redo(1);
-     await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('y').keyUp(protractor.Key.CONTROL).perform();
+     // await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('y').keyUp(protractor.Key.CONTROL).perform();
+     await page.keyboard.down('CONTROL+ y').up('CONTROL')
      await page.keyboard.press('CONTROL');
      expect(await formArea.getCountOfElementsInForm()).toEqual(1);
 
@@ -251,10 +254,13 @@ Then("Step-5:should undo redo should work for form logo and form title propertie
      await formArea.clickDeleteElementIcon('2. Set question', 'yesno');
      expect(await formArea.getCountOfElementsInForm()).toEqual(1);
      await designerToolbar.undo(1);
-     await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('z').keyUp(protractor.Key.CONTROL).perform();
+     // await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('z').keyUp(protractor.Key.CONTROL).perform();  
+     await page.keyboard.down('CONTROL+ z').up('CONTROL')
+     await page.keyboard.down()
      expect(await formArea.getCountOfElementsInForm()).toEqual(3);
      await designerToolbar.redo(1);
-     await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('y').keyUp(protractor.Key.CONTROL).perform();
+     // await browser.actions().keyDown(protractor.Key.CONTROL).sendKeys('y').keyUp(protractor.Key.CONTROL).perform();
+     await page.keyboard.down('CONTROL+ z').up('CONTROL')
      expect(await formArea.getCountOfElementsInForm()).toEqual(1);
 
 

@@ -97,12 +97,9 @@ const teamsAndGroupsPO = new TeamsAndGroupsPO();
 const planSummaryPO = new PlanSummaryPO();
 const samplingPO = new SamplingPO();
 const planDurationPO = new PlanDurationPO();
-let formDesignerPage = new FormDesignerPagePO();
-let formArea = new FormAreaComponentPo();
-let designerToolbar = new DesignerToolbarComponentPO();
-let scoringModal = new ScoringModalComponentPo();
-let elementAttributes = new ElementAttributesComponentPo();
 const evaluatorsPO = new EvaluatorsPO();
+const evaluationFormPO = new EvaluationFormPO();
+const evaluationTypePO = new EvaluationTypePO();
 
 
 
@@ -114,11 +111,10 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
-    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials(); //!
+    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials(); 
     console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
     USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
     console.log("Response login", USER_TOKEN);
-    //! DataCreator.setToken(USER_TOKEN); // not got file
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
@@ -126,14 +122,11 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     await prepareData();
 });
 
-const beforeEachFunction = async () => {
-    await formDesignerPage.navigateTo();
-    await Utils.waitUntilVisible(await formArea.getFormArea());
-};
-const onEnd = async () => {
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await CommonUIUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
-};
+
+AfterAll({ timeout: 60 * 1000 }, async () => {
+    await browser.close();
+});
+
 
 
 async function prepareData() {
@@ -167,7 +160,7 @@ async function prepareData() {
     await DataCreator.createUser(userData[1].email, userData[1]);
     const formId = await DataCreator.createForm(form.formName, form.formStatus, form.formType, form.workflowConfigType);
     form.formId = formId;
-    await protractorConfig.tmUtils.updateTeam((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN);
+    await AdminUtilsNoUI.updateTeam((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN));
 
 }
 

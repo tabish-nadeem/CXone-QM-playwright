@@ -1,6 +1,6 @@
 import { Utils } from './../../../../common/utils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import {   expect } from "@playwright/test";
+import { expect } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
@@ -11,6 +11,10 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
+import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import { ModuleExports } from '../../../../common/qmDefaultData';
+import { QuestionBankComponentPo } from '../../../../pageObjects/question-bank.component.po';
+import { HeaderPropertiesComponentPo } from '../../../../pageObjects/header-properties.component.po';
 
 let browser: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
@@ -91,28 +95,20 @@ const getElementList = () => {
 
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-     const protractorConfig = protHelper.getProtractorHelpers();
-     // ! this file is need to check
-     if (disableProtUtil.disableExecutionOnEnv(protractorConfig.envToDisable)) {
+     const protractorConfig = ModuleExports.getFormData();;
+     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
+     newOnPrepare = new OnPrepare();
+     await newOnPrepare.OnStart();
+     getElementLists = getElementList();
+     USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
+     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT, userDetails.orgName, USER_TOKEN);
+     await calibrationPO.navigate();
 
-          userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-         
-          newOnPrepare = new OnPrepare();
-          await newOnPrepare.OnStart();
-          getElementLists = getElementList();
-          USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
-          await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-          await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT, userDetails.orgName, USER_TOKEN);
-          await calibrationPO.navigate();
 
-     }    
 });
 
 
-// const onEnd = async () => {
-//      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-//      await CommonUIUtils.testUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
-//  };
 
 //! need to ask
 AfterAll({ timeout: 60 * 1000 }, async () => {
