@@ -7,6 +7,8 @@ import { OmnibarPO } from "./omnibar.po";
 import { RenameFormModalPO } from "./rename-form-modal.po";
 import { WarningModalComponentPo } from "./warning-modal.component.po";
 import { DuplicateFormModalPO } from "./duplicate-form-modal.po";
+import { UIConstants } from "../common/uiConstants"
+import { URLs } from "../common/pageIdentifierURLs"
 
 
 
@@ -15,11 +17,13 @@ export class ManageFormsPO {
     readonly elements:any;
     readonly utils:Utils;
     readonly page:Page;
+    readonly uiConstants: UIConstants;
 
     public constructor(pageElement?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
         this.page = pageElement || this.page.locator('#ng2-manage-forms-page');
         this.utils = new Utils(this.page);
+        this.uiConstants = new UIConstants();
         this.elements = {
             container: this.page.locator('#ng2-manage-forms-page'),
             gridComponent: this.page.locator('cxone-grid'),
@@ -38,6 +42,7 @@ export class ManageFormsPO {
         };
     }
 
+<<<<<<< HEAD
     // need to update this functions
     // public async refresh() {
     //     return await navigateQuicklyTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'), fdUtils.getPageIdentifierUrls('qp.qpPlanManager'));
@@ -45,6 +50,14 @@ export class ManageFormsPO {
 
     async navigateTo() {        
         return await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
+=======
+    async navigate() {
+        let baseUrl = this.uiConstants.URLS.LOCALHOST
+        await this.page.goto(baseUrl + URLs.qualityManagement.manageforms);
+        await this.page.waitForURL('**\/#/manageForms');
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
+        await this.page.waitForSelector(`#ng2-manage-forms-page`);
+>>>>>>> 1961cf90ebb21ec79673ba61addfefa3e122d962
     }
 
      async navigateToWithWarningModal() {

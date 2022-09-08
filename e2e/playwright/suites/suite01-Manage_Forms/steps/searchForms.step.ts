@@ -66,7 +66,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
         await browser.close();
 });
 
-Given("Step-1: should create multiple forms and search form by numbers on grid : P1", { timeout: 60 * 1000 }, async () => {
+Given("should create multiple forms and search form by numbers on grid : P1", { timeout: 60 * 1000 }, async () => {
 
         formDetails = [
             {
@@ -116,19 +116,19 @@ Given("Step-1: should create multiple forms and search form by numbers on grid :
             createForms.push(form);
         })
         await Promise.all(createForms);
-        await manageFormsPO.navigateTo();
+        await manageFormsPO.navigate();
         await manageFormsPO.searchFormInGrid(formNames.formFour);
         expect(await manageFormsPO.verifyFormPresence(formNames.formThree, false)).toBeFalsy();
         expect(await manageFormsPO.verifyFormPresence(formNames.formFour, false)).toBeTruthy();
         expect(await omnibarPO.getItemCountLabel()).toEqual([await manageFormsPO.getNumberOfRows() + ' form']);
 });
 
-When("step-2: should create multiple forms and search form by alphabets on grid : P1" , { timeout: 60 * 1000 }, async () => {
+When("should create multiple forms and search form by alphabets on grid : P1" , { timeout: 60 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid('Form1');
     expect(await omnibarPO.getItemCountLabel()).toEqual([await manageFormsPO.getNumberOfRows() + ' forms']);
 })
 
-Then("step-3: should  verify that appropriate message should be displayed on grid if no matches found to user for his search string : P1" ,{ timeout: 60 * 1000 }, async () => {
+Then("should  verify that appropriate message should be displayed on grid if no matches found to user for his search string : P1" ,{ timeout: 60 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid('Forms');
     expect(await manageFormsPO.getNoMatchFoundMsg()).toEqual(utils.getExpectedString('manageFormsPage.noItemsOverlay'));
 })

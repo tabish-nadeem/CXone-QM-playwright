@@ -1,8 +1,8 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { FormAreaComponentPo } from 'cxone-qm-library/form-area.component.po';
-import { ManageFormsPO } from '../../../manage-forms/manage-forms.po';
-import { FormDesignerPagePO } from '../../form-designer-page.po';
+import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
+import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';

@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
-import { Utils } from '../../../../../../../tests/protractor/common/utils';
+import { Utils } from '../common/utils';
 import { CategoryManagerPO } from 'cxone-qm-library/category-manager.po';
 import { SENTIMENT_TYPE } from '../../quality-plan-models';
 
@@ -21,7 +21,7 @@ export class SentimentsPO {
     }
 
     public async isFilterPresent() {
-        return await this.utils.isPresent(this.ancestor);
+        return await Utils.isPresent(this.ancestor);
     }
 
     public async clearFilter() {
@@ -33,7 +33,7 @@ export class SentimentsPO {
         const checkboxEl = new CheckboxPO(`checkbox-sentiment-${sentimentType.toLowerCase()}`);
         const sideSelectorDropdown = new SingleselectDropdownPO(`side-select-${sentimentCode.toUpperCase()}`);
         await checkboxEl.click();
-        await this.utils.waitUntilVisible(this.page.locator(sideSelectorDropdown.selector));
+        await this.page.waitForSelector(this.page.locator(sideSelectorDropdown.selector));
         await this.utils.delay(2000);
         await sideSelectorDropdown.selectItemByLabelWithoutSearchBox(sideSelectorLabel);
         await this.utils.delay(2000);

@@ -18,6 +18,9 @@ export const URLs = {
         "selfAssessments": "/qm/monitoring/#/selfAssessments",
         "recentInteractions":"/qm/#/recentInteractions"
     },
+    "qualityManagement": {
+        "manageforms":"/qm/admin/#/manageForms"
+    },
     "search": {
         "search": "/search/#/search",
         "selection": "/search/#/selection"

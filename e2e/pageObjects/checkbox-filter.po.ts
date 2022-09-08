@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
-import { Utils } from '../../../../../../../tests/protractor/common/utils';
+import { Utils } from '../common/utils';
 import { CategoryManagerPO } from 'cxone-qm-library/category-manager.po';
 
 export class CheckboxFilterPO {
@@ -32,7 +32,7 @@ export class CheckboxFilterPO {
     }
 
     public async getSelectedInteractionButton() {
-        return await this.utils.getText(this.page.locator('.interaction-buttons-wrapper button.active'));
+        return await this.page.locator('.interaction-buttons-wrapper button.active').textContent();
     }
 
     public async toggleChannelByName(channelTypeLabel: string) {
@@ -47,7 +47,7 @@ export class CheckboxFilterPO {
 
     public async isChannelPresent(channelTypeLabel: string) {
         const channelCheckbox = new CheckboxPO(`QpMediaTypeMapper-checkbox-${channelTypeLabel.toUpperCase()}`);
-        return await this.utils.isPresent(this.page.locator(channelCheckbox.selector));
+        return await Utils.isPresent(this.page.locator(channelCheckbox.selector));
     }
 
     public async toggleCallDirectionByName(directionLabel: string) {

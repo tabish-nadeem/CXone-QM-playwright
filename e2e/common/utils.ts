@@ -2,8 +2,7 @@ import { Page } from '@playwright/test';
 import { ExpectedCondition as EC } from 'expected-condition-playwright';
 import { Strings } from './strings_en_US';
 
-let strings: any
-
+let strings: any;
 
 const DEFAULT_WAIT_TIME = 25000;
 

@@ -2,7 +2,7 @@
 import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
-import { Utils } from '../../../../../../../tests/protractor/common/utils';
+import { Utils } from '../common/utils';
 import { CategoryManagerPO } from 'cxone-qm-library/category-manager.po';
 
 export class CategoriesPO {
@@ -25,7 +25,7 @@ export class CategoriesPO {
     }
 
     public async clearFilter() {
-        return await Utils.click(this.page.locator('button.filter-clear-btn'));
+        return Utils.click(this.page.locator('button.filter-clear-btn'));
     }
 
     public async isHighConfidenceChecked() {
@@ -37,12 +37,12 @@ export class CategoriesPO {
     }
 
     public async getTotalSelectedCategories() {
-        return await this.utils.getText(this.page.locator('.header-row span'));
+        return await this.page.locator('.header-row span').textContent();
     }
 
     public async openCategoryModal() {
         await this.utils.click(this.page.locator('#add-categories-btn'));
-        await this.utils.waitUntilVisible(this.page.locator('.category-list-modal-wrapper'));
+        await this.page.waitForSelector(this.page.locator('.category-list-modal-wrapper'));
         await this.utils.delay(2000);
     }
 
@@ -62,7 +62,7 @@ export class CategoriesPO {
 
     public async dismissModal() {
         await this.utils.click(this.page.locator('.category-list-modal-wrapper .modal-footer-wrapper button.cancel-btn')));
-        if (await this.utils.isPresent(this.page.locator('#exit-yes-btn'))) {
+        if (await Utils.isPresent(this.page.locator('#exit-yes-btn'))) {
             await this.utils.click(this.page.locator('#exit-yes-btn'));
         }
         await this.utils.waitUntilInvisible(this.page.locator('.category-list-modal-wrapper'));

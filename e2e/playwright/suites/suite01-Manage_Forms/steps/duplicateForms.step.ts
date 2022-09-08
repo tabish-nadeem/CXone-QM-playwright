@@ -50,7 +50,6 @@ let currForm = {
 console.log('ANGULAR8: MANAGE FORMS DUPLICATE FORM MODAL TESTS');
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-    
     browser = await chromium.launch({
         headless: false,
     });
@@ -67,9 +66,9 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     console.log('Form Names used :', formNames);
     userToken = await loginPage.login(userDetails.email, userDetails.password);
     await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.navigation_redesign, true, userDetails.orgName, userToken)
-    await manageFormsPO.navigateTo();
+    await manageFormsPO.navigate();
     await CommonQMNoUIUtils.createForm(currForm, userToken);
-    await manageFormsPO.navigateTo();
+    await manageFormsPO.navigate();
     dateFormat = await LocalizationNoUI.getDateStringFormat(localString);
     console.log('DateTime formats to use', dateFormat);
     await CommonQMNoUIUtils.createForm(currForm, userToken);
@@ -82,8 +81,8 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("Step-1: should create a duplicate form of existing form;Also should verify if existing name is specified while duplicating form", { timeout: 60 * 1000 }, async () => {
-    await manageFormsPO.refresh();
+Given("should create a duplicate form of existing form;Also should verify if existing name is specified while duplicating form", { timeout: 60 * 1000 }, async () => {
+    await manageFormsPO.navigate();
     const menuItem = await manageFormsPO.getHamburgerMenuItem(formNames.formOne, 'Duplicate');
     await menuItem.click();
     await browser.wait(page.locator('cxone-modal').isVisible(), 20000);
@@ -100,7 +99,7 @@ Given("Step-1: should create a duplicate form of existing form;Also should verif
     expect((await manageFormsPO.getFormRowElements(formNames.duplicateFormOne)).status).toEqual('Draft');
 });
 
-When("Step-2: should be able to cancel duplicate form creation : P2", { timeout: 180 * 1000 }, async () => {
+When("should be able to cancel duplicate form creation : P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid(formNames.formOne);
     const menuItem = await manageFormsPO.getHamburgerMenuItem(formNames.formOne, 'Duplicate');
     await menuItem.click();
@@ -111,18 +110,18 @@ When("Step-2: should be able to cancel duplicate form creation : P2", { timeout:
     expect(await manageFormsPO.verifyFormPresence(formNames.duplicateFormTwo)).toBeFalsy();
 });
 
-Then("Step-3: should be able to create a duplicate form of already duplicated form : P2", { timeout: 180 * 1000 }, async () => {
+Then("should be able to create a duplicate form of already duplicated form : P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.duplicateForm(formNames.formOne, formNames.secondDuplicateFormOne);
     expect(await manageFormsPO.verifyFormPresence(formNames.secondDuplicateFormOne)).toBeTruthy();
 });
 
-Then("Step-4: should create a duplicate form from active form and duplicated form status should be draft :P2", { timeout: 180 * 1000 }, async () => {
+Then("should create a duplicate form from active form and duplicated form status should be draft :P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.duplicateForm(formNames.formTwo, formNames.duplicateActiveFormTwo);
     expect(await manageFormsPO.verifyFormPresence(formNames.duplicateActiveFormTwo)).toBeTruthy();
     expect((await manageFormsPO.getFormRowElements(formNames.duplicateActiveFormTwo)).status).toEqual('Draft');
 });
 
-Then('Step-5: should verify that user is not able to save a form with special characters except "-" and "_" :P1', { timeout: 180 * 1000 }, async () => {
+Then('should verify that user is not able to save a form with special characters except "-" and "_" :P1', { timeout: 180 * 1000 }, async () => {
     let errorMsg = utils.getExpectedString('duplicateFormModal.nameFieldValidation');
     await manageFormsPO.searchFormInGrid(formNames.duplicateActiveFormTwo);
     const item = await manageFormsPO.getHamburgerMenuItem(formNames.duplicateActiveFormTwo, 'Duplicate');

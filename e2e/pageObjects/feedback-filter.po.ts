@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import {CheckboxPO} from 'cxone-components/checkbox.po';
-import {Utils} from '../../../../../../../tests/protractor/common/utils';
+import {Utils} from '../common/utils';
 
 export class FeedbackFilterPo {
     ancestor: Locator;
@@ -29,17 +29,17 @@ export class FeedbackFilterPo {
 
     public async getMinValueScore(selector: string) {
         const handle = this.page.locator(`${selector} nouislider .noUi-handle.noUi-handle-lower .noUi-tooltip`);
-        return await this.utils.getText(handle);
+        return await handle.textContent();
     }
 
     public async getMaxValueScore(selector: string) {
         const handle = this.page.locator(`${selector} nouislider .noUi-handle.noUi-handle-upper .noUi-tooltip`);
-        return await this.utils.getText(handle);
+        return await handle.textContent();
     }
 
     public async getRangeText() {
         const handle = this.page.locator('.range-text');
-        return await this.utils.getText(handle);
+        return await handle.textContent();
     }
 
 }
