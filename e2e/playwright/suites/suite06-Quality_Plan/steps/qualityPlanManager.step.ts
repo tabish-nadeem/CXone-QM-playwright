@@ -95,7 +95,7 @@ Then("Step-2: Should be able to navigate to new plan page", { timeout: 180 * 100
     await planManagerPO.getNewPlanButton().click();
     const navigatedUrl = await browser.getCurrentUrl();
     await planManagerPO.clickBreadCrumbLink();
-    await utils.delay(5000);
+    await page.waitForEvent();
     expect(navigatedUrl).toContain(page);
 });
 

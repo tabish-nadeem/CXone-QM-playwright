@@ -133,8 +133,8 @@ Given("Step-1: should be able to save plan as draft and verify all filters are r
     }
     await callDirectionPO.toggleCallDirectionByName('Incoming');
     await callDirectionPO.toggleCallDirectionByName('Outgoing');
-    await utils.delay(2000);
-    await utils.delay(2000);
+    await page.waitForEvent();
+    await page.waitForEvent();
     await qualityPlanDetailsPO.saveAsDraft();
     expect(await qualityPlanManagerPO.verifyPlanPresence(planName)).toBeTruthy();
     await qualityPlanManagerPO.openQualityPlanByName(planName);
