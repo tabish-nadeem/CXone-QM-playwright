@@ -4,14 +4,15 @@ import { expect, page } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
-import { CHARACTER_LIMIT, ELEMENT_TYPES, FEATURE_TOGGLES } from "../../../../common/uiConstants";
+import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { ManageFormsPO } from '../../../manage-forms/manage-forms.po';
+import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import { ModuleExports } from '../../../../common/qmDefaultData';
 
 let browser: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
@@ -92,30 +93,24 @@ let formNames = [
 ];
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-     const protractorConfig = protHelper.getProtractorHelpers();
-     // ! this file is need to check
-     if (disableProtUtil.disableExecutionOnEnv(protractorConfig.envToDisable)) {
-          userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-          const manageFormsPO = new ManageFormsPO(page.locator(('ng2-manage-forms-page')));
-          newOnPrepare = new OnPrepare();
-          await newOnPrepare.OnStart();
-          getElementLists = getElementList();
-          USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
-          await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-          await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
-          await manageFormsPO.navigateTo();
-     };
+     const protractorConfig = ModuleExports.getFormData();
+     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
+     const manageFormsPO = new ManageFormsPO(page.locator(('ng2-manage-forms-page')));
+     newOnPrepare = new OnPrepare();
+     await newOnPrepare.OnStart();
+     getElementLists = getElementList();
+     USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
+     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
+     await manageFormsPO.navigateTo();
+
 
 
 
 });
 
-// const onEnd = async () => {
-//      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-//      await CommonUIUtils.testUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
-//  };
 
-//! need to ask
+
 AfterAll({ timeout: 60 * 1000 }, async () => {
      await browser.close();
 });

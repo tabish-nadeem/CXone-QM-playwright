@@ -27,6 +27,7 @@ import { ScoringModalComponentPo } from "../../../../pageObjects/scoring-modal.c
 import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
 import { WarningModalComponentPo } from '../../../../pageObjects/warning-modal.component.po';
 import { EnhancedEvaluatorsPO } from '../../../../pageObjects/enhanced-evaluators.po';
+import { EvaluatorsPO } from '../../../../pageObjects/evaluators.po';
 
 let browser: any;
 let context: BrowserContext;
@@ -100,19 +101,20 @@ let testDataUsed: any = {
 };
 
 let userDetails: any = {}
-const planSummaryPO = new PlanSummaryPO();
-const qualityPlanDetailsPO = new QualityPlanDetailsPO();
-const qualityPlanManagerPO = new QualityPlanManagerPO();
-const teamsAndGroupsPO = new TeamsAndGroupsPO();
-const samplingPO = new SamplingPO();
-const planDurationPO = new PlanDurationPO();
+let planSummaryPO = new PlanSummaryPO();
+let qualityPlanDetailsPO = new QualityPlanDetailsPO();
+let qualityPlanManagerPO = new QualityPlanManagerPO();
+let teamsAndGroupsPO = new TeamsAndGroupsPO();
+let samplingPO = new SamplingPO();
+let planDurationPO = new PlanDurationPO();
 let formDesignerPage = new FormDesignerPagePO();
-const enhancedEvaluatorsPO = new EnhancedEvaluatorsPO();
+let enhancedEvaluatorsPO = new EnhancedEvaluatorsPO();
 let formArea = new FormAreaComponentPo();
-let designerToolbar = new DesignerToolbarComponentPO();
-let scoringModal = new ScoringModalComponentPo();
-let elementAttributes = new ElementAttributesComponentPo();
 let warningPageModalPO = new WarningModalComponentPo();
+let evaluatorsPO = new EvaluatorsPO();
+const evaluationFormPO = new EvaluationFormPO();
+const evaluationTypePO = new EvaluationTypePO()
+const callDurationPO = new CallDurationPO();
 
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
@@ -122,11 +124,10 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      });
      context = await browser.newContext();
      page = await context.newPage();
-     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials(); //!
+     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
      console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
      console.log("Response login", USER_TOKEN);
-     //! DataCreator.setToken(USER_TOKEN); // not got file
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
@@ -176,7 +177,7 @@ async function prepareData() {
      await DataCreator.createUser(userData[1].email, userData[1]);
      const formId = await DataCreator.createForm(form.formName, form.formStatus, form.formType, form.workflowConfigType);
      form.formId = formId;
-     await protractorConfig.tmUtils.updateTeam((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN);
+     await AdminUtilsNoUI.updateTeam((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN));
 
 }
 
@@ -463,7 +464,4 @@ Then("Step-20 should verify that user is able to continue on page after clicking
 
 
 
-function userToken(ANGULAR8_MIGRATION_SPRING20: string, orgName: any, userToken: any) {
-     throw new Error('Function not implemented.');
-}
 
