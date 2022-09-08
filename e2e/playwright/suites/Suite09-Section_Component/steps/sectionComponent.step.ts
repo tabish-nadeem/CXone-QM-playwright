@@ -11,7 +11,7 @@ import {AccountUtils} from "../../../../common/AccountUtils";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import {ELEMENT_TYPES} from "../../../../common/uiConstants";
-import {CommonQMNoUIUtils} from "../../../../common/CommonQMNoUIUtils"
+import {CommonQMNoUIUtils} from "../../../../common/CommonQMNoUIUtils";
 
 let page: Page;
 let browser: any;

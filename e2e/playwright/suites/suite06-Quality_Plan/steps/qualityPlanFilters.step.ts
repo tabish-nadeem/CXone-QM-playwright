@@ -196,9 +196,9 @@ Then("Step-2: should be able to select feedback score ranges", { timeout: 60 * 1
     expect(await feedbackFilterPo.getMinValueScore('.csat-score-filter')).toEqual('0%');
     expect(await feedbackFilterPo.getMaxValueScore('.csat-score-filter')).toEqual('100%');
     expect(await feedbackFilterPo.getRangeText()).toEqual('0% to 100%');
-    await utils.delay(2000);
+    await page.waitForFunction();
     await feedbackFilterPo.moveFeedBackRangeSlider('.noUi-handle-lower',20);
-    await utils.delay(2000);
+    await page.waitForEvent();
     await feedbackFilterPo.moveFeedBackRangeSlider('.noUi-handle-upper',-20);
     expect(await feedbackFilterPo.getMinValueScore('.csat-score-filter')).toEqual('13%');
     expect(await feedbackFilterPo.getMaxValueScore('.csat-score-filter')).toEqual('87%');
@@ -304,9 +304,9 @@ When("Step-1: should be able to save plan as draft and verify filters are retain
     expect(await feedbackFilterPo.getMinValueScore('.csat-score-filter')).toEqual('0%');
     expect(await feedbackFilterPo.getMaxValueScore('.csat-score-filter')).toEqual('100%');
     expect(await feedbackFilterPo.getRangeText()).toEqual('0% to 100%');
-    await utils.delay(2000);
+    await page.waitForFunction();
     await feedbackFilterPo.moveFeedBackRangeSlider('.noUi-handle-lower',20);
-    await utils.delay(2000);
+    await page.waitForEvent();
     await feedbackFilterPo.moveFeedBackRangeSlider('.noUi-handle-upper',-20);
     await sentimentsPO.selectSentiment('MIXED', 'Agent side');
     await agentBehaviourPO.setAgentBehaviorType('Demonstrate ownership', 0);
@@ -413,7 +413,7 @@ When("Step-1: should display interaction button filters and hide acd(email,chat)
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ENGAGE_RECORDING'], tmToken);
     console.log('Waiting for 125 second because qp service is using in-memory ft-cache which will update in every 2 min');
-    await utils.delay(125000);
+    await page.waitForFunction();
     await qualityPlanDetailsPO.refresh();
 
     expect(await recordedSegmentFilterPO.isChannelPresent('Voice')).toBeFalsy();
