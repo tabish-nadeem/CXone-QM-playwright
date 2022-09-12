@@ -11,6 +11,9 @@ import { ApiUrl } from "src/ng2/assets/api-url";
 import { CommonNoUIUtils } from './CommonNoUIUtils';
 
 export class fdUtils {
+     static removeAllGroups(USER_TOKEN: string) {
+          throw new Error('Method not implemented.');
+     }
      static waitABit(timeToWait: number) {
           return new Promise<void>((resolve) => {
                setTimeout(() => {
@@ -150,32 +153,9 @@ export class fdUtils {
           searchString: any
      ) => { };
 
-     static removeAllUsers = async (token: any, ids: any) => {
-          var usersIds = ids;
-          if (ids) {
-               CommonNoUIUtils.getUsers(token)
-                    .then(function (users) {
-                         var nonAdminUsers = this.filter(users, function (user) {
-                              return user.role !== "Administrator";
-                         });
-                         return this.map(nonAdminUsers, "id");
-                    })
-                    .then(function (nonAdmins) {
-                         if (this.isEmpty(nonAdmins)) {
-                              return nonAdmins;
-                         } else {
-                              return CommonNoUIUtils.deleteUsers(nonAdmins, token);
-                         }
-                    })
-                    .then(function () {
-                         return;
-                    });
-          } else {
-               CommonNoUIUtils.deleteUsers(usersIds, token).then(function () {
-                    console.log("all users removed: ", usersIds);
-                    return;
-               });
-          }
+     static removeAllUsers = async (token: any) => {
+          // var usersIds = ids;
+     
      };
      removeAllGroups = async (token: any, ids: any) => {
           //! wont work
