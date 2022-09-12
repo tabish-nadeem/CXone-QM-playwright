@@ -197,6 +197,10 @@ export class UserDefaultPermissions {
     };
 }
 
+
+export function getUserDefaultApplications(arg0: string): string[] {
+     throw new Error('Function not implemented.');
+}
 // module.exports = {
 //     getUserDefaultApplications: getUserDefaultApplications
 // };

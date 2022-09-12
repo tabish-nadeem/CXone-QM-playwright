@@ -3,7 +3,6 @@ import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { Utils } from '../../../../common/utils';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
-import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import { QualityPlanManagerPO } from "../../../../pageObjects/quality-plan-manager.po"
@@ -11,17 +10,11 @@ import { QualityPlanDetailsPO } from "../../../../pageObjects/quality-plan-detai
 import { PlanSummaryPO } from '../../../../pageObjects/plan-summary.po'
 import { PlanDurationPO } from '../../../../pageObjects/plan-duration.po'
 import { SamplingPO } from '../../../../pageObjects/sampling.po';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
 import { TeamsAndGroupsPO } from '../quality-plan-details/teams-and-groups/teams-and-groups.po';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DataCreator, DCGroup, DCTeam } from "../../../../common/DataCreator";
-import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
-import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
-import { ScoringModalComponentPo } from "../../../../pageObjects/scoring-modal.component.po";
-import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
 import { EvaluatorsPO } from "../../../../pageObjects/evaluators.po";
 
 
@@ -115,8 +108,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
     USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
     console.log("Response login", USER_TOKEN);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
     await prepareData();
 });

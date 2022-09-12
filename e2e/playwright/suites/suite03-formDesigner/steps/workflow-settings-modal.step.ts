@@ -172,7 +172,7 @@ Given("Step 1: Should able to change and cancel the workflow settings", { timeou
      expect(Utils.isSelected(workflowModal.getAssignedEvaluatorRadio())).toBeTruthy();
  });
  
- Then("STEP-3:Verify that the workflow settings are disabled once the form is activated using Activate button", { timeout: 180 * 1000 }, async () => {
+ Then("STEP-4:Verify that the workflow settings are disabled once the form is activated using Activate button", { timeout: 180 * 1000 }, async () => {
      await manageFormsPO.navigateTo();
      await manageFormsPO.searchFormInGrid(formNames[2]);
      await manageFormsPO.openParticularForm(formNames[2]);
@@ -187,7 +187,7 @@ Given("Step 1: Should able to change and cancel the workflow settings", { timeou
      expect(Utils.isEnabled(workflowModal.getAssignedEvaluatorRadio())).toBeFalsy();;
  });
 
- Then("STEP-3:Verify that the workflow settings are disabled once the form is activated from more menu", { timeout: 180 * 1000 }, async () => {
+ Then("STEP-5:Verify that the workflow settings are disabled once the form is activated from more menu", { timeout: 180 * 1000 }, async () => {
      await manageFormsPO.navigateTo();
      await manageFormsPO.activateForm(formNames[1]);
      await manageFormsPO.waitForSpinnerToDisappear();
@@ -202,7 +202,7 @@ Given("Step 1: Should able to change and cancel the workflow settings", { timeou
      expect(Utils.isEnabled(workflowModal.getagentCanRequestReviewCheckbox())).toBeFalsy();
      expect(Utils.isEnabled(workflowModal.getAssignedEvaluatorRadio())).toBeFalsy();
  });
- Then("STEP-3:Verify that the workflow settings are disabled for inactivated form", { timeout: 180 * 1000 }, async () => {
+ Then("STEP-6:Verify that the workflow settings are disabled for inactivated form", { timeout: 180 * 1000 }, async () => {
      await manageFormsPO.navigateTo();
      await manageFormsPO.deactivateForm(formNames[2]);
      await manageFormsPO.searchFormInGrid(formNames[2]);

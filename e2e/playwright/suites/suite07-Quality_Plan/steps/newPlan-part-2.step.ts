@@ -12,19 +12,13 @@ import { QualityPlanDetailsPO } from "../../../../pageObjects/quality-plan-detai
 import { PlanSummaryPO } from '../../../../pageObjects/plan-summary.po'
 import { PlanDurationPO } from '../../../../pageObjects/plan-duration.po'
 import { SamplingPO } from '../../../../pageObjects/sampling.po';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
 import { TeamsAndGroupsPO } from '../quality-plan-details/teams-and-groups/teams-and-groups.po';
-import { OnPrepare } from '../../../../playwright.config';
-import { Helpers } from '../../../../playwright.helpers';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DataCreator, DCGroup, DCTeam } from "../../../../common/DataCreator";
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
-import { ScoringModalComponentPo } from "../../../../pageObjects/scoring-modal.component.po";
-import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
 import { WarningModalComponentPo } from '../../../../pageObjects/warning-modal.component.po';
 import { EnhancedEvaluatorsPO } from '../../../../pageObjects/enhanced-evaluators.po';
 import { EvaluatorsPO } from '../../../../pageObjects/evaluators.po';
@@ -35,7 +29,6 @@ let performanceMonitoring: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let page: Page;
-let teams: DCTeam[], groups: DCGroup[], form: { formId: string; formName: string; formStatus: string; formType: string };
 
 const evaluators: {
      firstName: string;
@@ -125,13 +118,11 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      context = await browser.newContext();
      page = await context.newPage();
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-     console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
      console.log("Response login", USER_TOKEN);
-     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
-     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
-     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
+     await fdUtils.removeAllUsers(USER_TOKEN);
+     await fdUtils.removeAllGroups(USER_TOKEN);
      await prepareData();
 });
 
@@ -140,7 +131,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
      await qualityPlanDetailsPO.navigate();
      await browser.close();
- });
+});
 
 
 async function prepareData() {
