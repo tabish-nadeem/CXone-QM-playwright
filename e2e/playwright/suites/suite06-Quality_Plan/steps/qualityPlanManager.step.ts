@@ -1,8 +1,8 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import {QualityPlanManagerPO} from "../../../../pageObjects/quality-plan-manager.po"
-import {QualityPlanDetailsPO} from "../../../../pageObjects/quality-plan-details.po"
-import {OmnibarPO} from 'cxone-components/omnibar.po';
+import { QualityPlanManagerPO } from "../../../../pageObjects/quality-plan-manager.po"
+import { QualityPlanDetailsPO } from "../../../../pageObjects/quality-plan-details.po"
+import { OmnibarPO } from '../../../../pageObjects/omnibar.po';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { OnPrepare } from '../../../../playwright.config';
@@ -25,17 +25,17 @@ let newGlobalTenantUtils = new GlobalTenantUtils();
 let page: Page;
 let browser: any;
 let context: BrowserContext;
-let newOnPrepare:any;
-let loginPage:any;
-let userToken:any;
-let dateFormat:any;
-let localString='en-US';
-let adminDetails:any;
-let responseForm:any;
-let utils:any;
-let response:any;
-let team:any;
-let group:any;
+let newOnPrepare: any;
+let loginPage: any;
+let userToken: any;
+let dateFormat: any;
+let localString = 'en-US';
+let adminDetails: any;
+let responseForm: any;
+let utils: any;
+let response: any;
+let team: any;
+let group: any;
 
 let planNames = {
     one: 'Draft_Valid_Plan',
@@ -44,10 +44,195 @@ let planNames = {
     four: 'Draft_Valid_Plan_Dup'
 };
 
+function getStandardPlanData(planName: any, adminUUID: any, evaluatorUUID: any, formId: any, teamId: any, status: any) {
+    'use strict';
+    return {
+        name: planName,
+        description: '',
+        state: status,
+        createdBy: adminUUID,
+        evaluators: [evaluatorUUID],
+        groups: [],
+        numSegmentsPerAgent: 2,
+        formId: formId,
+        numDaysBackDistribution: -1,
+        filters: [
+            {
+                name: 'CallDuration',
+                value: '30',
+                value2: '360',
+                operation: 'Greater',
+                active: true
+            },
+            {
+                name: 'DirectionType',
+                values: [],
+                operation: 'In',
+                active: false
+            },
+            {
+                name: 'QpMediaTypeMapper',
+                values: [],
+                operation: 'In',
+                active: false
+            },
+            {
+                name: 'Categories',
+                values: [],
+                operation: 'In',
+                active: false
+            },
+            {
+                name: 'Sentiments',
+                values: [],
+                operation: 'In',
+                active: false
+            },
+            {
+                name: 'BusinessData',
+                values: [],
+                operation: 'In',
+                active: false
+            },
+            {
+                name: 'Skills',
+                values: [],
+                operation: 'In',
+                active: false
+            },
+            {
+                name: 'Dispositions',
+                values: [],
+                operation: 'In',
+                active: false
+            }
+        ],
+        evaluationType: 'Standard',
+        planDuration: {
+            recurring: 'Monthly',
+            oneTimeDateRange: null
+        },
+        createdDate: new Date(),
+        agentsCount: 0,
+        teams: [teamId]
+    };
+}
+
+function getSampleFormData () {
+    'use strict';
+    return {
+        "formTitle": "",
+        "elements": [
+            {
+                "id": 1011800173239,
+                "uuid":"6c4eb7e0-fbd9-4c0c-aa73-ff50800fdf6d",
+                "type": "section",
+                "elementData": {
+                    "sectionElementData": [],
+                    "attributes": {
+                        "isScorable": false,
+                        "question": "Set Title",
+                        "backgroundColor": "#ffffff",
+                        "visible": true,
+                        "appliedRuleCount": 0,
+                        "questionHTML": "<p><span style=\"font-family:'OpenSans';font-size:18px;color:#5b788e;\">Set Title</span></p>",
+                        "numbering": 1,
+                        "showNumbering": true,
+                        "showNumberingDot": true
+                    }
+                },
+                "$$hashKey": "object:315"
+            }
+        ],
+        "theme": {
+            "themeId": "",
+            "themeName": "",
+            "isDefault": true,
+            "themeLogo": "",
+            "themeData": {
+                "imgWidth": 243,
+                "imgHeight": 30,
+                "isAspectRatioChecked": true,
+                "logoAspectRatio": 8.1,
+                "bgColor": "#ffffff",
+                "numberingEnabled": true,
+                "title": {
+                    "text": "",
+                    "font": "OpenSans",
+                    "fontSize": 18,
+                    "fontStyling": {
+                        "fontColor": "#2e2e2e",
+                        "italic": {
+                            "isLabelItalic": false,
+                            "fontStyle": "normal"
+                        },
+                        "bold": {
+                            "isLabelBold": true,
+                            "fontWeight": "bold"
+                        },
+                        "underline": {
+                            "isLabelUnderline": false,
+                            "textDecoration": "none"
+                        }
+                    }
+                },
+                "subTitle": {
+                    "text": "",
+                    "font": "OpenSans",
+                    "fontSize": 14,
+                    "fontStyling": {
+                        "fontColor": "#707070",
+                        "italic": {
+                            "isLabelItalic": false,
+                            "fontStyle": "normal"
+                        },
+                        "bold": {
+                            "isLabelBold": false,
+                            "fontWeight": "normal"
+                        },
+                        "underline": {
+                            "isLabelUnderline": false,
+                            "textDecoration": "none"
+                        }
+                    }
+                }
+            }
+        },
+        "ranking": {
+            "isRankingEnabled": false,
+            "totalCoverage": 101,
+            "ranges": [
+                {
+                    "from": "0%",
+                    "to": "50%",
+                    "coverage": 51,
+                    "displayText": "Failed"
+                },
+                {
+                    "from": "51%",
+                    "to": "100%",
+                    "coverage": 50,
+                    "displayText": "Passed"
+                }
+            ]
+        },
+        "themeId": "",
+        "elementCount": 1,
+        "rules": {},
+        "rulesAssociation": {},
+        "rulesAssociationV2": {},
+        "headerFields": [],
+        "formMaxScore": 0,
+        "currentScore": 0,
+        "percentage": null
+    };
+}
+
+
 const omnibarPO = new OmnibarPO(page.locator('cxone-omnibar'));
 let userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
 utils = new Utils(page);
-let sampleFormData = JSON.stringify(protractorConfig.formsMockService.getSampleFormData());
+let sampleFormData = JSON.stringify(getSampleFormData());
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
     browser = await chromium.launch({
@@ -68,7 +253,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
         workflowConfigType: 'AGENT_NO_REVIEW'
     };
 
-    userToken = await CommonNoUIUtils.login(userDetails.email, userDetails.password,true);
+    userToken = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, userToken);
     await CommonUIUtils.waitUntilIconLoaderDone(page);
     responseForm = await CommonQMNoUIUtils.createForm(currForm, userToken);
@@ -85,9 +270,9 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
 Given("Step-1: Should verify page title, plan count and overlay text", { timeout: 60 * 1000 }, async () => {
 
     expect(await planManagerPO.getHeaderText()).toEqual(utils.getExpectedString('qualityPlaner.qualityPlanerPage.pageTitle'));
-        response = await CommonQMNoUIUtils.getAllPlans(undefined, userToken);
-        expect(await omnibarPO.getItemCountLabel()).toEqual([response.length + ' plans']);
-        expect(await planManagerPO.getNewPlanButton().getText()).toEqual(utils.getExpectedString('qualityPlaner.qualityPlanerPage.newPlanButton'));
+    response = await CommonQMNoUIUtils.getAllPlans(undefined, userToken);
+    expect(await omnibarPO.getItemCountLabel()).toEqual([response.length + ' plans']);
+    expect(await planManagerPO.getNewPlanButton().textContent()).toEqual(utils.getExpectedString('qualityPlaner.qualityPlanerPage.newPlanButton'));
 });
 
 Then("Step-2: Should be able to navigate to new plan page", { timeout: 180 * 1000 }, async () => {
@@ -102,7 +287,7 @@ Then("Step-2: Should be able to navigate to new plan page", { timeout: 180 * 100
 When("Step-1: Should check actions available on a particular plan", { timeout: 60 * 1000 }, async () => {
 
     response = await await AdminUtilsNoUI.getAllTeams(userToken);
-    team = response.teams.find((item:any) => item.name === 'DefaultTeam');
+    team = response.teams.find((item: any) => item.name === 'DefaultTeam');
     group = await await CommonQMNoUIUtils.createGroup('User Group1', userToken);
     let agentDetails = {
         firstName: 'Alfred',
@@ -122,7 +307,7 @@ When("Step-1: Should check actions available on a particular plan", { timeout: 6
         userToken);
 
     let allUsers = await CommonNoUIUtils.getUsers(userToken);
-    allUsers.users.forEach((user:any) => {
+    allUsers.users.forEach((user: any) => {
         switch (user.role) {
             case 'Administrator':
                 adminDetails = user;
@@ -134,9 +319,9 @@ When("Step-1: Should check actions available on a particular plan", { timeout: 6
                 break;
         }
     });
-    await CommonQMNoUIUtils.createPlan(protractorConfig.plansMockService.getStandardPlanData(planNames.one, adminDetails.id, adminDetails.id, responseForm.id, team.id, 'Draft'), userToken);
-    await CommonQMNoUIUtils.createPlan(protractorConfig.plansMockService.getStandardPlanData(planNames.two, adminDetails.id, adminDetails.id, responseForm.id, team.id, 'Active'), userToken);
-    await CommonQMNoUIUtils.createPlan(protractorConfig.plansMockService.getStandardPlanData(planNames.three, adminDetails.id, adminDetails.id, '', team.id, 'Draft'), userToken);
+    await CommonQMNoUIUtils.createPlan(getStandardPlanData(planNames.one, adminDetails.id, adminDetails.id, responseForm.id, team.id, 'Draft'), userToken);
+    await CommonQMNoUIUtils.createPlan(getStandardPlanData(planNames.two, adminDetails.id, adminDetails.id, responseForm.id, team.id, 'Active'), userToken);
+    await CommonQMNoUIUtils.createPlan(getStandardPlanData(planNames.three, adminDetails.id, adminDetails.id, '', team.id, 'Draft'), userToken);
 
     await planManagerPO.navigate(true);
     let row = await planManagerPO.getPlanRowElements(planNames.one);
@@ -144,9 +329,9 @@ When("Step-1: Should check actions available on a particular plan", { timeout: 6
     expect(row.planOccurence).toEqual('Monthly Recurring Plan');
     expect(row.status).toEqual('Draft');
     let actions = await planManagerPO.verifyHamburgerMenuOptions(planNames.one);
-    expect(actions).toEqual({activate: true, duplicate: true, deactivate: false});
+    expect(actions).toEqual({ activate: true, duplicate: true, deactivate: false });
     actions = await planManagerPO.verifyHamburgerMenuOptions(planNames.two);
-    expect(actions).toEqual({activate: false, duplicate: true, deactivate: true});
+    expect(actions).toEqual({ activate: false, duplicate: true, deactivate: true });
     expect(planManagerPO.verifyDeleteOption(planNames.one)).toBeTruthy();
 });
 
@@ -161,7 +346,7 @@ Then("Step-3: Should verify plan can be activated", { timeout: 180 * 1000 }, asy
 
     await planManagerPO.activatePlan(planNames.one);
     let row = await planManagerPO.getPlanRowElements(planNames.one);
-    expect(row.status).toEqual('Active');    
+    expect(row.status).toEqual('Active');
 });
 
 Then("Step-4: Should verify plan can be deactivated", { timeout: 180 * 1000 }, async () => {
@@ -170,7 +355,7 @@ Then("Step-4: Should verify plan can be deactivated", { timeout: 180 * 1000 }, a
     let row = await planManagerPO.getPlanRowElements(planNames.one);
     expect(row.status).toEqual('Inactive');
     let actions = await planManagerPO.verifyHamburgerMenuOptions(planNames.one);
-    expect(actions).toEqual({activate: true, duplicate: true, deactivate: false});
+    expect(actions).toEqual({ activate: true, duplicate: true, deactivate: false });
 });
 
 Then("Step-5: Should verify plan can be deleted", { timeout: 180 * 1000 }, async () => {
@@ -180,7 +365,7 @@ Then("Step-5: Should verify plan can be deleted", { timeout: 180 * 1000 }, async
 });
 
 Then("Step-6: Should verify invalid plan cannot be activated", { timeout: 180 * 1000 }, async () => {
-    
+
     await omnibarPO.typeSearchQuery(planNames.three);
     await planManagerPO.waitForSpinnerToDisappear();
     const menuItem = await planManagerPO.getHamburgerMenuItem(planNames.three, 'Activate');

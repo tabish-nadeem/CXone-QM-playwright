@@ -10,7 +10,6 @@ import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import { Utils } from '../../../../common/utils';
 import {CallDurationPO} from "../../../../pageObjects/call-duration.po"
 import {CheckboxFilterPO} from "../../../../pageObjects/checkbox-filter.po"
-import {UserDetails } from '../../../../../tests/protractor/common/prots-utils';
 import moment from 'moment';
 import {SELECTORS} from "../../../../playwright.helpers"
 
@@ -33,6 +32,17 @@ const callDurationPO = new CallDurationPO();
 const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter2]'));
 const callDirectionPO = new CheckboxFilterPO(page.locator('#call-direction-filter'));
 utils=new Utils(Page);
+
+export interface UserDetails {
+    orgName: string;
+    firstName: string;
+    lastName: string;
+    adminCreds: {
+        email: string;
+        password: string;
+    },
+    tmToken?: string;
+}
 
 BeforeAll({ timeout: 400 * 1000 }, async () => {
     browser = await chromium.launch({
@@ -101,7 +111,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
 });
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
-    await qualityPlanDetailsPO.refresh();
+    // await qualityPlanDetailsPO.refresh();
     await qualityPlanManagerPO.navigate();
     console.log('Deleting created plans...');
     await qualityPlanManagerPO.deleteAllPlans();
