@@ -1,6 +1,6 @@
 import {expect, Locator, Page} from "@playwright/test";
 
-import {SingleselectDropdownPO} from 'cxone-qm-library/singleselect-dropdown.po';
+import { SingleselectDropdownPO } from './singleselect-dropdown.po';
 
 export class ScoringModalComponentPo {
     readonly page: Page;

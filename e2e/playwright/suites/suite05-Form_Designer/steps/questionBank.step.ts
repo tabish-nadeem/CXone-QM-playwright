@@ -1,6 +1,8 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
+import { CommonUIUtils } from "cxone-playwright-test-utils";
+import { CommonNoUIUtils } from "../../../../common/CommonNoUIUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
 import { Utils } from "../../../../common/utils"
 import { LoginPage } from "../../../../common/login";
@@ -22,8 +24,8 @@ let browser: any,
     manageFormsPO: any,
     questionBankComponentPo: any,
     loginPage: any,
-    newOnPrepare: any,
-    newGlobalTenantUtils: any;
+    newOnPrepare: any;
+let newGlobalTenantUtils = new GlobalTenantUtils();
 let context: BrowserContext;
 let formNames = [
     'ImageUpload_1' + moment(),
@@ -32,22 +34,24 @@ let formNames = [
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
     browser = await chromium.launch({
-        headless: false,
+        channel: "chrome",
+        headless: true,
+        args: ['--window-position=-8,0']
     });
     context = await browser.newContext();
     page = await context.newPage();
-    manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
+    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
+    newOnPrepare = new OnPrepare();
+    await newOnPrepare.OnStart(userDetails);
+    userToken = await CommonNoUIUtils.login(userDetails.email, userDetails.password, false);
+    console.log('Form Names used :', formNames);
+    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, userToken)
+    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, userToken)
+    manageFormsPO = new ManageFormsPO(page);
     formDesignerPage = new FormDesignerPagePO();
     formArea = new FormAreaComponentPo();
     questionBankComponentPo = new QuestionBankComponentPo();
-    newGlobalTenantUtils = new GlobalTenantUtils();
-    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-    newOnPrepare = new OnPrepare();
     loginPage = new LoginPage(page);
-    console.log('Form Names used :', formNames);
-    userToken = await loginPage.login(userDetails.email, userDetails.password);
-    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, userToken)
-    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, userToken)
 })
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
@@ -65,8 +69,8 @@ Given("should be able to save element in question bank with properties", { timeo
     await manageFormsPO.navigate();
     await manageFormsPO.searchFormInGrid(formNames[0]);
     await manageFormsPO.openParticularForm(formNames[0]);
-    await manageFormsPO.waitForSpinnerToDisappear();
-    await Utils.waitUntilVisible(formDesignerPage.elements.sectionFormElement);
+    await CommonUIUtils.waitUntilIconLoaderDone(page);
+    await page.waitForSelector(formDesignerPage.elements.sectionFormElement)
     await formArea.clickSaveElementIcon('1. Radio1', 'radio');
     await formArea.clickSaveElementIcon('2. YesNo1', 'yesno');
     await formArea.clickSaveElementIcon('3. DateTime', 'datetime');

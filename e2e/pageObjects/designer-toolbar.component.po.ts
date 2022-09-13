@@ -1,23 +1,22 @@
-import { SpinnerPO } from "cxone-components/spinner.po";
 import { expect, Locator, Page } from "@playwright/test";
+import { SpinnerPO } from "./spinner.po";
 import { Utils } from "../common/utils";
 
 export class DesignerToolbarComponentPO {
-  public readonly page: Page;
-  public ancestor: Locator;
-  public defaultTimeoutInMillis: number;
+  readonly page: Page;
+  readonly locator: Locator;
   readonly utils: Utils;
-  public elements;
+  readonly elements: any;
+  readonly defaultTimeoutInMillis: number;
+
   constructor() {
-    this.ancestor = this.page.locator(".cxone-designer-toolbar");
+    this.locator = this.page.locator(".cxone-designer-toolbar");
     this.elements = {
-      undoBtn: this.ancestor.page.locator('.toolbar-btn[iconname="icon-undo"]'),
-      redoBtn: this.ancestor.page.locator('.toolbar-btn[iconname="icon-redo"]'),
-      scoringBtn: this.ancestor.page.locator(".btn-scoring"),
-      workFlowSettingsButton: this.ancestor.page.locator(
-        "#form-designer-workflow-settings-btn"
-      ),
-      testFormBtn: this.ancestor.page.locator("#form-designer-test-form-btn"),
+      undoBtn: this.page.locator('.toolbar-btn[iconname="icon-undo"]'),
+      redoBtn: this.page.locator('.toolbar-btn[iconname="icon-redo"]'),
+      scoringBtn: this.page.locator(".btn-scoring"),
+      workFlowSettingsButton: this.page.locator("#form-designer-workflow-settings-btn"),
+      testFormBtn: this.page.locator("#form-designer-test-form-btn"),
     };
   }
 

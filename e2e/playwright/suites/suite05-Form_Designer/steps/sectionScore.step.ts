@@ -1,6 +1,8 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
+import { CommonNoUIUtils } from "../../../../common/CommonNoUIUtils";
 import { CommonQMNoUIUtils } from "../../../../common/CommonQMNoUIUtils"
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants"
@@ -25,8 +27,8 @@ let browser: any,
     testFormModalComponentPo: any,
     scoringModalComponentPo: any,
     loginPage: any,
-    newOnPrepare: any,
-    newGlobalTenantUtils: any;
+    newOnPrepare: any;
+    let newGlobalTenantUtils = new GlobalTenantUtils();
 let context: BrowserContext;
 let formNames = [
     'ImageUpload_1' + moment(),
@@ -35,7 +37,9 @@ let formNames = [
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
     browser = await chromium.launch({
-        headless: false,
+        channel: "chrome",
+        headless: true,
+        args: ['--window-position=-8,0']
     });
     formDetails = [
         {
@@ -62,20 +66,20 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     ];
     context = await browser.newContext();
     page = await context.newPage();
-    manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
+    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
+    newOnPrepare = new OnPrepare();
+    await newOnPrepare.OnStart(userDetails);
+    userToken = await CommonNoUIUtils.login(userDetails.email, userDetails.password, false);
+    console.log('Form Names used :', formNames);
+    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, userToken)
+    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, userToken)
+    manageFormsPO = new ManageFormsPO(page);
     formDesignerPage = new FormDesignerPagePO();
     formArea = new FormAreaComponentPo();
     designerToolbarComponentPO = new DesignerToolbarComponentPO();
     testFormModalComponentPo =  new TestFormModalComponentPo();
     scoringModalComponentPo = new ScoringModalComponentPo();
-    newGlobalTenantUtils = new GlobalTenantUtils();
-    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-    newOnPrepare = new OnPrepare();
     loginPage = new LoginPage(page);
-    console.log('Form Names used :', formNames);
-    userToken = await loginPage.login(userDetails.email, userDetails.password);
-    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, userToken)
-    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, userToken)
     await manageFormsPO.navigate();
 })
 
@@ -84,7 +88,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
 });
 
 Given("should add elements into section and verify section score and form score", { timeout: 60 * 1000 }, async () => {
-    await formDesignerPage.navigateTo();
+    await formDesignerPage.navigate();
     await formArea.dragElementToFormArea('checkbox');
     await formArea.dragElementToFormArea('section');
     await formArea.dragElementToSection('yesno', '2. Set Title');
@@ -123,7 +127,7 @@ When("should add two sections and verify section score and form score", { timeou
     expect(await scoringModalComponentPo.getCurrentPoints()).toEqual('Current points : 2 of 3');
     await scoringModalComponentPo.clickSaveButton();
     await formDesignerPage.saveAndActivateForm(formDetails[0].formName, false);
-    await manageFormsPO.waitForSpinnerToDisappear();
+    await CommonUIUtils.waitUntilIconLoaderDone(page);
     await manageFormsPO.searchFormInGrid(formDetails[0].formName);
     expect((await manageFormsPO.getFormRowElements(formDetails[0].formName)).status).toEqual('Active');
 
