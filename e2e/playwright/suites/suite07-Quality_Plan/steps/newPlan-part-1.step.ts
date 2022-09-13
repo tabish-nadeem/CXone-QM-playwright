@@ -1,3 +1,5 @@
+import { LoginPage } from './../../../../common/login';
+import { fdUtils } from './../../../../common/FdUtils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { Utils } from '../../../../common/utils';
@@ -11,11 +13,14 @@ import { PlanSummaryPO } from '../../../../pageObjects/plan-summary.po'
 import { PlanDurationPO } from '../../../../pageObjects/plan-duration.po'
 import { SamplingPO } from '../../../../pageObjects/sampling.po';
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import { TeamsAndGroupsPO } from '../quality-plan-details/teams-and-groups/teams-and-groups.po';
+import { TeamsAndGroupsPO } from '../../../../pageObjects/teams-and-groups.po';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DataCreator, DCGroup, DCTeam } from "../../../../common/DataCreator";
 import { EvaluatorsPO } from "../../../../pageObjects/evaluators.po";
+import {EvaluationFormPO} from "../../../../pageObjects/evaluation-form.po";
+import { EvaluationTypePO } from '../../../../pageObjects/evaluation-type.po';
+
 
 
 
@@ -25,8 +30,9 @@ let context: BrowserContext;
 let performanceMonitoring: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
-let page: Page;
+let page:Page 
 let teams: DCTeam[], groups: DCGroup[], form: { formId: string; formName: string; formStatus: string; formType: string };
+let login:LoginPage
 
 
 let testDataUsed: any = {
@@ -108,8 +114,9 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
     USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
     console.log("Response login", USER_TOKEN);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.QP_EDIT_EVALUATOR_FT, userDetails.orgName, USER_TOKEN);
+    await fdUtils. removeAllUsers(USER_TOKEN);
+    await fdUtils.removeAllGroups(USER_TOKEN);
     await prepareData();
 });
 
@@ -119,7 +126,8 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await qualityPlanManagerPO.deleteAllPlans();
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.QP_EDIT_EVALUATOR_FT, userDetails.orgName, USER_TOKEN);
-    await browser.close();
+    await  login.logout()
+    
 });
 
 

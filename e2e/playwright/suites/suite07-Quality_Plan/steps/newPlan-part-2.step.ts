@@ -2,7 +2,6 @@ import { Utils } from './../../../../common/utils';
 import { fdUtils } from './../../../../common/FdUtils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-// import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
@@ -13,7 +12,7 @@ import { PlanSummaryPO } from '../../../../pageObjects/plan-summary.po'
 import { PlanDurationPO } from '../../../../pageObjects/plan-duration.po'
 import { SamplingPO } from '../../../../pageObjects/sampling.po';
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import { TeamsAndGroupsPO } from '../quality-plan-details/teams-and-groups/teams-and-groups.po';
+import { TeamsAndGroupsPO } from '../../../../pageObjects/teams-and-groups.po';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DataCreator, DCGroup, DCTeam } from "../../../../common/DataCreator";
@@ -22,6 +21,10 @@ import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component
 import { WarningModalComponentPo } from '../../../../pageObjects/warning-modal.component.po';
 import { EnhancedEvaluatorsPO } from '../../../../pageObjects/enhanced-evaluators.po';
 import { EvaluatorsPO } from '../../../../pageObjects/evaluators.po';
+import { EvaluationFormPO } from '../../../../pageObjects/evaluation-form.po';
+import { EvaluationTypePO } from '../../../../pageObjects/evaluation-type.po';
+import {CallDurationPO} from '../../../../pageObjects/call-duration.po'
+import { LoginPage } from '../../../../common/login';
 
 let browser: any;
 let context: BrowserContext;
@@ -29,6 +32,7 @@ let performanceMonitoring: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let page: Page;
+let login:LoginPage
 
 const evaluators: {
      firstName: string;
@@ -121,16 +125,16 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
      console.log("Response login", USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
-     await fdUtils.removeAllUsers(USER_TOKEN);
-     await fdUtils.removeAllGroups(USER_TOKEN);
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
      await prepareData();
+
 });
 
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
      await qualityPlanDetailsPO.navigate();
-     await browser.close();
+     await  login.logout()
 });
 
 

@@ -61,7 +61,7 @@ export class CategoriesPO {
     }
 
     public async dismissModal() {
-        await this.utils.click(this.page.locator('.category-list-modal-wrapper .modal-footer-wrapper button.cancel-btn')));
+        await this.utils.click(this.page.locator('.category-list-modal-wrapper .modal-footer-wrapper button.cancel-btn'));
         if (await Utils.isPresent(this.page.locator('#exit-yes-btn'))) {
             await this.utils.click(this.page.locator('#exit-yes-btn'));
         }

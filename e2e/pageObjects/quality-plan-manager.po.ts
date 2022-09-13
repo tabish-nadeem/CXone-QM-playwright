@@ -1,11 +1,10 @@
 
 import { OmnibarPO } from 'cxone-components/omnibar.po';
 import { SpinnerPO } from 'cxone-components/spinner.po';
-import { ExpectedCondition as EC } from 'expected-condition-playwright';
-import { DuplicatePlanModalPO } from './modals/duplicate-plan-modal/duplicate-plan-modal.po';
+import { DuplicateFormModalPO } from './duplicate-form-modal.po'
 import { QualityPlanDetailsPO } from '../pageObjects/quality-plan-details.po';
 import { fdUtils } from '../common/fdUtils';
-import { Page, Locator } from "@playwright/test";
+import { Page, Locator, expect } from "@playwright/test";
 import { Helpers } from "../playwright.helpers";
 import { URLs } from "../common/pageIdentifierURLs";
 import { Utils } from '../common/utils';
@@ -22,14 +21,13 @@ export class QualityPlanManagerPO {
      }
     readonly page: Page;
     readonly gridPO: Locator;
-    readonly ancestor:Locator ;
     readonly defaultTimeoutInMillis: number;
     readonly elements: { newPlanBtn: any; gridComponent: any; header: any; breadCrumbLink: any; clickConfirmDelete: any; row: any; noMatchfoundMsg?: any; confirmCancelBtn: any; activeWarning: any; container: any; spinner?: any; optionsPlanPopover?: any; };
     readonly uiConstants: UIConstants;
 
-    public constructor(ancestorElement?: any, defaultTimeoutInMillis = 20000) {
+    public constructor(PageElement?: any, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
-        this.page = ancestorElement ||this.page.locator((`div[id="ng2-quality-plan-manager-page"]`));
+        this.page = PageElement ||this.page.locator((`div[id="ng2-quality-plan-manager-page"]`));
         this.elements = {
             container: this.page.locator.locator((`div[id="quality-plan-grid-container"]`)),
             gridComponent: this.page.locator.locator(('cxone-grid')).textContent(),
@@ -80,11 +78,11 @@ export class QualityPlanManagerPO {
         if (shouldSearch) {
             await this.searchPlan(planName);
         }
-        return this.ancestor.this.page.locator(('xpath=.//*[text()="' + planName + '"]/..'));
+        return this.page.locator(('xpath=.//*[text()="' + planName + '"]/..'));
     }
 
     async getGridRowOfMatchingText(text: string) {
-        let row = await this.ancestor.this.page.locator(('xpath=.//*[text()="' + text + '"]/..'));
+        let row = await this.page.locator(('xpath=.//*[text()="' + text + '"]/..'));
         const rowIndex = await row.getAttribute('row-index');
         return this.getGridRow(+rowIndex);
     }
@@ -133,7 +131,7 @@ export class QualityPlanManagerPO {
         const row = await this.getGridRowOfMatchingText(value);
         const actionMore = row.this.page.locator(('button.action-btn.action-more'));
         await actionMore.click();
-        await page.wait(EC.invisibilityOf(this.page.locator(('popover-container .more-option-popover'))), 5000);
+        await expect(this.page.locator('popover-container .more-option-popover').waitFor({state:'attached',timeout:5000}))
         return Page.locator((`popover-container .more-option-popover .clickable.${action.toLowerCase()}`));
     }
 
@@ -141,7 +139,7 @@ export class QualityPlanManagerPO {
         const row = await this.getGridRowOfMatchingText(planName);
         const actionMore = row.this.page.locator(('button.action-btn.action-more'));
         await actionMore.click();
-        await page.wait(EC.invisibilityOf(page.locator(('popover-container .more-option-popover'))), 5000);
+        await expect(this.page.locator('popover-container .more-option-popover').waitFor({state:'attached',timeout:5000}))
         const visibilityOptions = {
             activate: await this.page.locator(('popover-container .more-option-popover .clickable.activate')).isPresent(),
             duplicate: await this.page.locator(('popover-container .more-option-popover .clickable.duplicate')).isPresent(),
@@ -176,11 +174,11 @@ export class QualityPlanManagerPO {
     }
 
    async duplicatePlan(oldPlanName: string, newPlanName: string) {
-        const duplicateFormModalPO = new DuplicatePlanModalPO();  //! new 
+        const duplicateFormModalPO = new DuplicateFormModalPO();  //! new 
         await this.searchPlan(oldPlanName);
         const menuItem = await this.getHamburgerMenuItem(oldPlanName, 'Duplicate');
         await menuItem.click();
-        await page.wait(ExpectedConditions.visibilityOf(this.page.locator(('.cxone-modal-wrapper'))), this.defaultTimeoutInMillis);
+        await expect(this.page.locator('.cxone-modal-wrapper').waitFor({state:'attached',timeout:this.defaultTimeoutInMillis}))
         await duplicateFormModalPO.enterPlanName(newPlanName);
         await duplicateFormModalPO.clickSaveButton();
         await this.waitForSpinnerToDisappear();
@@ -199,7 +197,7 @@ export class QualityPlanManagerPO {
         await this.searchPlan(planName);
         const row = await this.getGridRowOfMatchingText(planName);
         await row.this.page.locator(('button.action-btn.action-delete')).click();
-        await page.wait(ExpectedConditions.visibilityOf(this.page.locator(('popover-container div.confirmBtns button[id="popup-single-delete"]'))), 5000);
+        await expect(this.page.locator('popover-container div.confirmBtns button[id="popup-single-delete').waitFor({state:'attached',timeout:5000}))
         await this.page.locator(('popover-container div.confirmBtns button[id="popup-single-delete"]')).click();
         await this.waitForSpinnerToDisappear();
     }

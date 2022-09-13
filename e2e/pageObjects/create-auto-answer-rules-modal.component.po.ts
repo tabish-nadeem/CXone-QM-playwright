@@ -5,17 +5,11 @@ import { Locator } from '@playwright/test';
 // import {SelectedTagsPO} from 'cxone-components/selected-tags.po';
 // import {SingleselectDropdownPO} from 'cxone-components/singleselect-dropdown.po';import {expect, Locator, Page} from "@playwright/test";
 // import moment from 'moment';
-import { Page, Locator } from "@playwright/test";
-import { fdUtils } from "../common/FdUtils";
-import { Utils } from "../common/utils";
-import { CommonUIUtils } from "cxone-playwright-test-utils";
-import { OmnibarPO } from "./omnibar.po";
-import { RenameFormModalPO } from "./rename-form-modal.po";
-import { WarningModalComponentPo } from "./warning-modal.component.po";
-import { DuplicateFormModalPO } from "./duplicate-form-modal.po";
-import { UIConstants } from "../common/uiConstants"
-import { URLs } from "../common/pageIdentifierURLs"
-import { SingleselectDropdownPO } from './singleselect-dropdown.po';
+import { Page, locator,expect } from "@playwright/test";
+import {SpinnerPO} from 'cxone-components/spinner.po';
+import {MultiselectDropdownPO} from 'cxone-components/multiselect-dropdown.po';
+import {SelectedTagsPO} from 'cxone-components/selected-tags.po';
+import {SingleselectDropdownPO} from './singleselect-dropdown.po';
 let browser: any;
 let page: Page;
 export class CreateAutoAnswerRulesPO {
@@ -120,30 +114,35 @@ export class CreateAutoAnswerRulesPO {
     }
 
     async clickSaveBtn(): Promise<any> {
-        await browser.wait(ExpectedConditions.visibilityOf(this.elements.saveBtn), 10000);
+        await expect(this.elements.saveBtn).toBeVisible(10000);
         await this.elements.saveBtn.click();
-        await browser.wait(ExpectedConditions.stalenessOf(this.elements.saveBtn), 10000);
+        await expect(this.elements.saveBtn).toBeVisible(10000);
     }
 
     async clickCancelBtn(): Promise<any> {
-        await browser.wait(ExpectedConditions.visibilityOf(this.elements.cancelBtn), 10000);
+        await expect(this.elements.cancelBtn).toBeVisible(10000);
+        
         await this.elements.cancelBtn.click();
-        await browser.wait(ExpectedConditions.stalenessOf(this.elements.cancelBtn), 10000);
+
+        await expect(this.elements.cancelBtn).toBeVisible(10000);
     }
 
     public async clickCategoryRuleType() {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.categoryRuleType), 10000);
-        await browser.executeScript('arguments[0].click()', this.elements.categoryRuleType);
+     
+        await expect(this.elements.categoryRuleType).toBeVisible(10000);
+        await this.page.executeScript('arguments[0].click()', this.elements.categoryRuleType);
     }
 
     public async clickSentimentRuleType() {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.sentimentRuleType), 10000);
-        await browser.executeScript('arguments[0].click()', this.elements.sentimentRuleType);
+        
+        await expect(this.elements.sentimentRuleType).toBeVisible(10000);
+        
+        await this.page.executeScript('arguments[0].click()', this.elements.sentimentRuleType);
     }
 
     public async clickBehaviourRuleType() {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.behaviourRuleType), 10000);
-        await browser.executeScript('arguments[0].click()', this.elements.behaviourRuleType);
+        await expect(this.elements.behaviourRuleType).toBeVisible(10000);
+        await this.page.executeScript('arguments[0].click()', this.elements.behaviourRuleType);
     }
 
     public async selectBehaviourOption(label: string, index: number) {
@@ -159,8 +158,8 @@ export class CreateAutoAnswerRulesPO {
 
     public async selectBehaviorType(typeCode: string, index: number) {
         typeCode = typeCode.concat('-').concat(index.toString());
-        await browser.wait(ExpectedConditions.presenceOf(this.page.locator(('#agentBehaviourTypes_' + index + ' #' + typeCode))), 10000);
-        await browser.executeScript('arguments[0].click();', this.page.locator(('#agentBehaviourTypes_' + index + ' #' + typeCode)));
+        await expect((this.page.locator(('#agentBehaviourTypes_' + index + ' #' + typeCode)))).toBeVisible(10000);
+        await this.page.executeScript('arguments[0].click();', this.page.locator(('#agentBehaviourTypes_' + index + ' #' + typeCode)));
     }
 
     public async getSelectedBehaviorType(index: number, typeCLassName: string) {
@@ -207,3 +206,4 @@ export class CreateAutoAnswerRulesPO {
     }
 
 }
+

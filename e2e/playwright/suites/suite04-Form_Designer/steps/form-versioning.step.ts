@@ -13,14 +13,14 @@ import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
 import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
 import { ModuleExports } from '../../../../common/qmDefaultData';
+import { LoginPage } from '../../../../common/login';
 
 let browser: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let userDetails: any = {}
 let newOnPrepare: any;
-let calibrationPO: any;
-let getElementLists: any;
+let login:LoginPage
 
 const getElementList = () => {
      return [
@@ -98,22 +98,19 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      const manageFormsPO = new ManageFormsPO(page.locator(('ng2-manage-forms-page')));
      newOnPrepare = new OnPrepare();
      await newOnPrepare.OnStart();
-     getElementLists = getElementList();
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
      await manageFormsPO.navigateTo();
-
-
-
-
 });
 
 
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
-     await browser.close();
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+     await  login.logout()
 });
+
 
 
 Given("Step 1: should verify new version", { timeout: 60 * 1000 }, async () => {

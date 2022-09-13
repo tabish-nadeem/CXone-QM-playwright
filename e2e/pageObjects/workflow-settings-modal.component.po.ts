@@ -20,6 +20,7 @@ export class WorkflowSettingsModalComponentPo {
         assignedEvaluatorRadio: Page.locator(('.workflow-default-evaluator-wrapper * input[name="evaluatorRadio"]')),
         specificEvaluatorRadio: Page.locator(('.workflow-specific-evaluator * input[name="evaluatorRadio"]'))
     };
+     page: any;
 
     async clickCloseButton(): Promise<any> {
         return this.elements.closeButton.click() as Promise<any>;
@@ -30,9 +31,9 @@ export class WorkflowSettingsModalComponentPo {
     }
 
     async clickPopOverYes(): Promise<any> {
-        await browser.wait(ExpectedConditions.visibilityOf(this.elements.confirmYesButton), 10000);
-        await this.elements.confirmYesButton.click();
-        return await browser.wait(ExpectedConditions.invisibilityOf(this.elements.modalWrapper), 10000);
+        await expect(this.page.locator(this.elements.confirmYesButton).waitFor({state:'attached',timeout:10000}))
+        await this.elements.confirmYesButton.click()
+        await expect(this.page.locator(this.elements.modalWrapper).waitFor({state:'attached',timeout:10000}))
     }
 
     async clickPopOverNo(): Promise<any> {
