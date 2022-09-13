@@ -254,7 +254,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     };
 
     userToken = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken);
     await CommonUIUtils.waitUntilIconLoaderDone(page);
     responseForm = await CommonQMNoUIUtils.createForm(currForm, userToken);
     await planManagerPO.navigate();
@@ -264,6 +264,9 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
 });
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
+    await planManagerPO.navigate();
+    await planManagerPO.deleteAllPlans();
+    await loginPage.logout(true, 120000, userDetails.orgName, userToken);
     await browser.close();
 });
 
