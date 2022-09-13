@@ -204,7 +204,6 @@ export class ScoringModalComponentPo {
       let questionElement = await this.getQuestionElement(questionText);
       await this.page.evaluate('arguments[0].scrollIntoView()', questionElement.getWebElement());
       await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].click();
-      //FIXME:
       await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].keyboard.press('Control+A');
       await (await questionElement.all(this.locators.scoreTextBox))[optionIndex].type(score);
     }
