@@ -1,6 +1,9 @@
 import { Page } from "@playwright/test";
 
 export class DuplicateFormModalPO {
+    enterPlanName(newPlanName: string) {
+        throw new Error('Method not implemented.');
+    }
     readonly page: Page;
     readonly elements: any;
 

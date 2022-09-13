@@ -1,41 +1,39 @@
 import { Utils } from "./../../../../common/utils";
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import { expect, page } from "@playwright/test";
+import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from "../../../../common/CommonNoUIUtils";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
-import {
-     CHARACTER_LIMIT,
-     ELEMENT_TYPES,
-     FEATURE_TOGGLES,
-} from "../../../../common/uiConstants";
+import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from "../../../../common/FeatureToggleUtils";
 import { OnPrepare } from "../../../../playwright.config";
 import * as moment from "moment";
 import * as _ from "lodash";
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { ManageFormsPO } from "../../../manage-forms/manage-forms.po";
+import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
 import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
 import { FormLogoComponentPo } from "../../../../pageObjects/form-logo.component.po";
 import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
 import { DisableProtUtils } from "../../../../common/disableProtUtil";
 import { ModuleExports } from "../../../../common/qmDefaultData";
+import { LoginPage } from "../../../../common/login";
 
 let browser: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let userDetails: any = {};
 let newOnPrepare: any;
-let calibrationPO: any;
-let getElementLists: any;
+let login:LoginPage
+let page: Page;
+let context: BrowserContext;
 
-const formDesignerPage = new FormDesignerPagePO();
+
 const formArea = new FormAreaComponentPo();
 const designerToolbar = new DesignerToolbarComponentPO();
 const formLogoComponentPo = new FormLogoComponentPo();
 const elementAttributes = new ElementAttributesComponentPo();
-let newDisableProtUtils = new DisableProtUtils();
+
 const getElementList = () => {
      return [
           {
@@ -108,6 +106,12 @@ const getElementList = () => {
 };
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
+     browser = await chromium.launch({
+          headless: false,
+          args: ['--window-position=-8,0']
+     });
+     context = await browser.newContext();
+     page = await context.newPage();
      const protractorConfig = ModuleExports.getFormData();
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
      const manageFormsPO = new ManageFormsPO(
@@ -115,22 +119,21 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      );
      newOnPrepare = new OnPrepare();
      await newOnPrepare.OnStart();
-     getElementLists = getElementList();
      USER_TOKEN = await CommonNoUIUtils.login(
           userDetails.adminCreds.email,
           userDetails.adminCreds.password,
           true
      );
-     await FeatureToggleUtils.addTenantToFeature(
-          FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20,
-          userDetails.orgName,
-          USER_TOKEN
-     );
-     await FeatureToggleUtils.removeTenantFromFeature(
-          FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT,
-          userDetails.orgName,
-          USER_TOKEN
-     );
+     // await FeatureToggleUtils.addTenantToFeature(
+     //      FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20,
+     //      userDetails.orgName,
+     //      USER_TOKEN
+     // );
+     // await FeatureToggleUtils.addTenantToFeature(
+     //      FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT,
+     //      userDetails.orgName,
+     //      USER_TOKEN
+     // );
      await manageFormsPO.navigateTo();
 
 });
@@ -138,7 +141,8 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
 
 //! need to ask
 AfterAll({ timeout: 60 * 1000 }, async () => {
-     await browser.close();
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+     await  login.logout()
 });
 
 Given(

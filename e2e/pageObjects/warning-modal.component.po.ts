@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Page } from "@playwright/test";
+import { Page ,expect} from "@playwright/test";
 import { ExpectedCondition as EC } from 'expected-condition-playwright';
 import { Utils } from '../common/utils';
 
@@ -16,9 +16,10 @@ export class WarningModalComponentPo {
         noBtn: page.locator(('.cxone-message-modal .btn-secondary')),
         closeButton: page.locator(('.cxone-message-modal *.close-button'))
     };
+    page: any;
 
     async getModalTitle() {
-        await page.wait(EC.visibilityOf(this.elements.modalTitle), 10000);
+        await expect(this.page.locator(this.elements.modalTitle).toBeVisible(5000))
         return await this.elements.modalTitle.textContent();
     }
 
@@ -50,3 +51,7 @@ export class WarningModalComponentPo {
     }
 
 }
+function timeout(timeout: any, arg1: number): any {
+    throw new Error("Function not implemented.");
+}
+

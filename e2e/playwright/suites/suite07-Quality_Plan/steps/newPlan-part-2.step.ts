@@ -2,7 +2,6 @@ import { Utils } from './../../../../common/utils';
 import { fdUtils } from './../../../../common/FdUtils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-// import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
@@ -12,22 +11,20 @@ import { QualityPlanDetailsPO } from "../../../../pageObjects/quality-plan-detai
 import { PlanSummaryPO } from '../../../../pageObjects/plan-summary.po'
 import { PlanDurationPO } from '../../../../pageObjects/plan-duration.po'
 import { SamplingPO } from '../../../../pageObjects/sampling.po';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import { TeamsAndGroupsPO } from '../quality-plan-details/teams-and-groups/teams-and-groups.po';
-import { OnPrepare } from '../../../../playwright.config';
-import { Helpers } from '../../../../playwright.helpers';
+import { TeamsAndGroupsPO } from '../../../../pageObjects/teams-and-groups.po';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DataCreator, DCGroup, DCTeam } from "../../../../common/DataCreator";
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
-import { ScoringModalComponentPo } from "../../../../pageObjects/scoring-modal.component.po";
-import { ElementAttributesComponentPo } from "../../../../pageObjects/element-attributes.component.po";
 import { WarningModalComponentPo } from '../../../../pageObjects/warning-modal.component.po';
 import { EnhancedEvaluatorsPO } from '../../../../pageObjects/enhanced-evaluators.po';
 import { EvaluatorsPO } from '../../../../pageObjects/evaluators.po';
+import { EvaluationFormPO } from '../../../../pageObjects/evaluation-form.po';
+import { EvaluationTypePO } from '../../../../pageObjects/evaluation-type.po';
+import {CallDurationPO} from '../../../../pageObjects/call-duration.po'
+import { LoginPage } from '../../../../common/login';
 
 let browser: any;
 let context: BrowserContext;
@@ -35,7 +32,7 @@ let performanceMonitoring: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let page: Page;
-let teams: DCTeam[], groups: DCGroup[], form: { formId: string; formName: string; formStatus: string; formType: string };
+let login:LoginPage
 
 const evaluators: {
      firstName: string;
@@ -125,25 +122,20 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      context = await browser.newContext();
      page = await context.newPage();
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-     console.log("userDetails.email", userDetails.email + "userDetails.password", userDetails.password);
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
      console.log("Response login", USER_TOKEN);
-     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SUMMER21, userDetails.orgName, USER_TOKEN);
-     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
-     await CommonUIUtils.maximizeBrowserWindow();
      await prepareData();
+
 });
 
-const beforeEachFunction = async () => {
-     await formDesignerPage.navigateTo();
-     await Utils.waitUntilVisible(await formArea.getFormArea());
-};
-const onEnd = async () => {
-     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-     await CommonUIUtils.logout(true, 120000, userDetails.orgName, USER_TOKEN);
-};
+
+AfterAll({ timeout: 60 * 1000 }, async () => {
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
+     await qualityPlanDetailsPO.navigate();
+     await  login.logout()
+});
 
 
 async function prepareData() {
@@ -209,7 +201,7 @@ When("Step-2: should verify plan days and interactions per agent", { timeout: 18
 });
 
 Then("Step-3: should verify total interactions and interactions per day per evaluator", { timeout: 180 * 1000 }, async () => {
-     await qualityPlanDetailsPO.refresh();
+     await qualityPlanDetailsPO.navigate();
      await qualityPlanDetailsPO.enterPlanName('Plan Summary 2');
      await teamsAndGroupsPO.selectTeams(['DefaultTeam']);
      await Utils.waitForSpinnerToDisappear();
@@ -269,7 +261,6 @@ Then("Step-6 should not be able to add or delete evaluators for activated plan",
 When("Step-7: should open new plan and verify that no evaluators are selected by default'", { timeout: 180 * 1000 }, async () => {
      await Utils.enablingFeatureToggle(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
      await qualityPlanDetailsPO.navigate();
-     await qualityPlanDetailsPO.refresh();
      expect(await enhancedEvaluatorsPO.getSelectedEvaluatorsCount()).toEqual(0);
 });
 
@@ -395,7 +386,7 @@ Then("Step-18 should open new plan, press cancel, Press  and check that the page
      expect(await browser.getCurrentUrl()).toEqual(page.baseUrl + fdUtils.getPageIdentifierUrls('qp.qpPlanDetails'));
 });
 Then("Step-19 should open new plan, press cancel without changing any plan details and check that we return to plan manager", { timeout: 180 * 1000 }, async () => {
-     await qualityPlanDetailsPO.refresh();
+     await qualityPlanDetailsPO.navigate();
      await qualityPlanDetailsPO.cancel();
      expect(await browser.getCurrentUrl()).toEqual(page.baseUrl + fdUtils.getPageIdentifierUrls('qp.qpPlanManager'));
 });

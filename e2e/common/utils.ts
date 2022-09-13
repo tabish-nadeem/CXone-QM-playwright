@@ -10,6 +10,15 @@ export class Utils {
     static enablingFeatureToggle(ENHANCED_EVALUATOR_MODAL_FT: string, orgName: any, USER_TOKEN: string) {
          throw new Error('Method not implemented.');
     }
+    waitUntilDisplayed(arg0: any) {
+        throw new Error('Method not implemented.');
+    }
+    static enablingF
+    refresh() {
+        throw new Error('Method not implemented.');
+    }eatureToggle(ENHANCED_EVALUATOR_MODAL_FT: string, orgName: any, USER_TOKEN: string) {
+         throw new Error('Method not implemented.');
+    }
     static delay(arg0: number) {
         throw new Error('Method not implemented.');
     }

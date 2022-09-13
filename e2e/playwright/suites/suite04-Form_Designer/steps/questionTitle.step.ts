@@ -1,5 +1,5 @@
 import { Utils } from './../../../../common/utils';
-import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
+import { Given, When, Then, BeforeAll, AfterAll,chromium } from "cucumber";
 import { expect } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
@@ -21,7 +21,6 @@ let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let userDetails: any = {}
 let newOnPrepare: any;
-let calibrationPO: any;
 let getElementLists: any;
 
 
@@ -95,15 +94,18 @@ const getElementList = () => {
 
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
+     browser = await chromium.launch({
+          headless: false,
+          args: ['--window-position=-8,0']
+     });
      const protractorConfig = ModuleExports.getFormData();;
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-     newOnPrepare = new OnPrepare();
+      newOnPrepare = new OnPrepare();
      await newOnPrepare.OnStart();
-     getElementLists = getElementList();
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
      await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT, userDetails.orgName, USER_TOKEN);
-     await calibrationPO.navigate();
+     await formDesignerPagePO.navigateTo();
 
 
 });
@@ -112,6 +114,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
 
 //! need to ask
 AfterAll({ timeout: 60 * 1000 }, async () => {
+     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.RESTRICT_QUESTION_LENGTH_FT, userDetails.orgName, userToken);
      await browser.close();
 });
 
@@ -157,7 +160,7 @@ Then("Step-3: should trim the question drag from question bank", { timeout: 180 
 });
 
 Then("Step-4: should drag and drop checkbox, enter form title and subtitle, save and activate form", { timeout: 180 * 1000 }, async () => {
-     await calibrationPO.navigate();
+     await manageFormsPO.navigateTo();
      const inputText = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum';
      const expectedText = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus e';
      await headerPropertiesComponentPo.enterTitle(inputText);

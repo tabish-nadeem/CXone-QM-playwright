@@ -14,10 +14,10 @@ import { URLs } from "../common/pageIdentifierURLs"
 
 export class ManageFormsPO {
     readonly defaultTimeoutInMillis: number;
-    readonly elements:any;
     readonly utils:Utils;
     readonly page:Page;
     readonly uiConstants: UIConstants;
+    elements: { container: any; gridComponent: any; header: any; newFormBtn: any; currentUserName: any; publishBtn: any; unpublishBtn: any; bulkDeleteBtn: any; spinner: any; delPublishFormPopover: any; clickConfirmDelete: any; confirmCancelBtn: any; row: any; noMatchfoundMsg: any; };
 
     public constructor(page?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;

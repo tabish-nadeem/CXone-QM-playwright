@@ -11,6 +11,9 @@ export const FEATURE_TOGGLES = {
     ENHANCED_EVALUATOR_MODAL_FT: 'release-QM-performance-improvement-for-50k-users-CXQM-18051',
     QP_EDIT_EVALUATOR_FT: 'release-QM-QP-Edit-Evaluator-CXQM-18068',
     RESTRICT_QUESTION_LENGTH_FT: 'utility-QM-restrict-form-data-question-title-CXQM-18756',
+    AUTO_RESPONSE_SENTIMENT: 'release-QM-Sentiment-Auto-Response-CXQM-16341',
+    AUTO_RESPONSE_BEHAVIOR: 'release-QM-autoResponse-behaviorScores-CXQM-16808',
+    LANGUAGE_SELECTOR : 'release-QM-language-selector-AN-32747',
 };
 
 export const FORM_STATES = {

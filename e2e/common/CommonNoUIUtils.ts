@@ -3,6 +3,9 @@ import { HttpUtils } from '../common/HttpUtils';
 import { FeatureToggleUtils } from '../common/FeatureToggleUtils';
 
 export class CommonNoUIUtils {
+    static createForm(formDetails: any, userToken: string) {
+         throw new Error("Method not implemented.");
+    }
     public baseUrl: string;
     static async createNewRoleByPermissions(name: string, roleDescription: any, myPermissions: string[], token: any) {
         try {
