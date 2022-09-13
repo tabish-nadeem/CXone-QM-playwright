@@ -8,7 +8,7 @@ import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import {CategoriesPO} from "../../../../pageObjects/categories.po"
-import { DataCreator } from '../../../../../tests/protractor/common/data-creator';
+import { DataCreator } from '../../../../common/DataCreator';
 import {SELECTORS} from "../../../../playwright.helpers"
 import { TmUtils } from 'cxone-playwright-test-utils';
 
@@ -81,7 +81,7 @@ Then("Step-3: should be able to create new draft plan with category filters and 
     await categoriesPO.submitAndCloseModal();
     expect(await categoriesPO.getTotalSelectedCategories()).toEqual('Selected Categories (3)');
     await qualityPlanDetailsPO.saveAsDraft();
-    await qualityPlanManagerPO.refresh();
+    await qualityPlanManagerPO.navigate();
     expect(await qualityPlanManagerPO.verifyPlanPresence('Category Plan')).toBeTruthy();
     await qualityPlanManagerPO.openQualityPlanByName('Category Plan');
     const planName = await browser.executeScript('return arguments[0].value;', qualityPlanDetailsPO.ancestor.page.locator('#planName input'));
@@ -96,7 +96,7 @@ Then("Step-4: should not be able to see category filter when tenant has no QMA l
 
     tmToken = await CommonNoUIUtils.login(SELECTORS.TM_LOGIN_EMAIL_ADDRESS, SELECTORS.TM_LOGIN_PASSWORD,true);
     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD', 'WFM', 'RECORDING'], tmToken);
-    await qualityPlanDetailsPO.refresh();
+    await qualityPlanDetailsPO.navigate();
     expect(await categoriesPO.isFilterPresent()).toBeFalsy();
     
 });

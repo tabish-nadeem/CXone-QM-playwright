@@ -52,7 +52,7 @@ export class QualityPlanManagerPO {
     }
 
 
-    async getNewPlanButton() {
+    getNewPlanButton() {
         return this.elements.newPlanBtn;
     }
 

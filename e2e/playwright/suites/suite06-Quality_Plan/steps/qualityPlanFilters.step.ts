@@ -65,7 +65,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
 });
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
-    await qualityPlanDetailsPO.refresh();
+    // await qualityPlanDetailsPO.refresh();
     tmUtils.updateTenantLicenses(userDetails.orgName, ['QMA', 'ACD', 'WFM', 'RECORDING'], tmToken);
     await qualityPlanManagerPO.navigate();
     console.log('Deleting created plans...');
@@ -414,7 +414,7 @@ When("Step-1: should display interaction button filters and hide acd(email,chat)
     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ENGAGE_RECORDING'], tmToken);
     console.log('Waiting for 125 second because qp service is using in-memory ft-cache which will update in every 2 min');
     await page.waitForFunction();
-    await qualityPlanDetailsPO.refresh();
+    await qualityPlanDetailsPO.navigate();
 
     expect(await recordedSegmentFilterPO.isChannelPresent('Voice')).toBeFalsy();
     expect(await recordedSegmentFilterPO.isChannelPresent('Chat')).toBeFalsy();
@@ -435,7 +435,7 @@ When("Step-1: should be showing only voice filter checkbox", { timeout: 60 * 100
     const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await qualityPlanDetailsPO.navigate();
     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'RECORDING'], tmToken);
-    await qualityPlanDetailsPO.refresh();
+    // await qualityPlanDetailsPO.refresh();
     expect(await interactionPO.isChannelPresent('Voice')).toBeTruthy();
     expect(await interactionPO.isChannelPresent('Chat')).toBeFalsy();
     expect(await interactionPO.isChannelPresent('Email')).toBeFalsy();
@@ -446,7 +446,7 @@ Then("Step-2: should be showing only chat and email filter checkbox", { timeout:
     const interactionPO = new CheckboxFilterPO(page.locator('[id^=recorded-segment-filter]'));
     await qualityPlanDetailsPO.navigate();
     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QM', 'ACD'], tmToken);
-    await qualityPlanDetailsPO.refresh();
+    // await qualityPlanDetailsPO.refresh();
     expect(await interactionPO.isChannelPresent('Voice')).toBeFalsy();
     expect(await interactionPO.isChannelPresent('Chat')).toBeTruthy();
     expect(await interactionPO.isChannelPresent('Email')).toBeTruthy();
