@@ -19,7 +19,8 @@ export const URLs = {
         "recentInteractions":"/qm/#/recentInteractions"
     },
     "qualityManagement": {
-        "manageforms":"/qm/admin/#/manageForms"
+        "manageforms":"/qm/admin/#/manageForms", 
+        "categoryManager":"/qm/admin/#/categoryManager"
     },
     "search": {
         "search": "/search/#/search",
@@ -29,5 +30,9 @@ export const URLs = {
         "myDashboards": "/mydashboard/#/myDashboards",
         "qmSupervisor": "/mydashboard/#/qmSupervisor"
     },
-
+    "forms": {
+        "form_Designer": "/qm/admin/#/formDesigner",
+        "form_Manager": "/qm/admin/#/manageForms",
+        "form_Executor": "/qm/#/formExecutor"
+    }
 };

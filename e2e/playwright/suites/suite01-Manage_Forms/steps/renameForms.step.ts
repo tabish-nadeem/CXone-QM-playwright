@@ -8,7 +8,7 @@ import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { LoginPage } from "../../../../common/login";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
-import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
+import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
 import { RenameFormModalPO } from '../../../../pageObjects/rename-form-modal.po';
 import { OnPrepare } from "../../../../playwright.config";
 

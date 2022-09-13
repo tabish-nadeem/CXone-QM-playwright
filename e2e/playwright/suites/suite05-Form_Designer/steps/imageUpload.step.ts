@@ -2,6 +2,7 @@ import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import { CommonUIUtils } from "cxone-playwright-test-utils";
+import { CommonNoUIUtils } from "../../../../common/CommonNoUIUtils";
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants"
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
@@ -23,8 +24,8 @@ let browser: any,
     elementAttributesComponentPo: any,
     fileToUpload: any,
     loginPage: any,
-    newOnPrepare: any,
-    newGlobalTenantUtils: any;
+    newOnPrepare: any;
+let newGlobalTenantUtils = new GlobalTenantUtils();
 let context: BrowserContext;
 let formNames = [
     'ImageUpload_1' + moment(),
@@ -33,24 +34,26 @@ let formNames = [
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
     browser = await chromium.launch({
-        headless: false,
+        channel: "chrome",
+        headless: true,
+        args: ['--window-position=-8,0']
     });
     context = await browser.newContext();
     page = await context.newPage();
-    manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
+    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
+    newOnPrepare = new OnPrepare();
+    await newOnPrepare.OnStart(userDetails);
+    userToken = await CommonNoUIUtils.login(userDetails.email, userDetails.password, false);
+    console.log('Form Names used :', formNames);
+    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, userToken)
+    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, userToken)
+    manageFormsPO = new ManageFormsPO(page);
     formDesignerPage = new FormDesignerPagePO();
     formArea = new FormAreaComponentPo();
     designerToolbar = new DesignerToolbarComponentPO();
     elementAttributesComponentPo = new ElementAttributesComponentPo();
-    newGlobalTenantUtils = new GlobalTenantUtils();
-    fileToUpload = './src/assets/img/icon_logoNICE.png';
-    userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-    newOnPrepare = new OnPrepare();
     loginPage = new LoginPage(page);
-    console.log('Form Names used :', formNames);
-    userToken = await loginPage.login(userDetails.email, userDetails.password);
-    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, userToken)
-    await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, userToken)
+    fileToUpload = './src/assets/img/icon_logoNICE.png';
     await manageFormsPO.navigate();
 })
 
@@ -59,7 +62,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
 });
 
 Given("should verify form logo,  select logo, check file name, save form and verify all the changes are saved and delete logo", { timeout: 60 * 1000 }, async () => {
-    await formDesignerPage.navigateTo();
+    await formDesignerPage.navigate();
     await elementAttributesComponentPo.imageUploadComponentPo.uploadRequiredFile(fileToUpload);
     expect(await elementAttributesComponentPo.imageUploadComponentPo.getFileName()).toEqual('icon_logoNICE.png');
     await formArea.dragElementToFormArea('yesno');

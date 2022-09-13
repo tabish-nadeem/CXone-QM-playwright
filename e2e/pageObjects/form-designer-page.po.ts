@@ -1,27 +1,22 @@
 
 import {expect, Locator, Page} from "@playwright/test";
-
-// import {
-//     navigateTo,
-//     navigateQuicklyTo,
-//     waitForSpinnerToDisappear
-// } from '../../../../tests/protractor/common/prots-utils';
-
-import { SpinnerPO } from 'cxone-components/spinner.po';
-import { Helpers } from "../playwright.helpers";
-import { URLs } from "../common/pageIdentifierURLs";
+import { SpinnerPO } from './spinner.po';
 import { DesignerToolbarComponentPO } from "./designer-toolbar.component.po";
 import { ElementAttributesComponentPo } from "./element-attributes.component.po";
 import { FormAreaComponentPo } from "./form-area.component.po";
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { fdUtils } from "../common/FdUtils";
+import { UIConstants } from "../common/uiConstants"
+import { URLs } from "../common/pageIdentifierURLs"
 
 // const protractorConfig = protHelper.getProtractorHelpers();
 
 export default class FormDesignerPagePO {
-    public ancestor: Locator;
     readonly page: Page;
+    public locator: Locator;
     public defaultTimeoutInMillis: number;
     public spinner :SpinnerPO;
+    readonly uiConstants: UIConstants;
     public elements:any;
     public saveModalWrapperElements:any;
 
@@ -29,9 +24,9 @@ export default class FormDesignerPagePO {
 
     public constructor() {
         this.defaultTimeoutInMillis = 25000;
-        this.ancestor = this.elements.container;
+        this.locator = this.elements.container;
         this.spinner = new SpinnerPO('.apphttpSpinner .cxonespinner');
-
+        this.uiConstants = new UIConstants();
         this.elements =  {
            container: this.page.locator('#ng2FormDesignerPage .cxone-form-designer'),
            sectionFormElement: this.page.locator(`.cxone-form-element .draggable-item.cdk-drag[element-type="section"]`),
@@ -70,12 +65,12 @@ export default class FormDesignerPagePO {
         return new FormAreaComponentPo();
     }
 
-    async navigateTo(quickly?: boolean) {
-        if (quickly) {
-            await navigateQuicklyTo(fdUtils.getPageIdentifierUrls('forms.form_Designer'), this.elements.sectionFormElement);
-        } else {
-            await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Designer'), this.elements.sectionFormElement);
-        }
+    async navigate() {
+        let baseUrl = this.uiConstants.URLS.LOCALHOST
+        await this.page.goto(baseUrl + URLs.forms.form_Designer);
+        await this.page.waitForURL('**\/#/formDesigner');
+        await CommonUIUtils.waitUntilIconLoaderDone(this.page);
+        await this.page.waitForSelector(`#ng2FormDesignerPage .cxone-form-designer`);
     }
 
     async navigateToPageThroughBreadcrumb(pageWarningModal: boolean) {
@@ -86,13 +81,13 @@ export default class FormDesignerPagePO {
                 await expect(this.page.locator('.cxone-message-modal')).toBeVisible(this.defaultTimeoutInMillis);
                 await this.page.locator('button, input[type="button"], input[type="submit"] >> text = "Yes"').click();
                 // await waitForSpinnerToDisappear();
-                await this.spinner.waitForSpinnerToBeHidden();
-                await this.navigateTo();
+                await this.spinner.waitForSpinnerToBeHidden(false, 60000);
+                await this.navigate();
             } else {
-                await this.navigateTo(true);
+                await this.navigate();
             }
         } catch {
-            await this.navigateTo(true);
+            await this.navigate();
         }
     }
 
@@ -135,7 +130,7 @@ export default class FormDesignerPagePO {
         await expect(this.elements.warningFooterNoBtn).toBeHidden(10000);
     }
 
-    async saveAndActivateForm(formName?, isNewForm?): Promise<any> {
+    async saveAndActivateForm(formName?: any, isNewForm?: any): Promise<any> {
         await expect(this.elements.saveAndActivateButton).toBeVisible(10000);
         await this.elements.saveAndActivateButton.click();
         if (isNewForm) {
@@ -182,6 +177,5 @@ export default class FormDesignerPagePO {
         await expect(elementsTab).toBeVisible(10000);
         await elementsTab.click();
         await expect(this.page.locator('.cxone-question-bank')).toBeVisible(10000);
-
     }
 }

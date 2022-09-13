@@ -1,7 +1,6 @@
-// import {Locator, element, by, browser, ExpectedConditions, protractor, WebElement} from 'protractor';
+
 import {SpinnerPO} from 'cxone-components/spinner.po';
 import {expect, Locator, Page} from "@playwright/test";
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { Utils } from '../common/utils';
 
 
@@ -87,8 +86,7 @@ export class FormAreaComponentPo {
             }
         }
         return false;
-    }
-    
+    }   
 
     async clickElementOnFormArea(elementText:string, elementType:string): Promise<any> {
         return (await this.getElementOnFormArea(elementText, elementType)).click() as Promise<any>;
@@ -243,6 +241,7 @@ export class FormAreaComponentPo {
     //     await browser.actions().mouseMove(to, {x: 10, y: 10}).perform();
     //     await browser.actions().mouseUp().perform();
     // }
+    
     async simulateDragDrop(from: any, to: any) {
         await this.page.mouse.move(from);
         await this.page.mouse.down();

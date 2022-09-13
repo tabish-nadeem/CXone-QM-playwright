@@ -1,6 +1,6 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
+import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
 import { DuplicateFormModalPO } from '../../../../pageObjects/duplicate-form-modal.po';
 import { OnPrepare } from "../../../../playwright.config";
 import { LoginPage } from "../../../../common/login";

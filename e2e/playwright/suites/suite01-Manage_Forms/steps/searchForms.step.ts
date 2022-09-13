@@ -1,7 +1,7 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
-import { ManageFormsPO } from "../../../../pageObjects/manager-form.po";
+import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
 import { Utils } from '../../../../common/utils';
 import { AccountUtils } from '../../../../common/AccountUtils';
 import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';

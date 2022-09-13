@@ -1,7 +1,7 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import * as userPermissions from '../../../../../tests/protractor/common/userDefaultPermissions.js';
-import {CategoryManagerPO} from 'cxone-qm-library/category-manager.po';
+import {CategoryManagerPO} from '../../../../pageObjects/category-manager.po';
 import {AccountUtils} from "../../../../common/AccountUtils"
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { OnPrepare } from '../../../../playwright.config';
@@ -46,6 +46,7 @@ userDetails = {
         password: 'Password1'
     }
 };
+
 const categories = {
     customCategories: 'Custom Categories',
     qualityManagement: 'Quality Management',
@@ -85,7 +86,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
         userDetails.adminCreds.token);
     await loginPage.logout(true, 120000, userDetails.orgName, userDetails.adminCreds.token);
     userToken = await CommonNoUIUtils.login(userDetails.managerCreds.email, userDetails.managerCreds.password, fdUtils.getPageIdentifierUrls('categoryManager.categoryManager'));
-    return await categoryManager.navigateTo(fdUtils.getPageIdentifierUrls('categoryManager.categoryManager'), page.locator('.cat-category-list__header'));
+    return await categoryManager.navigate();
 });
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
@@ -165,7 +166,7 @@ Then("Step-4: should be able to delete a category under Custom Categories", { ti
 
 Then("Step-5: should be able to create a new category folder under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
 
-    await CategoryManagerPO.navigateQuicklyTo(fdUtils.getPageIdentifierUrls('categoryManager.categoryManager'), page.locator('.nice-cat-category-list'));
+    await categoryManager.navigate();
     let data = {
         folderName: 'My Custom Folder'
     };
@@ -194,7 +195,7 @@ Then("Step-6: should be able to edit a category group under Custom Categories Gr
     await categoryManager.getSearchInputField().sendKeys(data.newFolderName);
     expect(await categoryManager.isElementVisible(categoryManager.getCategoryFolder(data.newFolderName).title)).toBeTruthy();
     await categoryManager.getSearchInputField().clear();
-    let currentElement = categoryManager.getCategoryFolder(categories.customCategories);
+    let currentElement: any = categoryManager.getCategoryFolder(categories.customCategories);
     await currentElement.title.click();
 
 });
@@ -205,13 +206,13 @@ Then("Step-7: should be able to delete a category folder", { timeout: 60 * 1000 
         folderName: 'My New Custom Folder'
     };
     await categoryManager.getSearchInputField().clear();
-    await categoryManager.getSearchInputField().sendKeys(data.folderName);
+    await categoryManager.getSearchInputField().type(data.folderName);
     let myCustomCategoryFolder = categoryManager.getCategoryFolder(data.folderName);
     await categoryManager.deleteCustomCategory(myCustomCategoryFolder);
     await categoryManager.getSearchInputField().clear();
     await categoryManager.getSearchInputField().sendKeys(data.folderName);
     expect(await categoryManager.isElementVisible(categoryManager.getCategoryFolder(data.folderName).title)).toBeFalsy();
-    let value = categoryManager.getCategory(data.folderName);
+    let value: any = categoryManager.getCategory(data.folderName);
     expect(await value.title.isPresent()).toBeFalsy();
     
 });

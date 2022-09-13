@@ -1,8 +1,8 @@
 import {expect, Locator, Page} from "@playwright/test";
 import moment from 'moment';
+import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { fdUtils } from "../common/FdUtils";
 import { Utils } from "../common/utils";
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { OmnibarPO } from "./omnibar.po";
 import { RenameFormModalPO } from "./rename-form-modal.po";
 import { WarningModalComponentPo } from "./warning-modal.component.po";
@@ -19,10 +19,10 @@ export class ManageFormsPO {
     readonly page:Page;
     readonly uiConstants: UIConstants;
 
-    public constructor(pageElement?: Page, defaultTimeoutInMillis = 20000) {
+    public constructor(page?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
-        this.page = pageElement || this.page.locator('#ng2-manage-forms-page');
-        this.utils = new Utils(this.page);
+        this.page = page;
+        this.utils = new Utils(page);
         this.uiConstants = new UIConstants();
         this.elements = {
             container: this.page.locator('#ng2-manage-forms-page'),
