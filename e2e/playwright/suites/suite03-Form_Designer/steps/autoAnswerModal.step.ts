@@ -1,8 +1,9 @@
-import { AccountUtils } from './../../../../common/AccountUtils';
-import { Utils } from './../../../../common/utils';
+import { LoginPage } from './../../../../common/login';
+import { CommonUIUtils } from 'cxone-playwright-test-utils';
+import { AccountUtils } from '../../../../common/AccountUtils';
+import { Utils } from '../../../../common/utils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import { expect, page } from "@playwright/test";
-// import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
+import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
@@ -13,12 +14,9 @@ import * as _ from 'lodash';
 import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
 import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
-import { ModuleExports } from '../../../../common/qmDefaultData';
-import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-toolbar.component.po';
-import { WorkflowSettingsModalComponentPo } from '../../../../pageObjects/workflow-settings-modal.component.po';
 import { DuplicateFormModalPO } from '../../../../pageObjects/duplicate-form-modal.po';
 import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
-import * as userPermissions from '../.././../../common/userDefaultPermissions';
+import * as userPermissions from '../../../../common/userDefaultPermissions';
 import { CreateAutoAnswerRulesPO } from '../../../../pageObjects/create-auto-answer-rules-modal.component.po';
 
 
@@ -28,7 +26,11 @@ let USER_TOKEN: string;
 let newOnPrepare: any;
 let calibrationPO: any;
 let getElementLists: any;
-let tmToken: any
+let tmToken: any;
+let tmUtils:any;
+let page: Page;
+let context: BrowserContext;
+let Login :LoginPage
 const formName = 'autoAnswerForm';
 const userDefaultPermissions = userPermissions;
 const duplicateFormName = 'autoAnswerFormDuplicate'; let userDetails: any = {
@@ -599,7 +601,7 @@ const editBehaviourRulesForCheckBoxQuestion = async function () {
 const addAutoAnswerRulesForYesNoQuestion = async function () {
      await formArea.clickElementOnFormArea('9. Set question', 'yesno');
      await formArea.clickAutoResponseRulesIcon('9. Set question', 'yesno');
-     await createAutoAnswerRuleModal.selectLanguage('English');
+     await createAutoAnswerRuleModal.selectLanguage('English','yes');
      await createAutoAnswerRuleModal.selectCategories(categories1, 0);
      await createAutoAnswerRuleModal.selectCategories(categories2, 1);
      let selectedTag = await createAutoAnswerRuleModal.getSelectedTag(0);
@@ -616,7 +618,7 @@ const addAutoAnswerRulesForYesNoQuestion = async function () {
 const addAutoAnswerRuleForRadioQuestion = async function () {
      await formArea.clickElementOnFormArea('3. Set question', 'radio');
      await formArea.clickAutoResponseRulesIcon('3. Set question', 'radio');
-     await createAutoAnswerRuleModal.selectLanguage('English');
+     await createAutoAnswerRuleModal.selectLanguage('English','yes');
      await createAutoAnswerRuleModal.selectCategories(categories2, 1);
      let selectedTag = await createAutoAnswerRuleModal.getSelectedTag(1);
      expect(selectedTag.includes('Agent Polite', 'Agent Rude')).toBeTruthy();
@@ -628,7 +630,7 @@ const addAutoAnswerRuleForRadioQuestion = async function () {
 const addAutoAnswerRuleForCheckBoxQuestion = async function () {
      await formArea.clickElementOnFormArea('4. Set question', 'checkbox');
      await formArea.clickAutoResponseRulesIcon('4. Set question', 'checkbox');
-     await createAutoAnswerRuleModal.selectLanguage('English');
+     await createAutoAnswerRuleModal.selectLanguage('English' ,'yes');
      await createAutoAnswerRuleModal.selectCategories(categories2, 0);
      let selectedTag = await createAutoAnswerRuleModal.getSelectedTag(0);
      expect(selectedTag.includes('Agent Polite', 'Agent Rude')).toBeTruthy();
@@ -673,7 +675,7 @@ const verifyRulesRemovedForYesNoQuestion = async function () {
 const verifyEditRulesForCheckBoxQuestion = async function () {
      await formArea.clickElementOnFormArea('4. Set question', 'checkbox');
      await formArea.clickAutoResponseRulesIcon('4. Set question', 'checkbox');
-     await createAutoAnswerRuleModal.selectLanguage('English');
+     await createAutoAnswerRuleModal.selectLanguage('English','yes');
      let selectedTag = await createAutoAnswerRuleModal.getSelectedTag(0);
      expect(selectedTag.includes('Agent Polite', 'Agent Rude')).toBeTruthy();
      let selectedCategories = await createAutoAnswerRuleModal.getSelectedCategories(0);
@@ -702,7 +704,7 @@ const verifyRulesRemovedForCheckBoxQuestion = async function () {
 const verifyEditRulesForRadioQuestion = async function () {
      await formArea.clickElementOnFormArea('3. Set question', 'radio');
      await formArea.clickAutoResponseRulesIcon('3. Set question', 'radio');
-     await createAutoAnswerRuleModal.selectLanguage('English');
+     await createAutoAnswerRuleModal.selectLanguage('English','yes');
      let selectedTag = await createAutoAnswerRuleModal.getSelectedTag(1);
      expect(selectedTag.includes('Agent Polite', 'Agent Rude')).toBeTruthy();
      let selectedCategories = await createAutoAnswerRuleModal.getSelectedCategories(1);
@@ -808,8 +810,7 @@ const addSentimentRuleForRadioQuestion = async function () {
      await formArea.clickAutoResponseRulesIcon('10. Set question', 'radio');
      await createAutoAnswerRuleModal.clickSentimentRuleType();
      await createAutoAnswerRuleModal.selectSentimentType('Positive', 0);
-     await browser.wait(ExpectedConditions.visibilityOf(createAutoAnswerRuleModal.elements.ruleTypeChangeWarningPopup), 10000);
-     const ruleTypeChangeWarningPopupText = await createAutoAnswerRuleModal.getRuleTypeChangeWarningPopupText();
+     await expect(this.page.locator(createAutoAnswerRuleModal.elements.ruleTypeChangeWarningPopup).waitFor({state:'attached',timeout:10000});     const ruleTypeChangeWarningPopupText = await createAutoAnswerRuleModal.getRuleTypeChangeWarningPopupText();
      expect(ruleTypeChangeWarningPopupText).toContain('Changing the rule type will remove the selected configuration.');
      await createAutoAnswerRuleModal.clickRuleTypeWarningPopupBtn('change');
      await createAutoAnswerRuleModal.selectSentimentSide('Customer side', 0);
@@ -841,10 +842,16 @@ const addSentimentRuleForCheckboxQuestion = async function () {
 
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-     userDetails.adminCreds = await newGlobalTenantUtils.getDefaultTenantCredentials();
-     userDetails.orgName = await newGlobalTenantUtils.getDefaultTenantCredentials();
+     browser = await chromium.launch({
+          headless: false,
+          args: ['--window-position=-8,0']
+     });
+     context = await browser.newContext();
+     page = await context.newPage();
+     userDetails.adminCreds = (await newGlobalTenantUtils.getDefaultTenantCredentials()).adminCreds;
+     userDetails.orgName =  (await newGlobalTenantUtils.getDefaultTenantCredentials()).orgName;
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
-     await protractorConfig.tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP', 'WFM'], tmToken);
+     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP', 'WFM'], tmToken);
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
      newOnPrepare = new OnPrepare();
      manageFormsPO = new ManageFormsPO(page);
@@ -858,7 +865,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, USER_TOKEN)
      await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, USER_TOKEN)
      await manageFormsPO.navigateTo();
-     await formDesignerPage.navigateTo();
+     await formDesignerPage.navigate();
      await Utils.waitUntilVisible(await formArea.getFormArea());
      let response = await CommonNoUIUtils.createNewRoleByPermissions('customManager', 'Custom Manager 1', userDefaultPermissions.getUserDefaultApplications('manager'), userDetails.adminCreds.token);
      userDetails.managerCreds.role = response.roleName;
@@ -869,6 +876,9 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
           userDetails.adminCreds.email,
           userDetails.orgName,
           userDetails.adminCreds.token);
+          // await protrac.logout(true, 120000, userDetails.orgName, userDetails.adminCreds.token); //! insted of this used this logout
+          await  Login.logout()
+          await Login.login(userDetails.managerCreds.email, userDetails.managerCreds.password);
 
 });
 
@@ -878,7 +888,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.AUTO_RESPONSE_BEHAVIOR, userDetails.orgName, userDetails.adminCreds.token);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.MOCK_CATEGORIES, userDetails.orgName, userDetails.adminCreds.token);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.LANGUAGE_SELECTOR, userDetails.orgName, userDetails.adminCreds.token);
-     await browser.close();
+     await  Login.logout()
 });
 
 
@@ -951,7 +961,8 @@ Then("STEP-5:Should not allow save auto answer rules and display warning message
      await createAutoAnswerRuleModal.selectBehaviorType('moderately-negative', 0);
      await createAutoAnswerRuleModal.selectBehaviourOption('Actively listening', 1);
      await createAutoAnswerRuleModal.selectBehaviorType('moderately-negative', 1);
-     await browser.wait(ExpectedConditions.visibilityOf(createAutoAnswerRuleModal.elements.saveBtn), 10000);
+
+     await expect(page.locator(createAutoAnswerRuleModal.elements.saveBtn).waitFor({state:'attached',timeout:10000}))
      await createAutoAnswerRuleModal.elements.saveBtn.click();
      const text = await createAutoAnswerRuleModal.getErrorText();
      expect(text).toContain('The criteria for answers cannot be identical.');
@@ -969,7 +980,9 @@ Then("STEP-6:Should not allow save auto answer rules and display warning message
      await createAutoAnswerRuleModal.selectSentimentSide('Customer side', 0);
      await createAutoAnswerRuleModal.selectSentimentType('Positive', 1);
      await createAutoAnswerRuleModal.selectSentimentSide('Customer side', 1);
-     await browser.wait(ExpectedConditions.visibilityOf(createAutoAnswerRuleModal.elements.saveBtn), 10000);
+
+     await expect(page.locator(createAutoAnswerRuleModal.elements.saveBtn).waitFor({state:'attached',timeout:10000}))
+     
      await createAutoAnswerRuleModal.elements.saveBtn.click();
      const text = await createAutoAnswerRuleModal.getErrorText();
      expect(text).toEqual('The criteria for answers cannot be identical.');
@@ -996,7 +1009,7 @@ Then("STEP-9:should verify saved sentiment auto response rules when changing rul
      await formArea.clickAutoResponseRulesIcon('10. Set question', 'radio');
      await createAutoAnswerRuleModal.clickBehaviourRuleType();
      await createAutoAnswerRuleModal.selectBehaviourOption('Actively listening', 0);
-     await browser.wait(ExpectedConditions.visibilityOf(createAutoAnswerRuleModal.elements.ruleTypeChangeWarningPopup), 10000);
+     await expect(page.locator(createAutoAnswerRuleModal.elements.ruleTypeChangeWarningPopup).waitFor({state:'attached',timeout:10000}))
      const ruleTypeChangeWarningPopupText = await createAutoAnswerRuleModal.getRuleTypeChangeWarningPopupText();
      expect(ruleTypeChangeWarningPopupText).toContain('Changing the rule type will remove the selected configuration.');
      await createAutoAnswerRuleModal.clickRuleTypeWarningPopupBtn('cancel');
@@ -1025,7 +1038,7 @@ Then("STEP-13:should duplicate form and verify auto-answer rules", { timeout: 18
      await manageFormsPO.searchFormInGrid(formName);
      const menuItem = await manageFormsPO.getHamburgerMenuItem(formName, 'Duplicate');
      await menuItem.click();
-     await browser.wait(ExpectedConditions.visibilityOf(page.locator(('cxone-modal'))), 20000);
+    await expect(page.locator('cxone-modal').waitFor({state:'attached',timeout:20000}))
      await duplicateFormModalPO.enterFormName(duplicateFormName);
      expect(await duplicateFormModalPO.checkSaveButton()).toBe(true);
      await duplicateFormModalPO.clickSaveButton();

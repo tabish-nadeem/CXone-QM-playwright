@@ -5,7 +5,6 @@ import * as path from 'path';
 import { Utils } from "../common/utils";
 
 export class ImageUploadComponentPo {
-    ancestor: Locator;
     public readonly page: Page;
     headerFieldsDropdown = new MultiselectDropdownPO('form-designer-header-fields');
     public elements: any;

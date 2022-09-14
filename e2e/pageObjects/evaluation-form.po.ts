@@ -1,4 +1,4 @@
-import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
+import { SingleselectDropdownPO } from './singleselect-dropdown.po';
 import { Page, Locator } from "@playwright/test";
 import { Utils } from '../common/utils';
 
@@ -12,7 +12,7 @@ export class EvaluationFormPO {
     public evaluationFormDropdown: SingleselectDropdownPO;
 
     public constructor() {
-        this.ancestor = this.page.locator('.evaluation-form-container');
+        this.page = this.page.locator('.evaluation-form-container');
         this.elements = {
             includeInteractionsFromLastCheckbox: this.page.locator('#enable-days-back-checkbox')
         };

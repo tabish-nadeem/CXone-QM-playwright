@@ -12,27 +12,27 @@ export class HeaderPropertiesComponentPo {
     public elements;
 
     constructor() {
-        this.ancestor = this.page.locator('.header-properties');
+        this.page = this.page.locator('.header-properties');
         this.elements = {
-            titleTextBox: this.ancestor.locator('#form-designer-name-form-title'),
-            titleColorPickerText: this.ancestor.locator('#form-designer-color-picker-title * input'),
-            titleBoldFont: this.ancestor.locator('#form-designer-title-font-bold'),
-            titleItalicFont: this.ancestor.locator('#form-designer-title-font-italic'),
-            titleUnderLineFont: this.ancestor.locator('#form-designer-title-font-underline'),
-            titleLeftFont: this.ancestor.locator('#form-designer-title-alignment-text-left'),
-            titleCenterFont: this.ancestor.locator('#form-designer-title-alignment-text-center'),
-            titleRightFont: this.ancestor.locator('#form-designer-title-alignment-text-right'),
-            subTitleTextBox: this.ancestor.locator('#form-designer-name-form-subTitle'),
-            subTitleColorPickerText: this.ancestor.locator('#form-designer-color-picker-subTitle * input'),
-            subTitleBoldFont: this.ancestor.locator('#form-designer-subTitle-font-bold'),
-            subTitleItalicFont: this.ancestor.locator('#form-designer-subTitle-font-italic'),
-            subTitleUnderLineFont: this.ancestor.locator('#form-designer-subTitle-font-underline'),
-            subTitleLeftFont: this.ancestor.locator('#form-designer-subTitle-alignment-text-left'),
-            subTitleCenterFont: this.ancestor.locator('#form-designer-subTitle-alignment-text-center'),
-            subTitleRightFont: this.ancestor.locator('#form-designer-subTitle-alignment-text-right'),
-            backgroundColorText: this.ancestor.locator('[name="bg-color"]'),
-            titleText: this.ancestor.locator('#form-designer-name-form-title * input'),
-            subTitleText: this.ancestor.locator('#form-designer-name-form-subTitle * input')
+            titleTextBox: this.page.locator('#form-designer-name-form-title'),
+            titleColorPickerText: this.page.locator('#form-designer-color-picker-title * input'),
+            titleBoldFont: this.page.locator('#form-designer-title-font-bold'),
+            titleItalicFont: this.page.locator('#form-designer-title-font-italic'),
+            titleUnderLineFont: this.page.locator('#form-designer-title-font-underline'),
+            titleLeftFont: this.page.locator('#form-designer-title-alignment-text-left'),
+            titleCenterFont: this.page.locator('#form-designer-title-alignment-text-center'),
+            titleRightFont: this.page.locator('#form-designer-title-alignment-text-right'),
+            subTitleTextBox: this.page.locator('#form-designer-name-form-subTitle'),
+            subTitleColorPickerText: this.page.locator('#form-designer-color-picker-subTitle * input'),
+            subTitleBoldFont: this.page.locator('#form-designer-subTitle-font-bold'),
+            subTitleItalicFont: this.page.locator('#form-designer-subTitle-font-italic'),
+            subTitleUnderLineFont: this.page.locator('#form-designer-subTitle-font-underline'),
+            subTitleLeftFont: this.page.locator('#form-designer-subTitle-alignment-text-left'),
+            subTitleCenterFont: this.page.locator('#form-designer-subTitle-alignment-text-center'),
+            subTitleRightFont: this.page.locator('#form-designer-subTitle-alignment-text-right'),
+            backgroundColorText: this.page.locator('[name="bg-color"]'),
+            titleText: this.page.locator('#form-designer-name-form-title * input'),
+            subTitleText: this.page.locato('#form-designer-name-form-subTitle * input')
         };
     }
 
@@ -49,7 +49,7 @@ export class HeaderPropertiesComponentPo {
 
     async enterTitle(text): Promise<any> {
       await (await this.getTitleTextBox()).click();
-      await browser.actions().sendKeys(text).perform();
+      await this.page.actions().sendKeys(text).perform();
     }
 
     async getSubTitleTextBox(): Promise<Locator> {
@@ -65,7 +65,7 @@ export class HeaderPropertiesComponentPo {
 
     async enterSubTitle(text): Promise<any> {
       await (await this.getSubTitleTextBox()).click();
-      await browser.actions().sendKeys(text).perform();
+      await this.page.actions().sendKeys(text).perform();
     }
 
     async getTitleColorPickerText(): Promise<Locator> {

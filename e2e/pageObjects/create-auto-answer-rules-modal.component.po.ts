@@ -1,19 +1,12 @@
-import { element } from 'protractor';
-import { Locator } from '@playwright/test';
-// import {SpinnerPO} from 'cxone-components/spinner.po';
-// import {MultiselectDropdownPO} from 'cxone-components/multiselect-dropdown.po';
-// import {SelectedTagsPO} from 'cxone-components/selected-tags.po';
-// import {SingleselectDropdownPO} from 'cxone-components/singleselect-dropdown.po';import {expect, Locator, Page} from "@playwright/test";
-// import moment from 'moment';
 import { Page, locator,expect } from "@playwright/test";
 import {SpinnerPO} from 'cxone-components/spinner.po';
-import {MultiselectDropdownPO} from 'cxone-components/multiselect-dropdown.po';
+import {MultiSelectDropdownPo} from './multiselectDropdown.po';
 import {SelectedTagsPO} from 'cxone-components/selected-tags.po';
 import {SingleselectDropdownPO} from './singleselect-dropdown.po';
 let browser: any;
 let page: Page;
 export class CreateAutoAnswerRulesPO {
-    public categorySelectionDropdown: MultiselectDropdownPO;
+    public categorySelectionDropdown: MultiSelectDropdownPo;
     readonly page:Page;
     public selectedTags: SelectedTagsPO;
     public singleSelectDropDown: SingleselectDropdownPO
@@ -70,7 +63,7 @@ export class CreateAutoAnswerRulesPO {
     }
 
     public async selectCategories(categoryNames: string[], index: number) {
-        this.categorySelectionDropdown = new MultiselectDropdownPO('category-selection-dropdown_' + index);
+        this.categorySelectionDropdown = new MultiSelectDropdownPo('category-selection-dropdown_' + index);
         for (let i = 0; i < categoryNames.length; i++) {
             await this.categorySelectionDropdown.selectItem(categoryNames[i]);
             await this.waitForSpinnerToDisappear();
@@ -88,7 +81,7 @@ export class CreateAutoAnswerRulesPO {
     }
 
     public async getSelectedCategories(index: number) {
-        this.categorySelectionDropdown = new MultiselectDropdownPO('category-selection-dropdown_' + index);
+        this.categorySelectionDropdown = new MultiSelectDropdownPo('category-selection-dropdown_' + index);
         await this.categorySelectionDropdown.open();
         const selection = await this.categorySelectionDropdown.getDisplayedSelection();
         await this.categorySelectionDropdown.close();

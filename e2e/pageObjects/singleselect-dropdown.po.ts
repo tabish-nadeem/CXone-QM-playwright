@@ -65,8 +65,12 @@ export class SingleselectDropdownPO {
     async selectItem(itemLabel: string) {
         //FIXME:
         await browser.wait(async () => {
+<<<<<<< HEAD
             return await this.page.locator('.item-row').isVisible();
             //return await $(this.selector + ' .item-row').isDisplayed();
+=======
+            return await this.anscestor.element('.item-row').isDisplayed();
+>>>>>>> 5a0b6e045481adf24ea28f2bd6f46488873f795d
         });
         await this.searchItem(itemLabel);
 

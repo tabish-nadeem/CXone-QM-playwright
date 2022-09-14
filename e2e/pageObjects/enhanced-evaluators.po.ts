@@ -124,6 +124,6 @@ export class EnhancedEvaluatorsPO {
     }
 
     async getSelectiveFieldsEditMsgText() {
-        return this.page.locator(('.can-edit-message')).getText();
+        return this.page.locator(('.can-edit-message')).textContent();
     }
 }

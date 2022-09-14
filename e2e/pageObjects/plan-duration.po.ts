@@ -1,3 +1,4 @@
+import { Page } from '@playwright/test';
 import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
 import { DatePickerPO } from 'cxone-components/date-picker.po';
 import { by, element, ElementFinder } from 'protractor';
@@ -6,16 +7,18 @@ import { Utils } from '../common/utils';
 import { QualityPlanDetailsPO } from './quality-plan-details.po';
 
 export class PlanDurationPO {
-    public ancestor: ElementFinder;
+    
+
     public recurringTypeDropdown: SingleselectDropdownPO;
     public startDatePicker: DatePickerPO;
     public endDatePicker: DatePickerPO;
     public recurringRadio: RadioPO;
     public oneTimeRadio: RadioPO;
     public qualityPlanDetailsPO: QualityPlanDetailsPO;
+    readonly page:Page
 
     public constructor() {
-        this.ancestor = element(by.css('.plan-duration-container'));
+        this.page = this.page.locator(('.plan-duration-container'));
         this.recurringTypeDropdown = new SingleselectDropdownPO('recurring-dropdown');
         this.startDatePicker = new DatePickerPO(element(by.id('startDate')));
         this.endDatePicker = new DatePickerPO(element(by.id('endDate')));
@@ -69,7 +72,7 @@ export class PlanDurationPO {
     }
 
     public async isStartDateEnabled() {
-        return !(await Utils.isPresent(this.ancestor.element(by.css('#startDate .cxone-datepicker-container.disabled'))));
+        return !(await Utils.isPresent(this.page.locator(('#startDate .cxone-datepicker-container.disabled'))));
     }
 
     public async isRecurringRadioEnabled() {
@@ -81,7 +84,7 @@ export class PlanDurationPO {
     }
 
     public async isEndDateEnabled() {
-        return !(await Utils.isPresent(this.ancestor.element(by.css('#endDate .cxone-datepicker-container.disabled'))));
+        return !(await Utils.isPresent(this.page.locator(('#endDate .cxone-datepicker-container.disabled'))));
     }
 
 }

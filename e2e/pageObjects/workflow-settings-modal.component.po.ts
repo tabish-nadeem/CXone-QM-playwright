@@ -1,4 +1,3 @@
-// import {element, by, browser, ExpectedConditions} from 'protractor';
 import {SingleselectDropdownPO} from '../pageObjects/singleselect-dropdown.po';
 import {expect, Locator, Page} from "@playwright/test";
 
@@ -37,43 +36,45 @@ export class WorkflowSettingsModalComponentPo {
     }
 
     async clickPopOverNo(): Promise<any> {
-        await browser.wait(ExpectedConditions.visibilityOf(this.elements.confirmNoButton), 10000);
+        await expect(this.page.locator(this.elements.confirmNoButton).waitFor({state:'attached',timeout:10000}))
+
         return this.elements.confirmNoButton.click() as Promise<any>;
     }
 
     async clickSaveButton(): Promise<any> {
         await this.elements.saveButton.click();
-        return await browser.wait(ExpectedConditions.invisibilityOf(this.elements.modalWrapper), 10000);
+        await expect(this.page.locator(this.elements.modalWrapper).waitFor({state:'attached',timeout:10000}))
     }
 
     async clickAgentCanReviewCheckBox(): Promise<any> {
-          await browser.wait(ExpectedConditions.presenceOf(this.elements.agentCanReviewCheckBox), 10000);
-          return browser.executeScript('arguments[0].click();', this.elements.agentCanReviewCheckBox) as Promise<any>;
+          await expect(this.page.locator(this.elements.agentCanReviewCheckBox).waitFor({state:'attached',timeout:10000}))
+          return this.page.executeScript('arguments[0].click();', this.elements.agentCanReviewCheckBox) as Promise<any>;
     }
 
     async clickDisplayScoreToAgentCheckBox(): Promise<any> {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.displayScoreToAgentCheckBox), 10000);
-        return browser.executeScript('arguments[0].click();', this.elements.displayScoreToAgentCheckBox) as Promise<any>;
+
+        await expect(this.page.locator(this.elements.displayScoreToAgentCheckBox).waitFor({state:'attached',timeout:10000}))
+        return this.page.executeScript('arguments[0].click();', this.elements.displayScoreToAgentCheckBox) as Promise<any>;
     }
 
     async clickAgentCanAcknowledgeCheckbox(): Promise<any> {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.agentCanAcknowledgeCheckbox), 10000);
-        return browser.executeScript('arguments[0].click();', this.elements.agentCanAcknowledgeCheckbox) as Promise<any>;
+        await expect(this.page.locator(this.elements.agentCanAcknowledgeCheckbox).waitFor({state:'attached',timeout:10000}))
+        return this.page.executeScript('arguments[0].click();', this.elements.agentCanAcknowledgeCheckbox) as Promise<any>;
     }
 
     async clickagentCanRequestReviewCheckbox(): Promise<any> {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.agentCanRequestReviewCheckbox), 10000);
-        return browser.executeScript('arguments[0].click();', this.elements.agentCanRequestReviewCheckbox) as Promise<any>;
+        await expect(this.page.locator(this.elements.agentCanRequestReviewCheckbox).waitFor({state:'attached',timeout:10000}))
+        return this.page.executeScript('arguments[0].click();', this.elements.agentCanRequestReviewCheckbox) as Promise<any>;
     }
 
     async clickAssignedEvaluatorRadio(): Promise<any> {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.assignedEvaluatorRadio), 10000);
-        return browser.executeScript('arguments[0].click();', this.elements.assignedEvaluatorRadio) as Promise<any>;
+        await expect(this.page.locator(this.elements.assignedEvaluatorRadio).waitFor({state:'attached',timeout:10000}))
+        return this.page.executeScript('arguments[0].click();', this.elements.assignedEvaluatorRadio) as Promise<any>;
     }
 
     async clickSpecificEvaluatorRadio(): Promise<any> {
-        await browser.wait(ExpectedConditions.presenceOf(this.elements.specificEvaluatorRadio), 10000);
-        return browser.executeScript('arguments[0].click();', this.elements.specificEvaluatorRadio) as Promise<any>;
+        await expect(this.page.locator(this.elements.specificEvaluatorRadio).waitFor({state:'attached',timeout:10000}))
+        return this.page.executeScript('arguments[0].click();', this.elements.specificEvaluatorRadio) as Promise<any>;
     }
 
     getAgentCanReviewCheckBox() {

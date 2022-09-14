@@ -1,14 +1,5 @@
 import { Browser } from "@playwright/test";
-// import { async } from "@angular/core/testing";
-// import { Browser } from "@playwright/test";
-import { EnvUtils } from "../common/EnvUtils";
-import { HttpUtils } from "../common/HttpUtils";
-import { FeatureToggleUtils } from "../common/FeatureToggleUtils";
-import { AccountUtils } from "./AccountUtils";
 import { Utils } from "./utils";
-import { expect } from "src";
-import { ApiUrl } from "src/ng2/assets/api-url";
-import { CommonNoUIUtils } from './CommonNoUIUtils';
 
 export class fdUtils {
      static removeAllGroups(USER_TOKEN: string) {
@@ -59,7 +50,7 @@ export class fdUtils {
           return callbackFunction(text).getAttribute(attributeName);
      };
 
-     static isElementSelected = async (callbackFunction, text) => {
+     static isElementSelected = async (callbackFunction: (arg0: any) => any, text: any) => {
           //    var deferred = protractor.promise.defer();
           var elementToCheck = callbackFunction(text);
           elementToCheck
@@ -97,8 +88,8 @@ export class fdUtils {
      };
 
      static getRandomEmployeeDetails = async (seq: any) => {
-          
-          
+
+
      };
 
      static getToastMessageWithExtraWait = async () => {
@@ -135,7 +126,7 @@ export class fdUtils {
           //    return deferred.promise;
      };
      static generateKinesisStream = async () => {
-          return Browser.driver.getCurrentUrl().then(function (url) {
+          return Browser.driver.getCurrentUrl().then(function (url: string | string[]) {
                if (url.indexOf("dev") !== -1) {
                     return "dev";
                } else if (url.indexOf("staging") !== -1) {
@@ -155,11 +146,9 @@ export class fdUtils {
 
      static removeAllUsers = async (token: any) => {
           // var usersIds = ids;
-     
+
      };
-     removeAllGroups = async (token: any, ids: any) => {
-          //! wont work
-     };
+
      static removeEvaluationPlans = async () => { };
      static clickOnWarning = async () => { };
 }

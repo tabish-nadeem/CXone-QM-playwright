@@ -1,5 +1,5 @@
-import { LoginPage } from './../../../../common/login';
-import { fdUtils } from './../../../../common/FdUtils';
+import { LoginPage } from '../../../../common/login';
+import { fdUtils } from '../../../../common/FdUtils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { Utils } from '../../../../common/utils';
@@ -124,8 +124,11 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
 AfterAll({ timeout: 60 * 1000 }, async () => {
     await qualityPlanManagerPO.navigate();
     await qualityPlanManagerPO.deleteAllPlans();
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.QP_EDIT_EVALUATOR_FT, userDetails.orgName, USER_TOKEN);
+    await fdUtils.removeAllUsers(USER_TOKEN);
+    await fdUtils.removeAllGroups(USER_TOKEN);
     await  login.logout()
     
 });

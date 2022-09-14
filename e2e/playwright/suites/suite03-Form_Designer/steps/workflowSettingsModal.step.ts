@@ -1,6 +1,6 @@
-import { Utils } from './../../../../common/utils';
+import { Utils } from '../../../../common/utils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import { expect, page } from "@playwright/test";
+import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
@@ -13,14 +13,31 @@ import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
 import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
 import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
 import { ModuleExports } from '../../../../common/qmDefaultData';
-import { LoginPage } from '../../../../common/login';
+import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-toolbar.component.po';
+import { WorkflowSettingsModalComponentPo } from '../../../../pageObjects/workflow-settings-modal.component.po';
+
 
 let browser: any;
 let newGlobalTenantUtils = new GlobalTenantUtils();
 let USER_TOKEN: string;
 let userDetails: any = {}
 let newOnPrepare: any;
-let login:LoginPage
+let calibrationPO: any;
+let getElementLists: any;
+let page: Page;
+let context: BrowserContext;
+
+const formNames = [
+     'WorkFlowSettings_form_1' + moment(),
+     'WorkFlowSettings_form_2' + moment(),
+     'WorkFlowSettings_form_3' + moment(),
+     'WorkFlowSettings_form_4' + moment(),
+     'WorkFlowSettings_form_5' + moment(),
+     'WorkFlowSettings_form_6' + moment(),
+     'WorkFlowSettings_form_7' + moment(),
+     'WorkFlowSettings_form_8' + moment(),
+     'WorkFlowSettings_form_9' + moment()
+];
 
 const getElementList = () => {
      return [
@@ -84,94 +101,126 @@ const getElementList = () => {
 
 const formDesignerPage = new FormDesignerPagePO();
 const formArea = new FormAreaComponentPo();
-const manageFormsPO = new ManageFormsPO(page.locator(('ng2-manage-forms-page')));
+const designerToolbar = new DesignerToolbarComponentPO();
+const workflowModal = new WorkflowSettingsModalComponentPo();
+const manageFormsPO = new ManageFormsPO(page);
 
 
-let formNames = [
-     'FormVersion_0_' + moment(),
-     'FormVersion_1_' + + moment()
-];
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-     const protractorConfig = ModuleExports.getFormData();
+     browser = await chromium.launch({
+          headless: false,
+          args: ['--window-position=-8,0']
+     });
+     context = await browser.newContext();
+     page = await context.newPage();
+     // const protractorConfig = ModuleExports.getFormData();
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
      const manageFormsPO = new ManageFormsPO(page.locator(('ng2-manage-forms-page')));
      newOnPrepare = new OnPrepare();
      await newOnPrepare.OnStart();
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
-     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
+     await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, USER_TOKEN)
+     await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, USER_TOKEN)
      await manageFormsPO.navigateTo();
+     await formDesignerPage.navigate();
+     await Utils.waitUntilVisible(await formArea.getFormArea());
+
 });
-
-
 
 AfterAll({ timeout: 60 * 1000 }, async () => {
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
-     await  login.logout()
+     await browser.close();
 });
 
-
-
-Given("Step 1: should verify new version", { timeout: 60 * 1000 }, async () => {
-
-     await formDesignerPage.navigateTo();
-     await Utils.waitUntilVisible(await formArea.getFormArea());
-     await formArea.dragElementToFormArea('yesno');
-     await formDesignerPage.saveFormAsDraft(formNames[0], true);
+Given("Step 1: Should able to change and cancel the workflow settings", { timeout: 60 * 1000 }, async () => {
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     await workflowModal.clickAgentCanReviewCheckBox();
+     expect(Utils.isSelected(workflowModal.getAgentCanReviewCheckBox())).toBeFalsy();
+     await workflowModal.clickCancelButton();
+     await workflowModal.clickPopOverNo();
+     expect(workflowModal.getModalWrapper().isDisplayed()).toBeTruthy();
+     await workflowModal.clickCancelButton();
+     await workflowModal.clickPopOverYes();
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     expect(workflowModal.getAgentCanReviewCheckBox().isSelected()).toBeTruthy();
+ 
+ });
+ When("Step-2: Should able to save the form along with workflow settings", { timeout: 180 * 1000 }, async () => {
+     await formArea.dragElementToFormArea('text');
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     await workflowModal.clickagentCanRequestReviewCheckbox();
+     expect(Utils.isSelected(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeTruthy();
+     expect(Utils.isSelected(workflowModal.getagentCanRequestReviewCheckbox())).toBeTruthy();
+     expect(Utils.isSelected(workflowModal.getAssignedEvaluatorRadio())).toBeTruthy();
+     await workflowModal.clickSaveButton();
+     await formDesignerPage.saveFormAsDraft(formNames[1], true);
      await manageFormsPO.navigateTo();
-     await manageFormsPO.searchFormInGrid(formNames[0]);
-     expect((await manageFormsPO.getFormRowElements(formNames[0])).version).toEqual('0.0');
+     await manageFormsPO.searchFormInGrid(formNames[1]);
+     await manageFormsPO.openParticularForm(formNames[1]);
+     await manageFormsPO.waitForSpinnerToDisappear();
+     await Utils.waitUntilVisible(formDesignerPage.elements.sectionFormElement);
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     expect(Utils.isSelected(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeTruthy();
+     expect(Utils.isSelected(workflowModal.getagentCanRequestReviewCheckbox())).toBeTruthy();
+     expect(Utils.isSelected(workflowModal.getAssignedEvaluatorRadio())).toBeTruthy();
+ });
 
-
-
-});
-
-When("Step-2: should verify editing and saving draft does not change version", { timeout: 180 * 1000 }, async () => {
-     await manageFormsPO.openParticularForm(formNames[0]);
-     await formArea.dragElementToFormArea('yesno');
-     await formDesignerPage.saveFormAsDraft();
+ Then("STEP-3:Should verify that the workflow settings are maintained when form is duplicated", { timeout: 180 * 1000 }, async () => {
      await manageFormsPO.navigateTo();
-     await manageFormsPO.searchFormInGrid(formNames[0]);
-     expect((await manageFormsPO.getFormRowElements(formNames[0])).version).toEqual('0.0');
-
-
-});
-
-Then("Step-3:should verify activating a draft form does not change version", { timeout: 180 * 1000 }, async () => {
-     await manageFormsPO.openParticularForm(formNames[0]);
+     await manageFormsPO.duplicateForm(formNames[1], formNames[2]);
+     await manageFormsPO.searchFormInGrid(formNames[2]);
+     await manageFormsPO.openParticularForm(formNames[2]);
+     await manageFormsPO.waitForSpinnerToDisappear();
+     await Utils.waitUntilVisible(formDesignerPage.elements.sectionFormElement);
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     await manageFormsPO.waitForSpinnerToDisappear();
+     expect(Utils.isSelected(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeTruthy();
+     expect(Utils.isSelected(workflowModal.getagentCanRequestReviewCheckbox())).toBeTruthy();
+     expect(Utils.isSelected(workflowModal.getAssignedEvaluatorRadio())).toBeTruthy();
+ });
+ 
+ Then("STEP-4:Verify that the workflow settings are disabled once the form is activated using Activate button", { timeout: 180 * 1000 }, async () => {
+     await manageFormsPO.navigateTo();
+     await manageFormsPO.searchFormInGrid(formNames[2]);
+     await manageFormsPO.openParticularForm(formNames[2]);
+     await manageFormsPO.waitForSpinnerToDisappear();
      await formDesignerPage.saveAndActivateForm();
      await manageFormsPO.waitForSpinnerToDisappear();
-     await manageFormsPO.searchFormInGrid(formNames[0]);
-     expect((await manageFormsPO.getFormRowElements(formNames[0])).version).toEqual('0.0');
+     await manageFormsPO.searchFormInGrid(formNames[2]);
+     await manageFormsPO.openParticularForm(formNames[2]);
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     expect(Utils.isEnabled(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeFalsy();
+     expect(Utils.isEnabled(workflowModal.getagentCanRequestReviewCheckbox())).toBeFalsy();
+     expect(Utils.isEnabled(workflowModal.getAssignedEvaluatorRadio())).toBeFalsy();;
+ });
 
-});
-Then("Step-4: should verify editing an active form increments draft version", { timeout: 180 * 1000 }, async () => {
-     await manageFormsPO.openParticularForm(formNames[0]);
-     await formArea.dragElementToFormArea('yesno');
-     await formDesignerPage.saveAPublishedForm();
+ Then("STEP-5:Verify that the workflow settings are disabled once the form is activated from more menu", { timeout: 180 * 1000 }, async () => {
      await manageFormsPO.navigateTo();
-     await manageFormsPO.searchFormInGrid(formNames[0]);
-     expect((await manageFormsPO.getFormRowElements(formNames[0])).version).toEqual('1.0');
-
-});
-Then("Step-5: should verify editing an inactive form increments draft version", { timeout: 180 * 1000 }, async () => {
-     await manageFormsPO.deactivateForm(formNames[0]);
-     await manageFormsPO.openParticularForm(formNames[0]);
-     await formArea.dragElementToFormArea('yesno');
-     await formDesignerPage.saveFormAsDraft();
-     await manageFormsPO.navigateTo();
-     await manageFormsPO.searchFormInGrid(formNames[0]);
-     expect((await manageFormsPO.getFormRowElements(formNames[0])).version).toEqual('2.0');
-
-});
-Then("Step-6:should verify for version is 0 if new form created with a deleted form\'s name", { timeout: 180 * 1000 }, async () => {
-     await manageFormsPO.deleteForm(formNames[0]);
-     await formDesignerPage.navigateTo();
-     await formArea.dragElementToFormArea('yesno');
-     await formDesignerPage.saveAndActivateForm(formNames[0], true);
+     await manageFormsPO.activateForm(formNames[1]);
      await manageFormsPO.waitForSpinnerToDisappear();
-     expect((await manageFormsPO.getFormRowElements(formNames[0])).version).toEqual('0.0');
-
-});
-
+     await manageFormsPO.searchFormInGrid(formNames[1]);
+     expect((await manageFormsPO.getFormRowElements(formNames[1])).status).toEqual('Active');
+     await manageFormsPO.searchFormInGrid(formNames[1]);
+     await manageFormsPO.openParticularForm(formNames[1]);
+     await manageFormsPO.waitForSpinnerToDisappear();
+     await Utils.waitUntilVisible(formDesignerPage.elements.sectionFormElement);
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     expect(Utils.isEnabled(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeFalsy();
+     expect(Utils.isEnabled(workflowModal.getagentCanRequestReviewCheckbox())).toBeFalsy();
+     expect(Utils.isEnabled(workflowModal.getAssignedEvaluatorRadio())).toBeFalsy();
+ });
+ Then("STEP-6:Verify that the workflow settings are disabled for inactivated form", { timeout: 180 * 1000 }, async () => {
+     await manageFormsPO.navigateTo();
+     await manageFormsPO.deactivateForm(formNames[2]);
+     await manageFormsPO.searchFormInGrid(formNames[2]);
+     expect((await manageFormsPO.getFormRowElements(formNames[2])).status).toEqual('Inactive');
+     await manageFormsPO.openParticularForm(formNames[2]);
+     await manageFormsPO.waitForSpinnerToDisappear();
+     await Utils.waitUntilVisible(formDesignerPage.elements.sectionFormElement);
+     await designerToolbar.clickOnWorkFlowSettingsButton();
+     expect(Utils.isEnabled(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeFalsy();
+     expect(Utils.isEnabled(workflowModal.getAgentCanAcknowledgeCheckbox())).toBeFalsy();
+     expect(Utils.isEnabled(workflowModal.getagentCanRequestReviewCheckbox())).toBeFalsy();
+     await workflowModal.clickCancelButton();
+ });

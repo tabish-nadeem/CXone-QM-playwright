@@ -1,4 +1,4 @@
-import { Utils } from "./../../../../common/utils";
+import { Utils } from "../../../../common/utils";
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
