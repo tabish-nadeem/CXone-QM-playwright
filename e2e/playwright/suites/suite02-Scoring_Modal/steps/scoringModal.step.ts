@@ -1,13 +1,9 @@
-import * as protHelper from '../../../../playwright.helpers';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { Utils } from '../../../../common/utils';
-import * as moment from 'moment';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
-import { FEATURE_TOGGLES } from "../../../../common/uiletants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import * as _ from 'lodash';
-import { CommonUIUtils } from "cxone-playwright-test-utils";
 import FormDesignerPagePO from '../../../../pageObjects/form-designer-page.po';
 import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
 import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-toolbar.component.po';
@@ -15,8 +11,10 @@ import { ScoringModalComponentPo } from '../../../../pageObjects/scoring-modal.c
 import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
 import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
 import { LoginPage } from '../../../../common/login';
+import { FEATURE_TOGGLES } from '../../../../common/uiConstants';
 let _ = require('lodash');
-
+let browser: any;
+let context: BrowserContext;
 let page: Page;
 let formDesignerPage;
 let formArea;
@@ -26,10 +24,18 @@ let elementAttributes;
 let manageFormsPO;
 let loginPage:LoginPage;
 let userToken: any ;
-let userDetails : any = new GlobalTenantUtils;
+let userDetails ;
+let globalTenantUtils:GlobalTenantUtils;
 
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
+    browser = await chromium.launch({
+        headless: false,
+        args: ['--window-position=-8,0']
+    });
+    context = await browser.newContext();
+    page = await context.newPage();
+    userDetails = globalTenantUtils.getDefaultTenantCredentials();
     formDesignerPage = new FormDesignerPagePO();
     formArea = new FormAreaComponentPo();
     designerToolbar = new DesignerToolbarComponentPO();
@@ -41,16 +47,16 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken)
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken)
     await manageFormsPO.navigateTo();    
-});
-
-const beforeEachFunction = async () => {
     await formDesignerPage.navigateTo();
     await page.waitForSelector(await formArea.getFormArea());
-};
-const onEnd = async () => {
+});
+
+AfterAll({ timeout: 400 * 1000}, async () =>{
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await loginPage.logout();
-};
+})
+
+
 
 Given("Step 1: Scoring modal should open after clicking on scoring button and Should close after clicking on set/cancel button",{timeout: 60 * 1000 }, async () => {
     await formArea.dragElementToFormArea('section');
