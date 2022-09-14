@@ -1,6 +1,7 @@
 import {HttpUtils} from './HttpUtils';
 
 export class AdminUtilsNoUI {
+    private static TOKEN: string;
     static getRandomEmail(arg0: number) {
         throw new Error("Method not implemented.");
     }
@@ -40,4 +41,11 @@ export class AdminUtilsNoUI {
      
        
     }
+
+    static async createForm(token: any) {
+        
+    }
 }
+
+
+

@@ -11,11 +11,11 @@ export class LogicPropertiesComponentPo {
   public elementLocators: any;
 
   constructor() {
-    this.ancestor = this.page.locator(".logic-properties-wrapper");
+    this.page = this.page.locator(".logic-properties-wrapper");
     this.elements = {
-      logicPropertiesWrapper: this.ancestor.locator(".cxone-logic-properties"),
-      ruleSections: this.ancestor.locator(".logic-panel-rule"),
-      addRuleButton: this.ancestor.locator("#form-designer-add-rule"),
+      logicPropertiesWrapper: this.page.locator(".cxone-logic-properties"),
+      ruleSections: this.page.locator(".logic-panel-rule"),
+      addRuleButton: this.page.locator("#form-designer-add-rule"),
     };
     this.elementLocators = {
       ruleNumber: this.page.locator(".rule-number"),

@@ -8,7 +8,6 @@ let utils = new Utils(page);
 
 export class EvaluatorsPO {
      readonly page: Page;
-     readonly ancestor: Locator;
      readonly modal: Locator;
      readonly elements: {
           error: Locator;
@@ -71,13 +70,13 @@ export class EvaluatorsPO {
      }
 
      public async deleteEvaluator(evaluatorName: string) {
-          const row = this.getRow(evaluatorName, this.ancestor);
+          const row = this.getRow(evaluatorName, this.page);
           await Utils.click(row.this.page.locatorr(('[col-id="action"] cxone-svg-sprite-icon')));
           await Utils.waitForTime(1000);
      }
 
      public async isDeleteEvaluatorButtonVisible(evaluatorName: string) {
-          const row = this.getRow(evaluatorName, this.ancestor);
+          const row = this.getRow(evaluatorName, this.page);
           return await Utils.isPresent(row.this.page.locator(('[col-id="action"] cxone-svg-sprite-icon')));
      }
 

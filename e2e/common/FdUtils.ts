@@ -59,7 +59,7 @@ export class fdUtils {
           return callbackFunction(text).getAttribute(attributeName);
      };
 
-     static isElementSelected = async (callbackFunction, text) => {
+     static isElementSelected = async (callbackFunction: (arg0: any) => any, text: any) => {
           //    var deferred = protractor.promise.defer();
           var elementToCheck = callbackFunction(text);
           elementToCheck
@@ -97,8 +97,8 @@ export class fdUtils {
      };
 
      static getRandomEmployeeDetails = async (seq: any) => {
-          
-          
+
+
      };
 
      static getToastMessageWithExtraWait = async () => {
@@ -135,7 +135,7 @@ export class fdUtils {
           //    return deferred.promise;
      };
      static generateKinesisStream = async () => {
-          return Browser.driver.getCurrentUrl().then(function (url) {
+          return Browser.driver.getCurrentUrl().then(function (url: string | string[]) {
                if (url.indexOf("dev") !== -1) {
                     return "dev";
                } else if (url.indexOf("staging") !== -1) {
@@ -155,11 +155,9 @@ export class fdUtils {
 
      static removeAllUsers = async (token: any) => {
           // var usersIds = ids;
-     
+
      };
-     removeAllGroups = async (token: any, ids: any) => {
-          //! wont work
-     };
+
      static removeEvaluationPlans = async () => { };
      static clickOnWarning = async () => { };
 }

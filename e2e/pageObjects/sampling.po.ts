@@ -1,16 +1,16 @@
+import { Page } from '@playwright/test';
 import { CheckboxPO } from 'cxone-components/checkbox.po';
-import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
-import { by, element, ElementFinder } from 'protractor';
+import { SingleselectDropdownPO } from './singleselect-dropdown.po';
 import { Utils } from './../common/utils';
 
 export class SamplingPO {
-    public ancestor: ElementFinder;
     public interactionsPerAgentDropdown: SingleselectDropdownPO;
     public interactionsFromLastDaysDropdown: SingleselectDropdownPO;
+    readonly page:Page;
     public includeInteractionsFromLastCheckbox: CheckboxPO;
 
     public constructor() {
-        this.ancestor = element(by.css('.sampling-container'));
+        this.page = this.page.locator(('.sampling-container'));
         this.interactionsPerAgentDropdown = new SingleselectDropdownPO('num-segments-per-agent-dropdown');
         this.interactionsFromLastDaysDropdown = new SingleselectDropdownPO('num-days-back-dropdown');
         this.includeInteractionsFromLastCheckbox = new CheckboxPO('enable-days-back-checkbox');
@@ -37,7 +37,7 @@ export class SamplingPO {
     }
 
     public async isIncludeInteractionsFromLastDropdownEnabled() {
-        return !(await Utils.isPresent(this.ancestor.element(by.css('#num-days-back-dropdown .dropdown-button.disabled'))));
+        return !(await Utils.isPresent(this.page.locator(('#num-days-back-dropdown .dropdown-button.disabled'))));
     }
 
     public async getIncludeInteractionsFromLastValue() {
@@ -50,11 +50,11 @@ export class SamplingPO {
     }
 
     public async getErrorMessage() {
-        return await Utils.getText(this.ancestor.element(by.css('.error-message')));
+        return await Utils.getText(this.page.locator(('.error-message')));
     }
 
     public async isInteractionsPerAgentDropdownEnabled() {
-        return !(await Utils.isPresent(this.ancestor.element(by.css('#num-segments-per-agent-dropdown .dropdown-button.disabled'))));
+        return !(await Utils.isPresent(this.page.locator(('#num-segments-per-agent-dropdown .dropdown-button.disabled'))));
     }
 
 }

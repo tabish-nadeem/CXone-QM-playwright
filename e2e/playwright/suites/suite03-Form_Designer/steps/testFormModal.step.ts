@@ -1,12 +1,11 @@
-import { Utils } from "./../../../../common/utils";
+import { Utils } from "../../../../common/utils";
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
-import { expect, page } from "@playwright/test";
+import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 // import { FEATURE_TOGGLES } from '../../../assets/CONSTANTS';
 import { CommonNoUIUtils } from "../../../../common/CommonNoUIUtils";
 import { GlobalTenantUtils } from "../../../../common/globalTenantUtils";
 import {
-     CHARACTER_LIMIT,
-     ELEMENT_TYPES,
+     
      FEATURE_TOGGLES,
 } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from "../../../../common/FeatureToggleUtils";
@@ -31,6 +30,8 @@ let newOnPrepare: any;
 let calibrationPO: any;
 let getElementLists: any;
 let USER_TOKEN: string;
+let page: Page;
+let context: BrowserContext;
 
 const formDesignerPage = new FormDesignerPagePO();
 const formArea = new FormAreaComponentPo();
@@ -48,7 +49,13 @@ let formNames = [
 let formDetails: any;
 
 BeforeAll({ timeout: 300 * 1000 }, async () => {
-     const protractorConfig = ModuleExports.getFormData();
+     browser = await chromium.launch({
+          headless: false,
+          args: ['--window-position=-8,0']
+     });
+     context = await browser.newContext();
+     page = await context.newPage();
+     // const protractorConfig = ModuleExports.getFormData();
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
      
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
@@ -127,7 +134,7 @@ When("Step-2: should create form with logic", { timeout: 180 * 1000 }, async () 
 });
 
 Then("Step-3: should verify froala changes on test form modal", { timeout: 180 * 1000 }, async () => {
-     await formDesignerPage.navigateTo();
+     await formDesignerPage.navigate();
      await Utils.waitUntilVisible(await formArea.getFormArea());
      await formArea.dragElementToFormArea('yesno');
      await formArea.froalaSetFontColor('1. Set question', 'yesno', '#B8312F');

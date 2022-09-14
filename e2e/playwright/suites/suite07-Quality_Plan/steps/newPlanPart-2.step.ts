@@ -1,5 +1,5 @@
-import { Utils } from './../../../../common/utils';
-import { fdUtils } from './../../../../common/FdUtils';
+import { Utils } from '../../../../common/utils';
+import { fdUtils } from '../../../../common/FdUtils';
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
@@ -124,6 +124,8 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.email, userDetails.password, true);
      console.log("Response login", USER_TOKEN);
+     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, USER_TOKEN);
+     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.FT_EXCLUDE_INACTIVE_USERS, userDetails.orgName, testDataUsed.adminUser.USER_TOKEN);
      await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ENHANCED_EVALUATOR_MODAL_FT, userDetails.orgName, USER_TOKEN);
      await prepareData();
@@ -169,7 +171,7 @@ async function prepareData() {
      await DataCreator.createUser(userData[1].email, userData[1]);
      const formId = await DataCreator.createForm(form.formName, form.formStatus, form.formType, form.workflowConfigType);
      form.formId = formId;
-     await AdminUtilsNoUI.updateTeam((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN));
+     await AdminUtilsNoUI.createForm((teams[2].id, teams[2].name, teams[2].description, '', 'INACTIVE', USER_TOKEN));
 
 }
 

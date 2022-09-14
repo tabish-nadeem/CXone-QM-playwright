@@ -1,4 +1,4 @@
-import { AccountUtils } from "../common/AccountUtils";
+import { AccountUtils } from "./AccountUtils";
 
 let managerCreds: any;
 let managerCreds2: any;
@@ -8,6 +8,7 @@ export class GlobalTenantUtils {
     userDetails = {
         orgName: 'orghttp' + AccountUtils.getRandomString() + AccountUtils.getFullRandomString(5),
         email: 'ptor.' + AccountUtils.getRandomString() + '@wfosaas.com',
+        adminCreds:{},
         password: 'Pass1234',
         firstName: 'Admin',
         lastName: 'User',

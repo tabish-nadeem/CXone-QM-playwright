@@ -1,13 +1,20 @@
-import { by, element, ElementFinder } from 'protractor';
 import { RadioPO } from 'cxone-components/radio.po';
+import {expect, Locator, Page} from "@playwright/test";
+import { Utils } from "../common/utils";
+
+
+
+
+
 
 export class EvaluationTypePO {
-    public ancestor: ElementFinder;
     public collaborativeRadio: RadioPO;
     public standardRadio: RadioPO;
+    readonly utils:Utils;
+    readonly page:Page;
 
     public constructor() {
-        this.ancestor = element(by.css('.evaluation-type-container'));
+        this.page = this.page.locator(('.evaluation-type-container'));
         this.collaborativeRadio = new RadioPO('type-collaborative');
         this.standardRadio = new RadioPO('type-standard');
     }
