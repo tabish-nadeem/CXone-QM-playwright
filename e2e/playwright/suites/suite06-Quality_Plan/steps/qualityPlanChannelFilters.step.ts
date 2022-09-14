@@ -103,10 +103,10 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     console.log(planNameSuffix);
     userToken = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.DIGITAL_CHANNELS, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.WORKITEM_CHANNEL_FT, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.CUSTOM_CHANNEL_FT, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken);
     await qualityPlanDetailsPO.navigate();
 });
 
@@ -116,9 +116,9 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     console.log('Deleting created plans...');
     await qualityPlanManagerPO.deleteAllPlans();
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
-    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.DIGITAL_CHANNELS, userDetails.orgName, userToken);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.WORKITEM_CHANNEL_FT, userDetails.orgName, userToken);
+    await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.CUSTOM_CHANNEL_FT, userDetails.orgName, userToken);
     await loginPage.logout();
     await browser.close();
 });

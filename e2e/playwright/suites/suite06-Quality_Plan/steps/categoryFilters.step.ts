@@ -42,7 +42,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     userToken = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.MOCK_CATEGORIES, userDetails.orgName, userToken);
-    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);
+    await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userToken);
     await qualityPlanDetailsPO.navigate();
 });
 
