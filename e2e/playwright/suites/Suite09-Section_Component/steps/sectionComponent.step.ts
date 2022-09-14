@@ -27,7 +27,6 @@ let newGlobalTenantUtils:any;
 
 formAreaComponentPo = new FormAreaComponentPo();
 formDesignerPagePO = new FormDesignerPagePO();
-manageFormsPO = new ManageFormsPO(page.locator('ng2-manage-forms-page'));
 newGlobalTenantUtils = new GlobalTenantUtils();
 
 let formNames = [
@@ -44,6 +43,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
+    manageFormsPO = new ManageFormsPO(page);
     newOnPrepare = new OnPrepare();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);

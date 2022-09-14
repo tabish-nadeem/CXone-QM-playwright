@@ -36,7 +36,7 @@ const formDesignerPage = new FormDesignerPagePO();
 const formArea = new FormAreaComponentPo();
 const designerToolbar = new DesignerToolbarComponentPO();
 const testFormModalPo = new TestFormModalComponentPo();
-const manageFormsPO = new ManageFormsPO(page.locator(('#ng2-manage-forms-page')));
+let manageFormsPO: any;
 
 let newDisableProtUtils = new DisableProtUtils();
 
@@ -50,7 +50,7 @@ let formDetails: any;
 BeforeAll({ timeout: 300 * 1000 }, async () => {
      const protractorConfig = ModuleExports.getFormData();
      userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
-     
+     manageFormsPO = new ManageFormsPO(page);
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
      await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, true, userDetails.orgName, USER_TOKEN)
      await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, true, userDetails.orgName, USER_TOKEN)

@@ -16,10 +16,10 @@ import { LoginPage } from '../../../../common/login';
 
 let page: Page;
 let globalTenantUtils:GlobalTenantUtils;
-let formDesignerPagePO;
-let formAreaComponentPo;
-let dateTimePropertiesComponentPo;
-let manageFormsPO;
+let formDesignerPagePO: any;
+let formAreaComponentPo: any;
+let dateTimePropertiesComponentPo: any;
+let manageFormsPO: any;
 let loginPage:LoginPage;
 
 BeforeAll({timeout: 300 * 1000},async ()=>{
@@ -28,7 +28,7 @@ BeforeAll({timeout: 300 * 1000},async ()=>{
         dateTimePropertiesComponentPo = new DateTimePropertiesComponentPo();
         manageFormsPO = new ManageFormsPO(page.locator('#ng2-manage-forms-page'));
         loginPage = new LoginPage(page);
-        let userToken;
+        let userToken: any;
 
         let userDetails = globalTenantUtils.getDefaultTenantCredentials();
 

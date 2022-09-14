@@ -66,8 +66,8 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
-    omnibarPO = new OmnibarPO(page.locator('cxone-omnibar'));
-    manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
+    omnibarPO = new OmnibarPO(page);
+    manageFormsPO = new ManageFormsPO(page);
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();

@@ -101,7 +101,7 @@ const formDesignerPage = new FormDesignerPagePO();
 const formArea = new FormAreaComponentPo();
 const designerToolbar = new DesignerToolbarComponentPO();
 const workflowModal = new WorkflowSettingsModalComponentPo();
-const manageFormsPO = new ManageFormsPO(page.locator(('#ng2-manage-forms-page')));
+const manageFormsPO = new ManageFormsPO(page);
 
 
 

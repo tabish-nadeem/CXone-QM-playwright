@@ -55,7 +55,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
-    manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
+    manageFormsPO = new ManageFormsPO(page);
     duplicateFormModalPO = new DuplicateFormModalPO();
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     utils = new Utils(page);

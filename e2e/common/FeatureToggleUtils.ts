@@ -1,7 +1,7 @@
 import { HttpUtils } from './HttpUtils';
 const baseFeatureTogglesUri = '/config/toggledFeatures';
 
-export class FeatureToggleUtils {
+export class FeatureToggleUtils { 
     static async addTenantToFeature(featureName: any, tenantName: any, token: any) {
         const featureRequestBody = {
             name: featureName,

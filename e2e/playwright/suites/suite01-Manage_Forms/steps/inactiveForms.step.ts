@@ -64,7 +64,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
-    manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
+    manageFormsPO = new ManageFormsPO(page);
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();
     sampleFormData = ModuleExports.getFormData();

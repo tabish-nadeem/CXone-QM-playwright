@@ -53,8 +53,12 @@ export class Utils {
         throw new Error("Method not implemented.");
     }
 
-    static isPresent(arg0: any): any {
-        throw new Error("Method not implemented.");
+    // static isPresent(arg0: any): any {
+    //     throw new Error("Method not implemented.");
+    // }
+
+    isPresent(elem: any): any {
+        return elem.isPresent();
     }
 
     static isEnabled(arg0: any): any {
