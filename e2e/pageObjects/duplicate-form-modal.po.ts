@@ -1,80 +1,84 @@
-import { Page } from "@playwright/test";
+import { Page,Locator } from "@playwright/test";
 
 export class DuplicateFormModalPO {
     enterPlanName(newPlanName: string) {
         throw new Error('Method not implemented.');
     }
     readonly page: Page;
-    readonly elements: any;
+    public saveModalTitle: Locator;
+    public formNameTextBox: Locator;
+    public saveBtn: Locator;
+    public cancelBtn: Locator;
+    public closeModalBtn: Locator;
+    public formSaveErrorMsg: Locator;
+    
 
     public constructor(pageElement?: Page) {
         this.page = pageElement || this.page.locator('body');
-        this.elements = {
-            saveModalTitle: this.page.locator('cxone-modal .headerTitle'),
-            formNameTextBox: this.page.locator('cxone-modal #form-designer-duplicate-form-name input'),
-            saveBtn: this.page.locator('cxone-modal .save-btn'),
-            cancelBtn: this.page.locator('cxone-modal .cancel-btn'),
-            closeModalBtn: this.page.locator('cxone-modal i.close-button'),
-            formSaveErrorMsg: this.page.locator('cxone-modal .error-messages span')
-        };
+        this.saveModalTitle = this.page.locator('cxone-modal .headerTitle');
+        this.formNameTextBox = this.page.locator('cxone-modal #form-designer-duplicate-form-name input');
+        this.saveBtn = this.page.locator('cxone-modal .save-btn');
+        this.cancelBtn = this.page.locator('cxone-modal .cancel-btn');
+        this.closeModalBtn = this.page.locator('cxone-modal i.close-button');
+        this.formSaveErrorMsg = this.page.locator('cxone-modal .error-messages span');
     }
 
     // Function to verify header title of Save Modal window
     public checkSaveModalHeaderText() {
-        return this.elements.saveModalTitle.isPresent();
+        return this.saveModalTitle.isPresent();
     }
 
     public getSaveButton() {
-        return this.elements.saveBtn;
+        return this.saveBtn;
     }
 
     // Function to verify Save button in Save Modal window
     public checkSaveButton() {
-        return this.elements.saveBtn.isPresent();
+        return this.saveBtn.isPresent();
     }
 
     // Function to click on Save button in Save Modal window
     public clickSaveButton() {
-        return this.elements.saveBtn.click();
+        return this.saveBtn.click();
     }
 
     // Function to verify Cancel button in Save Modal window
     public checkCancelButton() {
-        return this.elements.cancelBtn.isPresent();
+        return this.cancelBtn.isPresent();
     }
 
     // Function to click on Cancel button in Save Modal window
     public clickCancelButton() {
-        return this.elements.cancelBtn.click();
+        return this.cancelBtn.click();
     }
 
     // Function to verify close(x) button in Save Modal window
     public checkModalCloseButton() {
-        return this.elements.closeModalBtn.isPresent();
+        return this.closeModalBtn.isPresent();
     }
 
     // Function to click on close(x) button in Save Modal window
     public clickModalCloseButton() {
-        return this.elements.closeModalBtn.click();
+        return this.closeModalBtn.click();
     }
 
     // Function to verify Form Name textbox in Save Modal window
     public checkFormNameTextBox() {
-        return this.elements.formNameTextBox.isPresent();
+        return this.formNameTextBox.isPresent();
     }
 
     /* Function to enter form name in text box
      * Parameter - formName - send the form name*/
     public enterFormName(formName : any) {
-        return this.elements.formNameTextBox.type(formName);
+        return this.formNameTextBox.type(formName);
     }
 
     // Function to get save error message
     public verifySaveErrorMsg() {
-        return this.elements.formSaveErrorMsg.textContent();
+        return this.formSaveErrorMsg.textContent();
     }
 
     public getFormNameTextBox() {
-        return this.elements.formNameTextBox;
+        return this.formNameTextBox;
     }
 }
