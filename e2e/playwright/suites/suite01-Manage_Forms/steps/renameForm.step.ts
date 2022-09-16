@@ -74,7 +74,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("should open the rename form modal and verify the components on the modal :P1", { timeout: 60 * 1000 }, async () => {
+Given("Should open the rename form modal and verify the components on the modal :P1", { timeout: 60 * 1000 }, async () => {
     let createForms : any = [];
     formDetails = [
         {
@@ -144,7 +144,7 @@ Given("should open the rename form modal and verify the components on the modal 
         expect(await omnibarPO.getItemCountLabel()).toEqual(['1 form']);
 });
 
-When("should give a new name and save the form, rename it again : P1", { timeout: 180 * 1000 }, async () => {
+When("Should give a new name and save the form, rename it again : P1", { timeout: 180 * 1000 }, async () => {
     let beforeCount: any;
     let afterCount: any;
     await manageFormsPO.refresh();
@@ -161,7 +161,7 @@ When("should give a new name and save the form, rename it again : P1", { timeout
     expect(afterCount).toEqual(beforeCount);
 });
 
-Then("should verify that the rename option is not present for Published/Unpublished Form : P1", { timeout: 180 * 1000 }, async () => {
+Then("Should verify that the rename option is not present for Published/Unpublished Form : P1", { timeout: 180 * 1000 }, async () => {
     formNames['renameFormThree'] = 'ReForm3 ' + formNames['formThree'];
     await manageFormsPO.renameForm(formNames['formThree'], formNames['renameFormThree']);
     await manageFormsPO.refresh();
@@ -173,7 +173,7 @@ Then("should verify that the rename option is not present for Published/Unpublis
     expect((await manageFormsPO.verifyHamburgerMenuOptions(formNames['renameFormThree'])).rename).toBeFalsy();
 });
 
-Then("should verify form name field validation : P3", { timeout: 180 * 1000 }, async () => {
+Then("Should verify form name field validation : P3", { timeout: 180 * 1000 }, async () => {
     let nameValidationErrorMsg = utils.getExpectedStringg('renameFormModal.nameValidation');
     await manageFormsPO.searchFormInGrid(formNames['specialCharacterFormName']);
     const menuItem = await manageFormsPO.getHamburgerMenuItem(formNames['specialCharacterFormName'], 'Rename');

@@ -81,7 +81,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("should create a duplicate form of existing form;Also should verify if existing name is specified while duplicating form", { timeout: 60 * 1000 }, async () => {
+Given("Should create a duplicate form of existing form;Also should verify if existing name is specified while duplicating form", { timeout: 60 * 1000 }, async () => {
     await manageFormsPO.navigate();
     const menuItem = await manageFormsPO.getHamburgerMenuItem(formNames.formOne, 'Duplicate');
     await menuItem.click();
@@ -99,7 +99,7 @@ Given("should create a duplicate form of existing form;Also should verify if exi
     expect((await manageFormsPO.getFormRowElements(formNames.duplicateFormOne)).status).toEqual('Draft');
 });
 
-When("should be able to cancel duplicate form creation : P2", { timeout: 180 * 1000 }, async () => {
+When("Should be able to cancel duplicate form creation : P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid(formNames.formOne);
     const menuItem = await manageFormsPO.getHamburgerMenuItem(formNames.formOne, 'Duplicate');
     await menuItem.click();
@@ -110,18 +110,18 @@ When("should be able to cancel duplicate form creation : P2", { timeout: 180 * 1
     expect(await manageFormsPO.verifyFormPresence(formNames.duplicateFormTwo)).toBeFalsy();
 });
 
-Then("should be able to create a duplicate form of already duplicated form : P2", { timeout: 180 * 1000 }, async () => {
+Then("Should be able to create a duplicate form of already duplicated form : P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.duplicateForm(formNames.formOne, formNames.secondDuplicateFormOne);
     expect(await manageFormsPO.verifyFormPresence(formNames.secondDuplicateFormOne)).toBeTruthy();
 });
 
-Then("should create a duplicate form from active form and duplicated form status should be draft :P2", { timeout: 180 * 1000 }, async () => {
+Then("Should create a duplicate form from active form and duplicated form status should be draft :P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.duplicateForm(formNames.formTwo, formNames.duplicateActiveFormTwo);
     expect(await manageFormsPO.verifyFormPresence(formNames.duplicateActiveFormTwo)).toBeTruthy();
     expect((await manageFormsPO.getFormRowElements(formNames.duplicateActiveFormTwo)).status).toEqual('Draft');
 });
 
-Then('should verify that user is not able to save a form with special characters except "-" and "_" :P1', { timeout: 180 * 1000 }, async () => {
+Then('Should verify that user is not able to save a form with special characters except "-" and "_" :P1', { timeout: 180 * 1000 }, async () => {
     let errorMsg = utils.getExpectedString('duplicateFormModal.nameFieldValidation');
     await manageFormsPO.searchFormInGrid(formNames.duplicateActiveFormTwo);
     const item = await manageFormsPO.getHamburgerMenuItem(formNames.duplicateActiveFormTwo, 'Duplicate');

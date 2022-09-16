@@ -87,7 +87,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("P2: verify page title, form count and create form button", { timeout: 60 * 1000 }, async () => {
+Given("P2: Verify page title, form count and create form button", { timeout: 60 * 1000 }, async () => {
     expect(await manageFormsPO.getHeaderText()).toEqual(utils.getExpectedString('manageFormsPage.pageTitle')); // mention page title
     let attributes = {
         formType: 'EVALUATION',
@@ -98,7 +98,7 @@ Given("P2: verify page title, form count and create form button", { timeout: 60 
     expect(await manageFormsPO.getNewFormButton().textContent()).toEqual(utils.getExpectedString('manageFormsPage.createForm'));
 });
 
-When("P1: should reflect timestamp and user name for last modification", { timeout: 180 * 1000 }, async () => {
+When("P1: Should reflect timestamp and user name for last modification", { timeout: 180 * 1000 }, async () => {
     const userName = await getCurrentUserName();
     const profile = await page.locator('.close-button');
     await profile.click();
@@ -148,18 +148,18 @@ Given("P3: Activate button should be disabled by defaultorm button", { timeout: 
     expect(bulkOperationsState.activate).toBeFalsy();
 });
 
-When("P1: should activate multiple forms", { timeout: 180 * 1000 }, async () => {
+When("P1: Should activate multiple forms", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.bulkActivateForms([formNames.formTwo, formNames.formThree]);
     expect((await manageFormsPO.getFormRowElements(formNames.formTwo)).status).toEqual(utils.getExpectedString('formManager.formStatus.published'));
     expect((await manageFormsPO.getFormRowElements(formNames.formThree)).status).toEqual(utils.getExpectedString('formManager.formStatus.published'));
 });
 
-Then("P1: should activate only draft forms and should neglect already activated(earlier published) ones", { timeout: 180 * 1000 }, async () => {
+Then("P1: Should activate only draft forms and should neglect already activated(earlier published) ones", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.bulkActivateForms([formNames.formThree, formNames.formFour]);
     expect((await manageFormsPO.getFormRowElements(formNames.formFour)).status).toEqual(utils.getExpectedString('formManager.formStatus.published'));
 });
 
-Given("P1: should publish a single form using a more menu", { timeout: 60 * 1000 }, async () => {
+Given("P1: Should publish a single form using a more menu", { timeout: 60 * 1000 }, async () => {
     await manageFormsPO.refresh();
     expect(await manageFormsPO.verifyHamburgerMenu(formNames.formFive)).toBeTruthy();
     expect(await manageFormsPO.verifyDeleteOption(formNames.formFive)).toBeTruthy();
@@ -172,7 +172,7 @@ When("P2: Activate option should not be present for already activated form in mo
     expect((await manageFormsPO.verifyHamburgerMenuOptions(formNames.formFive)).activate).toBeFalsy();
 });
 
-Given("P1: should show popover message if mouse over on delete icon of published form", { timeout: 60 * 1000 }, async () => {
+Given("P1: Should show popover message if mouse over on delete icon of published form", { timeout: 60 * 1000 }, async () => {
     formDetails = [
         {
             formName: formNames.formSix,
@@ -209,7 +209,7 @@ Given("P1: should show popover message if mouse over on delete icon of published
     expect(await manageFormsPO.verifyMessageMouseHoverDelOfPublishedForm(formNames.formSix)).toEqual(utils.getExpectedString('popover.deleteActivatedFormMessage'));
 });
 
-When("P2: should not delete forms if user will try to delete two forms having status as one is draft and other is activated", { timeout: 180 * 1000 }, async () => {
+When("P2: Should not delete forms if user will try to delete two forms having status as one is draft and other is activated", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid('');
     await manageFormsPO.bulkDeleteForms([formNames.formSix, formNames.formSeven]);
     let result = await manageFormsPO.verifyFormPresence(formNames.formSix);
@@ -218,7 +218,7 @@ When("P2: should not delete forms if user will try to delete two forms having st
     expect(result).toBeTruthy();
 });
 
-Then("P1: should delete multiple draft forms by selecting checkboxes and clicking on delete button in upper tool bar", { timeout: 180 * 1000 }, async () => {
+Then("P1: Should delete multiple draft forms by selecting checkboxes and clicking on delete button in upper tool bar", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid('465');
     await manageFormsPO.bulkDeleteForms([formNames.formEight, formNames.formNine]);
     let results = await Promise.all([
@@ -229,7 +229,7 @@ Then("P1: should delete multiple draft forms by selecting checkboxes and clickin
     expect(results[1]).toBeFalsy();
 });
 
-Then("P1: should delete a single draft form using delete icon", { timeout: 180 * 1000 }, async () => {
+Then("P1: Should delete a single draft form using delete icon", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.deleteForm(formNames.formSeven);
     expect(await manageFormsPO.verifyFormPresence(formNames.formSeven)).toBeFalsy();
 });

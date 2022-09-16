@@ -84,12 +84,12 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("should verify unpublish button is disabled by default: P1", { timeout: 60 * 1000 }, async () => {
+Given("Should verify unpublish button is disabled by default: P1", { timeout: 60 * 1000 }, async () => {
     const bulkButtonsState = await manageFormsPO.getBulkOperationsButtonEnabledStates();
     expect(bulkButtonsState.deactivate).toBeFalsy();
 });
 
-When("should submit the one side evaluation from agent side", { timeout: 180 * 1000 }, async () => {
+When("Should submit the one side evaluation from agent side", { timeout: 180 * 1000 }, async () => {
     expect(await manageFormsPO.verifyHamburgerMenu(formNames.formOne)).toBeTruthy();
     await manageFormsPO.elements.header.click();
     await manageFormsPO.clickUnpublishButton();
@@ -99,25 +99,25 @@ When("should submit the one side evaluation from agent side", { timeout: 180 * 1
     expect((await manageFormsPO.getFormRowElements(formNames.formOne)).status).toEqual('Inactive');
 });
 
-Then("should verify user should be able to Active a disabled form : P1", { timeout: 180 * 1000 }, async () => {
+Then("Should verify user should be able to Active a disabled form : P1", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.activateForm(formNames.formOne);
     expect((await manageFormsPO.getFormRowElements(formNames.formOne)).status).toEqual('Active');
 });
 
-Then("should verify user is be able to deactivate multiple activated forms : P1", { timeout: 180 * 1000 }, async () => {
+Then("Should verify user is be able to deactivate multiple activated forms : P1", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.deactivateForm(formNames.formTwo);
     await manageFormsPO.deactivateForm(formNames.formThree);
     expect((await manageFormsPO.getFormRowElements(formNames.formTwo)).status).toEqual('Inactive');
     expect((await manageFormsPO.getFormRowElements(formNames.formThree)).status).toEqual('Inactive');
 });
 
-Then("should verify user is be able to delete a inactive form : P1", { timeout: 180 * 1000 }, async () => {
+Then("Should verify user is be able to delete a inactive form : P1", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.deleteForm(formNames.formThree);
     await CommonUIUtils.waitUntilIconLoaderDone(page);
     expect(await manageFormsPO.verifyFormPresence(formNames.formThree)).toBeFalsy();
 });
 
-Then("should verify user should be able to duplicate a disabled form : P2", { timeout: 180 * 1000 }, async () => {
+Then("Should verify user should be able to duplicate a disabled form : P2", { timeout: 180 * 1000 }, async () => {
     await manageFormsPO.duplicateForm(formNames.formTwo, formNames.duplicateFormTwo);
     expect((await manageFormsPO.getFormRowElements(formNames.duplicateFormTwo)).status).toEqual('Draft');
 });
