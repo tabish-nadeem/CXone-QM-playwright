@@ -3,16 +3,16 @@ import { BrowserContext, Page, expect, chromium } from "@playwright/test";
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
-import {QualityPlanDetailsPO} from '../../../../pageObjects/quality-plan-details.po';
-import {QualityPlanManagerPO} from '../../../../pageObjects/quality-plan-manager.po';
-import {TeamsAndGroupsPO} from '../../../../pageObjects/teams-and-groups.po';
+import {QualityPlanDetailsPO} from '../../../../pageObjects/AualityPlanDetailsPO';
+import {QualityPlanManagerPO} from '../../../../pageObjects/AualityPlanManagerPO';
+import {TeamsAndGroupsPO} from '../../../../pageObjects/TeamsAndGroupsPO';
 import moment from 'moment';
-import {EvaluationFormPO} from '../../../../pageObjects/evaluation-form.po';
-import {EvaluatorsPO} from '../../../../pageObjects/evaluators.po';
+import {EvaluationFormPO} from '../../../../pageObjects/EvaluationFormPO';
+import {EvaluatorsPO} from '../../../../pageObjects/EvaluatorsPO';
 import * as userDefaultPermissions from '../../../../../tests/protractor/common/userDefaultPermissions';
-import {PlanDurationPO} from "../../../../pageObjects/plan-duration.po"
-import {TimezoneSelectionPO} from '../../../../pageObjects/timezone-selection.po';
-import {WarningModalComponentPo} from '../../../../pageObjects/warning-modal.component.po';
+import {PlanDurationPO} from "../../../../pageObjects/PlanDurationPO"
+import {TimezoneSelectionPO} from '../../../../pageObjects/TimezoneSelectionPO';
+import {WarningModalComponentPo} from '../../../../pageObjects/WarningModalComponentPO';
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
@@ -110,7 +110,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("Step-1: should open new plan,open the timezone-dropdown and verify client\'s current timezone is selected", { timeout: 60 * 1000 }, async () => {
+Given("Step-1: should open new plan,open the timezone dropdown and verify clients current timezone is selected", { timeout: 60 * 1000 }, async () => {
 
     await qualityPlanDetailsPO.navigate();
     await qualityPlanDetailsPO.enterPlanName('QP Timezone Plan');

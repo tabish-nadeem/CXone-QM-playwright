@@ -8,7 +8,7 @@ import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { LoginPage } from "../../../../common/login";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OnPrepare } from "../../../../playwright.config";
-import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import { ManageFormsPO } from '../../../../pageObjects/ManageFormsPO';
 
 let browser : any,
     utils : any,

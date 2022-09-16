@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { CreateEditRuleModalComponentPo } from "./create-edit-rule-modal.component.po";
+import { CreateEditRuleModalComponentPo } from "./CreateEditRuleModalComponentPO";
 
 
 

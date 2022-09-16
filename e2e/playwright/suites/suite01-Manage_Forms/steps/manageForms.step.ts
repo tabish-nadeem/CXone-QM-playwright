@@ -8,8 +8,8 @@ import { LocalizationNoUI } from "../../../../common/LocalizationNoUI";
 import { LoginPage } from "../../../../common/login";
 import { ModuleExports } from "../../../../common/qmDefaultData";
 import { OnPrepare } from "../../../../playwright.config";
-import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
-import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
+import { OmnibarPO } from "../../../../pageObjects/OmnibarPO";
+import { ManageFormsPO } from "../../../../pageObjects/ManageFormsPO";
 
 let browser: any,
     utils: any,

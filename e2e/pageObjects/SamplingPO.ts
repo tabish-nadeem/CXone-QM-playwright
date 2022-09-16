@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { CheckboxPO } from 'cxone-components/checkbox.po';
-import { SingleselectDropdownPO } from './singleselect-dropdown.po';
-import { Utils } from './../common/utils';
+import { SingleselectDropdownPO } from './SingleselectDropdownPO';
+import { Utils } from '../common/utils';
 
 export class SamplingPO {
     public interactionsPerAgentDropdown: SingleselectDropdownPO;

@@ -4,14 +4,17 @@ import moment from 'moment';
 import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { fdUtils } from "../common/FdUtils";
 import { Utils } from "../common/utils";
-import { OmnibarPO } from "./omnibar.po";
-import { RenameFormModalPO } from "./rename-form-modal.po";
-import { WarningModalComponentPo } from "./warning-modal.component.po";
-import { DuplicateFormModalPO } from "./duplicate-form-modal.po";
+import { OmnibarPO } from "./OmnibarPO";
+import { RenameFormModalPO } from "./RenameFormModalPO";
+import { WarningModalComponentPo } from "./WarningModalComponentPO";
+import { DuplicateFormModalPO } from "./DuplicateFormModalPO";
 import { UIConstants } from "../common/uiConstants"
 import { URLs } from "../common/pageIdentifierURLs"
 
 export class MultiSelectDropdownPo {
+    selectItem(arg0: string) {
+        throw new Error("Method not implemented.");
+    }
     getDisplayedSelection() {
         throw new Error("Method not implemented.");
     }

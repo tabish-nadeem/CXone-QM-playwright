@@ -1,9 +1,9 @@
 
 import {expect, Locator, Page} from "@playwright/test";
-import { SpinnerPO } from './spinner.po';
-import { DesignerToolbarComponentPO } from "./designer-toolbar.component.po";
-import { ElementAttributesComponentPo } from "./element-attributes.component.po";
-import { FormAreaComponentPo } from "./form-area.component.po";
+import { SpinnerPO } from './SpinnerPO';
+import { DesignerToolbarComponentPO } from "./DesignerToolbarComponentPO";
+import { ElementAttributesComponentPo } from "./ElementAttributesComponentPO";
+import { FormAreaComponentPo } from "./FormAreaComponentPO";
 import { CommonUIUtils } from "cxone-playwright-test-utils";
 import { fdUtils } from "../common/FdUtils";
 import { UIConstants } from "../common/uiConstants"

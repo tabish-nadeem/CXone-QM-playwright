@@ -14,7 +14,6 @@ export class QualityPlanDetailsPO {
     readonly planDetailsAncestor: Locator;
     readonly evaluatorsGridPO: Locator;
     readonly timePeriodDropdown: Locator;
-    readonly ancestor: Locator;
     readonly container: Locator;
     readonly planStatus: any;
     readonly uiConstants: UIConstants;

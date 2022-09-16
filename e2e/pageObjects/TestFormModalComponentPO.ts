@@ -1,6 +1,6 @@
 import {expect, Locator, Page} from "@playwright/test";
 import {MultiselectDropdownPO} from 'cxone-components/multiselect-dropdown.po';
-import { SingleselectDropdownPO } from "./singleselect-dropdown.po";
+import { SingleselectDropdownPO } from "./SingleselectDropdownPO";
 
 
 export class TestFormModalComponentPo {

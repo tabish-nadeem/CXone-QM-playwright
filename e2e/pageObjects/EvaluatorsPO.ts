@@ -25,7 +25,7 @@ export class EvaluatorsPO {
           return +(await Utils.getText(this.page.locator(('.evaluators-count .count'))));
      }
 
-     public async clickAddEvaluatorsButton() {
+     public async  clickAddEvaluatorsButton() {
           await Utils.click(this.page.locator(('add-evaluators-btn')));
           await Utils.waitUntilVisible(this.modal);
           await Utils.waitForTime(2000);

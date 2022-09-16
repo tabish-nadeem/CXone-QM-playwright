@@ -83,7 +83,7 @@ export class CategoryManagerPO {
 
     async addCustomCategory(customCategoryName: any, rules: any, folderElement: any): Promise<any> {
         await folderElement.addSubCategoryButton.click();
-        await this.elements.editMode.newCategoryNameInputField.clear();
+        await this.elements.editMode.newCategoryNameInputField.fill('');
         await this.elements.editMode.newCategoryNameInputField.type(customCategoryName);
         for (let i = 0; i < rules.length; i++) {
             await this.elements.editMode.newCategoryRulesInputField.type(rules[i]);
@@ -96,7 +96,7 @@ export class CategoryManagerPO {
 
     async updateCustomCategory( newCategoryName: any, newRules: any, categoryElement: any): Promise<any> {
     await categoryElement.editButton.click();
-    await this.elements.editMode.newCategoryNameInputField.clear();
+    await this.elements.editMode.newCategoryNameInputField.fill('');
     await this.elements.editMode.newCategoryNameInputField.type(
         newCategoryName
     );
@@ -105,7 +105,7 @@ export class CategoryManagerPO {
 
     async updateCustomCategoryFolder(newFolderName: any, folderElement: any): Promise<any> {
     await folderElement.editButton.click();
-    await this.elements.editMode.newCategoryNameInputField.clear();
+    await this.elements.editMode.newCategoryNameInputField.fill('');
     await this.elements.editMode.newCategoryNameInputField.type(
         newFolderName
     );
@@ -114,7 +114,7 @@ export class CategoryManagerPO {
 
     async addCustomFolder(customFolderName: any, folderElement: any): Promise<any> {
     await folderElement.addNewFolderButton.click();
-    await this.elements.editMode.newCategoryNameInputField.clear();
+    await this.elements.editMode.newCategoryNameInputField.fill('');
     await this.elements.editMode.newCategoryNameInputField.type(
         customFolderName
     );
@@ -135,7 +135,7 @@ export class CategoryManagerPO {
         const categoryRow = this.page.locator(`//article[contains(@class, "cat-category-list__article")]//span[text()="${categoryNames[i]}"]/../../..`);
         const categoryId = await categoryRow.getAttribute('categoryId');
         await this.page.locator(`#inlineCheckbox${categoryId} ~ label`).click();
-        await this.getSearchInputField().clear();
+        await this.getSearchInputField().fill('');
     //   await browser.sleep(1000);
         await this.utils.delay(1000);
     }

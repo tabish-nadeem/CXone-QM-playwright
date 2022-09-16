@@ -1,13 +1,13 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import {QualityPlanManagerPO} from "../../../../pageObjects/quality-plan-manager.po"
-import {QualityPlanDetailsPO} from "../../../../pageObjects/quality-plan-details.po"
+import {QualityPlanManagerPO} from "../../../../pageObjects/AualityPlanManagerPO"
+import {QualityPlanDetailsPO} from "../../../../pageObjects/AualityPlanDetailsPO"
 import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import {CategoriesPO} from "../../../../pageObjects/categories.po"
+import {CategoriesPO} from "../../../../pageObjects/CategoriesPO"
 import { DataCreator } from '../../../../common/DataCreator';
 import {SELECTORS} from "../../../../playwright.helpers"
 import { TmUtils } from 'cxone-playwright-test-utils';

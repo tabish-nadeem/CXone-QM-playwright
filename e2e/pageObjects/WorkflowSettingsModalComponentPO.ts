@@ -1,4 +1,4 @@
-import {SingleselectDropdownPO} from '../pageObjects/singleselect-dropdown.po';
+import {SingleselectDropdownPO} from './SingleselectDropdownPO';
 import {expect, Locator, Page} from "@playwright/test";
 
 export class WorkflowSettingsModalComponentPo {

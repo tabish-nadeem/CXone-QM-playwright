@@ -6,24 +6,24 @@ import { CommonNoUIUtils } from '../../../../common/CommonNoUIUtils';
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
 import { FEATURE_TOGGLES } from "../../../../common/uiConstants";
 import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
-import { QualityPlanManagerPO } from "../../../../pageObjects/quality-plan-manager.po"
-import { QualityPlanDetailsPO } from "../../../../pageObjects/quality-plan-details.po"
-import { PlanSummaryPO } from '../../../../pageObjects/plan-summary.po'
-import { PlanDurationPO } from '../../../../pageObjects/plan-duration.po'
+import { QualityPlanManagerPO } from "../../../../pageObjects/AualityPlanManagerPO"
+import { QualityPlanDetailsPO } from "../../../../pageObjects/AualityPlanDetailsPO"
+import { PlanSummaryPO } from '../../../../pageObjects/PlanSummaryPO'
+import { PlanDurationPO } from '../../../../pageObjects/PlanDurationPO'
 import { SamplingPO } from '../../../../pageObjects/sampling.po';
 import { AdminUtilsNoUI } from '../../../../common/AdminUtilsNoUI';
-import { TeamsAndGroupsPO } from '../../../../pageObjects/teams-and-groups.po';
+import { TeamsAndGroupsPO } from '../../../../pageObjects/TeamsAndGroupsPO';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { DataCreator, DCGroup, DCTeam } from "../../../../common/DataCreator";
-import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
-import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { WarningModalComponentPo } from '../../../../pageObjects/warning-modal.component.po';
-import { EnhancedEvaluatorsPO } from '../../../../pageObjects/enhanced-evaluators.po';
-import { EvaluatorsPO } from '../../../../pageObjects/evaluators.po';
-import { EvaluationFormPO } from '../../../../pageObjects/evaluation-form.po';
+import FormDesignerPagePO from "../../../../pageObjects/FormDesignerPagePO";
+import { FormAreaComponentPo } from "../../../../pageObjects/FormAreaComponentPO";
+import { WarningModalComponentPo } from '../../../../pageObjects/WarningModalComponentPO';
+import { EnhancedEvaluatorsPO } from '../../../../pageObjects/EnhancedEvaluatorsPO';
+import { EvaluatorsPO } from '../../../../pageObjects/EvaluatorsPO';
+import { EvaluationFormPO } from '../../../../pageObjects/EvaluationFormPO';
 import { EvaluationTypePO } from '../../../../pageObjects/evaluation-type.po';
-import {CallDurationPO} from '../../../../pageObjects/call-duration.po'
+import {CallDurationPO} from '../../../../pageObjects/CallDurationPO'
 import { LoginPage } from '../../../../common/login';
 
 let browser: any;
