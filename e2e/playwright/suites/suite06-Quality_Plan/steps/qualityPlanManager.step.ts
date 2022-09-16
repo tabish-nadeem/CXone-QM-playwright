@@ -229,7 +229,7 @@ function getSampleFormData () {
 }
 
 
-const omnibarPO = new OmnibarPO(page.locator('cxone-omnibar'));
+let omnibarPO: any;
 let userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
 utils = new Utils(page);
 let sampleFormData = JSON.stringify(getSampleFormData());
@@ -241,6 +241,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     });
     context = await browser.newContext();
     page = await context.newPage();
+    omnibarPO = new OmnibarPO(page);
     newOnPrepare = new OnPrepare();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);

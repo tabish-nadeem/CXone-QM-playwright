@@ -41,7 +41,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     designerToolbar = new DesignerToolbarComponentPO();
     scoringModal = new ScoringModalComponentPo();
     elementAttributes = new ElementAttributesComponentPo();
-    manageFormsPO = new ManageFormsPO(page.locator('#ng2-manage-forms-page'));
+    manageFormsPO = new ManageFormsPO(page);
     loginPage = new LoginPage(page);
     userToken = await loginPage.login(userDetails.adminCreds.email, userDetails.adminCreds.password);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken)

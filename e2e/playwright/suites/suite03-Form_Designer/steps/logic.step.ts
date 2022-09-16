@@ -32,7 +32,7 @@ const formDesignerPage = new FormDesignerPagePO();
 const formArea = new FormAreaComponentPo();
 const createEditRuleModal = new CreateEditRuleModalComponentPo();
 const elementAttributes = new ElementAttributesComponentPo();
-let manageFormsPO = new ManageFormsPO(page.locator('#ng2-manage-forms-page'));
+let manageFormsPO: any;
 newGlobalTenantUtils = new GlobalTenantUtils();
 
 const formNames = [
@@ -65,7 +65,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     newOnPrepare = new OnPrepare();
     await newOnPrepare.OnStart(userDetails);
     loginPage = new LoginPage(page);
-
+    manageFormsPO = new ManageFormsPO(page);
     userDetails = newGlobalTenantUtils.getDefaultTenantCredentials();
     userToken = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await FeatureToggleUtils.addTenantToFeature(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userToken);

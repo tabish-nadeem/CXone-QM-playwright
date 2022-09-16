@@ -73,7 +73,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
     userDetails.orgName = newGlobalTenantUtils.getDefaultTenantCredentials().orgName;
     tmToken = await CommonNoUIUtils.login(SELECTORS.TM_LOGIN_EMAIL_ADDRESS, SELECTORS.TM_LOGIN_PASSWORD,true);
     await tmUtils.updateTenantLicenses(userDetails.orgName, ['QMA', 'WFM'], tmToken);
-    userDetails.adminCreds.token = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
+    userDetails.adminCreds.token = await loginPage.login(userDetails.adminCreds.email, userDetails.adminCreds.password,true);
     await setFeatureToggleForMockCategories();
     let response = await CommonNoUIUtils.createNewRoleByPermissions('customManager', 'Custom Manager 1', userDefaultPermissions.getUserDefaultApplications('manager'), userDetails.adminCreds.token);
     userDetails.managerCreds.role = response.roleName;
@@ -85,7 +85,7 @@ BeforeAll({ timeout: 400 * 1000 }, async () => {
         userDetails.orgName,
         userDetails.adminCreds.token);
     await loginPage.logout(true, 120000, userDetails.orgName, userDetails.adminCreds.token);
-    userToken = await CommonNoUIUtils.login(userDetails.managerCreds.email, userDetails.managerCreds.password, fdUtils.getPageIdentifierUrls('categoryManager.categoryManager'));
+    userToken = await loginPage.login(userDetails.managerCreds.email, userDetails.managerCreds.password, fdUtils.getPageIdentifierUrls('categoryManager.categoryManager'));
     return await categoryManager.navigate();
 });
 

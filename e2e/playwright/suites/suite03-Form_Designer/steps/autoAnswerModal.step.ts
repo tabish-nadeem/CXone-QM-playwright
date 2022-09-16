@@ -496,7 +496,7 @@ const formArea = new FormAreaComponentPo();
 const createAutoAnswerRuleModal = new CreateAutoAnswerRulesPO();
 const duplicateFormModalPO = new DuplicateFormModalPO();
 const elementAttributes = new ElementAttributesComponentPo();
-let manageFormsPO = new ManageFormsPO(page.location(('#ng2-manage-forms-page')));
+let manageFormsPO: any;
 
 const addBehaviorRuleForYesNoQuestion = async function () {
      await formArea.clickElementOnFormArea('2. Set question', 'yesno');
@@ -854,6 +854,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
      await tmUtils.updateTenantLicenses(userDetails.orgName, ['QMP', 'WFM'], tmToken);
      USER_TOKEN = await CommonNoUIUtils.login(userDetails.adminCreds.email, userDetails.adminCreds.password, true);
      newOnPrepare = new OnPrepare();
+     manageFormsPO = new ManageFormsPO(page);
      await newOnPrepare.OnStart();
      await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.RELEASE_NAVIGATION_REDESIGN, userDetails.orgName, userDetails.adminCreds.token);
      await newOnPrepare.toggleFeatureToggle(FEATURE_TOGGLES.ANGULAR8_MIGRATION_SPRING20, userDetails.orgName, userDetails.adminCreds.token);
