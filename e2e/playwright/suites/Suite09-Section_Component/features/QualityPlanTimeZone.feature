@@ -1,7 +1,7 @@
 Feature: Quality Plan - TimeZone Test Scenarios
 
    Scenario: 1.Timezone scenarios for Draft, Active, Expired and Inactive Plans
-      Given STEP-1: should open new plan,open the timezone-dropdown and verify client\'s current timezone is selected
+      Given STEP-1: should open new plan,open the timezone dropdown and verify clients current timezone is selected
       When STEP-2: should select new timezone from dropdown, save plan as draft and verify selected timezone is retained
       Then STEP-3: should activate plan and verify timezone is non-editable for active plan
       Then STEP-4: should duplicate an active plan and verify timezone is retained

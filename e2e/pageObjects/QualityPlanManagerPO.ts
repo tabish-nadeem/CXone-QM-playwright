@@ -1,8 +1,8 @@
 
 import { OmnibarPO } from 'cxone-components/omnibar.po';
 import { SpinnerPO } from 'cxone-components/spinner.po';
-import { DuplicateFormModalPO } from './duplicate-form-modal.po'
-import { QualityPlanDetailsPO } from '../pageObjects/quality-plan-details.po';
+import { DuplicateFormModalPO } from './DuplicateFormModalPO'
+import { QualityPlanDetailsPO } from './AualityPlanDetailsPO';
 import { fdUtils } from '../common/fdUtils';
 import { Page, Locator, expect } from "@playwright/test";
 import { Helpers } from "../playwright.helpers";

@@ -1,4 +1,4 @@
-import { Utils } from './../common/utils';
+import { Utils } from '../common/utils';
 import { browser, by, element, ElementFinder, ExpectedConditions, WebElement } from 'protractor';
 import { SpinnerPO } from 'cxone-components/spinner.po';
 

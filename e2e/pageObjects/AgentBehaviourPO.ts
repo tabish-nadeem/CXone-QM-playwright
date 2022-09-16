@@ -1,26 +1,26 @@
-import { Page, Locator } from "@playwright/test";
-import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
+import { Page, Locator,expect } from "@playwright/test";
+import { SingleselectDropdownPO } from './SingleselectDropdownPO';
 import { Utils } from '../common/utils';
-import {ExpectedCondition} from 'expected-condition-playwright';
+
 
 export class AgentBehaviorPO {
-    public ancestor: Locator;
+   
     readonly page:Page;
     readonly utils: Utils;
-    public defaultTimeoutInMillis: number;
-    public elements:any;
+    readonly defaultTimeoutInMillis: number;
     public agentBehaviorDropdown: SingleselectDropdownPO;
+    readonly clearButton :Locator
 
-    public constructor(ancestorElement?: Locator, defaultTimeoutInMillis = 20000) {
+    public constructor(page?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
-        this.ancestor = ancestorElement || this.page.locator('.agent-behaviour');
-        this.elements = {
-            clearButton: this.page.locator('button.filter-clear-btn')
-        };
+        this.page = page 
+      this.clearButton = this.page.locator('button.filter-clear-btn')
+      
+       
     }
 
     public async isFilterPresent() {
-        return await Utils.isPresent(this.ancestor);
+        return await this.page.locator('.agent-behaviour').isPresent();
     }
 
     public async setAgentBehaviorType(abTypeName: any,index: any) {
@@ -40,26 +40,29 @@ export class AgentBehaviorPO {
     }
 
     public async clearFilter() {
-        return await this.utils.click(this.elements.clearButton);
+        return await this.clearButton.clicK();
     }
 
     public async selectScore(abScore: string, index: number) {
-        await this.page.wait(ExpectedCondition.presenceOf(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`)), 10000);
+        // await this.page.wait(ExpectedCondition.presenceOf(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`)), 10000);
+        await expect(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`).waitFor({state:'attached',timeout:10000})).isPresent()
         await this.page.executeScript('arguments[0].click();', this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`));
     }
 
     public async deSelectScore(abScore: string, index: number) {
-        Utils.click(this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`));
+    this.page.locator(`#agentBehaviourSentiments_${index} #${abScore}`).click();
     }
 
     public async addMoreAgentBehavior(index: any) {
-        await this.page.wait(ExpectedCondition.presenceOf(this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon')), 10000);
+        // await this.page.wait(ExpectedCondition.presenceOf(this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon')), 10000);
+        await expect(this.page.locator(`#agent-behavior-addBtn_0 .svg-sprite-icon`).waitFor({state:'attached',timeout:10000})).isPresent()
         await this.page.executeScript('arguments[0].click();', this.page.locator('#agent-behavior-addBtn_0 .svg-sprite-icon'));
     }
 
     public async deleteAgentBehavior(index: any) {
-        await browser.wait(ExpectedConditions.presenceOf(this.page.locator(`#agent-behavior-deleteBtn_${index} .svg-sprite-icon`)), 10000);
-        await browser.executeScript('arguments[0].click();', this.page.locator(`#agent-behavior-deleteBtn_${index} .svg-sprite-icon`));
+        // await browser.wait(ExpectedConditions.presenceOf(this.page.locator(`#agent-behavior-deleteBtn_${index} .svg-sprite-icon`)), 10000);
+        await expect(this.page.locator(`#agent-behavior-deleteBtn_${index} .svg-sprite-icon`).waitFor({state:'attached',timeout:10000})).isPresent()
+        await this.page.executeScript('arguments[0].click();', this.page.locator(`#agent-behavior-deleteBtn_${index} .svg-sprite-icon`));
     }
 
 }

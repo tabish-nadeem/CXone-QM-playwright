@@ -9,12 +9,12 @@ import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
-import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import FormDesignerPagePO from "../../../../pageObjects/FormDesignerPagePO";
+import { FormAreaComponentPo } from "../../../../pageObjects/FormAreaComponentPO";
+import { ManageFormsPO } from '../../../../pageObjects/ManageFormsPO';
 import { ModuleExports } from '../../../../common/qmDefaultData';
-import { DesignerToolbarComponentPO } from '../../../../pageObjects/designer-toolbar.component.po';
-import { WorkflowSettingsModalComponentPo } from '../../../../pageObjects/workflow-settings-modal.component.po';
+import { DesignerToolbarComponentPO } from '../../../../pageObjects/DesignerToolbarComponentPO';
+import { WorkflowSettingsModalComponentPo } from '../../../../pageObjects/WorkflowSettingsModalComponentPO';
 
 
 let browser: any;

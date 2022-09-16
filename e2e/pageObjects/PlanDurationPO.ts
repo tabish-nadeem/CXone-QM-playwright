@@ -4,7 +4,7 @@ import { DatePickerPO } from 'cxone-components/date-picker.po';
 import { by, element, ElementFinder } from 'protractor';
 import { RadioPO } from 'cxone-components/radio.po';
 import { Utils } from '../common/utils';
-import { QualityPlanDetailsPO } from './quality-plan-details.po';
+import { QualityPlanDetailsPO } from './AualityPlanDetailsPO';
 
 export class PlanDurationPO {
     

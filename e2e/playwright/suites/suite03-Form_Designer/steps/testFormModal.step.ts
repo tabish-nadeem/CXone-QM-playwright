@@ -13,11 +13,11 @@ import { OnPrepare } from "../../../../playwright.config";
 import * as moment from "moment";
 import * as _ from "lodash";
 //po
-import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { DesignerToolbarComponentPO } from "../../../../pageObjects/designer-toolbar.component.po";
-import { TestFormModalComponentPo } from "../../../../pageObjects/test-form-modal.component.po";
-import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
-import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
+import { FormAreaComponentPo } from "../../../../pageObjects/FormAreaComponentPO";
+import { DesignerToolbarComponentPO } from "../../../../pageObjects/DesignerToolbarComponentPO";
+import { TestFormModalComponentPo } from "../../../../pageObjects/TestFormModalComponentPO";
+import { ManageFormsPO } from "../../../../pageObjects/ManageFormsPO";
+import FormDesignerPagePO from "../../../../pageObjects/FormDesignerPagePO";
 //
 import { DisableProtUtils } from "../../../../common/disableProtUtil";
 import { ModuleExports } from "../../../../common/qmDefaultData";

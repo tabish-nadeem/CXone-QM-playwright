@@ -11,13 +11,13 @@ import { FeatureToggleUtils } from '../../../../common/FeatureToggleUtils';
 import { OnPrepare } from '../../../../playwright.config';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import FormDesignerPagePO from "../../../../pageObjects/form-designer-page.po";
-import { FormAreaComponentPo } from "../../../../pageObjects/form-area.component.po";
-import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
-import { DuplicateFormModalPO } from '../../../../pageObjects/duplicate-form-modal.po';
-import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
+import FormDesignerPagePO from "../../../../pageObjects/FormDesignerPagePO";
+import { FormAreaComponentPo } from "../../../../pageObjects/FormAreaComponentPO";
+import { ManageFormsPO } from '../../../../pageObjects/ManageFormsPO';
+import { DuplicateFormModalPO } from '../../../../pageObjects/DuplicateFormModalPO';
+import { ElementAttributesComponentPo } from '../../../../pageObjects/ElementAttributesComponentPO';
 import * as userPermissions from '../../../../common/userDefaultPermissions';
-import { CreateAutoAnswerRulesPO } from '../../../../pageObjects/create-auto-answer-rules-modal.component.po';
+import { CreateAutoAnswerRulesPO } from '../../../../pageObjects/CreateAutoAnswerRulesModalComponentPO';
 
 
 let browser: any;

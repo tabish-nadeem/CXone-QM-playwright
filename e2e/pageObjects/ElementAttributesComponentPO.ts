@@ -2,11 +2,11 @@
 
 // import {Locator, element, by, browser, ExpectedConditions} from 'protractor';
 import {expect, Locator, Page} from "@playwright/test";
-import { AddMultipleModalPo } from "./add-multiple-modal.component.po";
-import { ChoiceListPropertiesComponentPo } from "./choice-list-properties.component.po";
-import { HeaderPropertiesComponentPo } from "./header-properties.component.po";
-import { ImageUploadComponentPo } from "./image-upload.component.po";
-import { LogicPropertiesComponentPo } from "./logic-properties.component.po";
+import { AddMultipleModalPo } from "./AddMultipleModalComponentPO";
+import { ChoiceListPropertiesComponentPo } from "./ChoiceListPropertiesComponentPO";
+import { HeaderPropertiesComponentPo } from "./HeaderPropertiesComponentPO";
+import { ImageUploadComponentPo } from "./ImageUploadComponentPO";
+import { LogicPropertiesComponentPo } from "./LogicPropertiesComponentPO";
 
 export class ElementAttributesComponentPo {
     readonly page:Page;

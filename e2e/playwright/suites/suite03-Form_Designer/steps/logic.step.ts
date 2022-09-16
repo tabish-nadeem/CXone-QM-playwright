@@ -1,13 +1,13 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { FormAreaComponentPo } from '../../../../pageObjects/form-area.component.po';
-import { CreateEditRuleModalComponentPo } from '../../../../pageObjects/create-edit-rule-modal.component.po';
-import { ElementAttributesComponentPo } from '../../../../pageObjects/element-attributes.component.po';
-import  FormDesignerPagePO  from '../../../../pageObjects/form-designer-page.po';
+import { FormAreaComponentPo } from '../../../../pageObjects/FormAreaComponentPO';
+import { CreateEditRuleModalComponentPo } from '../../../../pageObjects/CreateEditRuleModalComponentPO';
+import { ElementAttributesComponentPo } from '../../../../pageObjects/ElementAttributesComponentPO';
+import  FormDesignerPagePO  from '../../../../pageObjects/FormDesignerPagePO';
 import { OnPrepare } from '../../../../playwright.config';
 import { LoginPage } from "../../../../common/login";
 import { GlobalTenantUtils } from '../../../../common/globalTenantUtils';
-import { ManageFormsPO } from '../../../../pageObjects/manage-forms.po';
+import { ManageFormsPO } from '../../../../pageObjects/ManageFormsPO';
 import moment from 'moment';
 import { CommonNoUIUtils } from "../../../../common/CommonNoUIUtils";
 import { FeatureToggleUtils } from "../../../../common/FeatureToggleUtils";

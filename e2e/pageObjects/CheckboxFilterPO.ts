@@ -1,34 +1,35 @@
 import { Page, Locator } from "@playwright/test";
 import { CheckboxPO } from 'cxone-components/checkbox.po';
-import { SingleselectDropdownPO } from 'cxone-components/singleselect-dropdown.po';
+import { SingleselectDropdownPO } from './SingleselectDropdownPO';
 import { Utils } from '../common/utils';
-import { CategoryManagerPO } from 'cxone-qm-library/category-manager.po';
+import { CategoryManagerPO } from './CategoryManagerPO';
 
 export class CheckboxFilterPO {
-    ancestor: Locator;
+   
     readonly page:Page;
     readonly utils: Utils;
     public highConfidenceCheckbox: CheckboxPO;
     public operationDropdown: SingleselectDropdownPO;
     public categoryManagerPO: CategoryManagerPO;
 
-    public constructor(ancestor?: Locator) {
-        this.ancestor = ancestor || this.page.locator('.checkbox-filter');
+    public constructor(page:Page) {
+        this.page= page
+        // this.ancestor = ancestor || this.page.locator('.checkbox-filter');
         this.highConfidenceCheckbox = new CheckboxPO('enable-duration-checkbox');
         this.operationDropdown = new SingleselectDropdownPO('operation-dropdown');
         this.categoryManagerPO = new CategoryManagerPO(this.page.locator('.category-list-modal-wrapper'));
     }
 
     public async clickWithScreenInteractionButton() {
-        await this.utils.click(this.page.locator('#interaction-with-screen'));
+        await this.page.locator('#interaction-with-screen').click();
     }
 
     public async clickWithoutScreenInteractionButton() {
-        await this.utils.click(this.page.locator('#interaction-without-screen'));
+        await this.page.locator('#interaction-without-screen').click();
     }
 
     public async clickAllInteractionsButton() {
-        await this.utils.click(this.page.locator('#all-interaction'));
+        await this.page.locator('#all-interaction').click();
     }
 
     public async getSelectedInteractionButton() {
@@ -47,7 +48,7 @@ export class CheckboxFilterPO {
 
     public async isChannelPresent(channelTypeLabel: string) {
         const channelCheckbox = new CheckboxPO(`QpMediaTypeMapper-checkbox-${channelTypeLabel.toUpperCase()}`);
-        return await Utils.isPresent(this.page.locator(channelCheckbox.selector));
+        return await this.page.locator(channelCheckbox.selector).isPresent();
     }
 
     public async toggleCallDirectionByName(directionLabel: string) {
@@ -63,7 +64,7 @@ export class CheckboxFilterPO {
     }
 
     public async clearFilter() {
-        return await this.utils.click(this.page.locator('button.filter-clear-btn'));
+        return await this.page.locator('button.filter-clear-btn').click();
     }
 
     private getDirectionTypeSelector(directionLabel: string) {

@@ -1,28 +1,38 @@
-import { AddMultipleModalPo } from "./add-multiple-modal.component.po";
+import { AddMultipleModalPo } from "./AddMultipleModalComponentPO";
 import { expect, Locator, Page } from "@playwright/test";
 
 export class ChoiceListPropertiesComponentPo {
-  ancestor: Locator;
-  addMultipleModal = new AddMultipleModalPo();
-  elements: any;
-  public readonly page: Page;
+   
+ public addMultipleModal : AddMultipleModalPo;
+  // elements: any;
+   readonly page: Page;
+  public enableScoringWarning: any;
+  public criticalQuestionHelp: Locator;
+  public useNACheckbox: Locator;
+  public addMultiple: Locator;
+  public verticalQuestionChoices: Locator;
+  public criticalCheckbox:Locator
+ 
 
-  constructor() {
-    this.ancestor = this.page.locator(".choice-list-properties");
-    this.elements = {
-      criticalCheckbox: this.ancestor.locator(
+  constructor(page:Page) {
+    // this.page = this.page.locator(".choice-list-properties");
+    this.page  = Page
+   
+     this.criticalCheckbox = this.page.locator(
         "#form-designer-critical-question-checkbox"
       ),
-      enableScoringWarning: this.ancestor.locator("#critical-question-warning"),
-      criticalQuestionHelp: this.ancestor.locator("#critical-question-help"),
-      useNACheckbox: this.ancestor.locator("#form-designer-use-na"),
-      addMultiple: this.ancestor.locator("#form-designer-add-multiple"),
-      verticalQuestionChoices: this.page.locator(".choice-vertical"),
-    };
+      this.enableScoringWarning = this.page.locator("#critical-question-warning"),
+      this.criticalQuestionHelp =this.page.locator("#critical-question-help"),
+      this.useNACheckbox = this.page.locator("#form-designer-use-na"),
+      this.addMultiple =this.page.locator("#form-designer-add-multiple"),
+      this.verticalQuestionChoices = this.page.locator(".choice-vertical")
+   
+
   }
 
+
   async getMarkAsCriticalCheckbox(): Promise<Locator> {
-    const elem = this.elements.criticalCheckbox;
+    const elem = this.criticalCheckbox;
     await expect(
       this.page.locator(elem).waitFor({ state: "attached", timeout: 10000 })
     );
@@ -37,22 +47,22 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getEnableScoringIcon(): Promise<Locator> {
-    const elem = this.elements.enableScoringWarning;
-    await expect(elem).toBeVisible(10000);
+    const elem = this.enableScoringWarning;
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
   async getHelpIconCriticalQuestion(): Promise<Locator> {
-    const elem = this.elements.criticalQuestionHelp;
-    await expect(elem).toBeVisible(10000);
+    const elem = this.criticalQuestionHelp;
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
   async getChoiceRadioButton(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator(
+    const elem = this.page.locator(
       "#form-designer-choices-" + index + " .cxone-radio"
     );
-    await expect(elem).toBeVisible(10000);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -61,10 +71,10 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getChoiceYesNoButton(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator(
+    const elem = this.page.locator(
       "#form-designer-yesno-choices-value-" + index + " .cxone-radio"
     );
-    await expect(elem).toBeVisible(10000);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -73,10 +83,10 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getChoiceCheckbox(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator(
+    const elem = this.page.locator(
       "#form-designer-choices-" + index + " .cxone-checkbox"
     );
-    await expect(elem).toBeVisible(10000);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -85,10 +95,10 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getChoiceNameTextBox(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator(
+    const elem = this.page.locator(
       "#form-designer-choices-text-" + index + " input"
     );
-    await expect(elem).toBeVisible(10000);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -99,8 +109,8 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getAddChoiceButton(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator("#form-designer-choices-add-" + index);
-    await expect(elem).toBeVisible(10000);
+    const elem = this.page.locator("#form-designer-choices-add-" + index);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -109,10 +119,10 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getDeleteChoiceButton(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator(
+    const elem = this.page.locator(
       "#form-designer-choices-delete-" + index
     );
-    await expect(elem).toBeVisible(10000);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -121,10 +131,10 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getCorrectAnswerChoiceFlag(index: any): Promise<Locator> {
-    const elem = this.ancestor.locator(
+    const elem = this.page.locator(
       "#form-designer-choices-correct-answer-" + index
     );
-    await expect(elem).toBeVisible(10000);
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
@@ -135,7 +145,7 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getNACheckbox(): Promise<Locator> {
-    const elem = this.elements.useNACheckbox;
+    const elem = this.useNACheckbox;
     await expect(
       this.page.locator(elem).waitFor({ state: "attached", timeout: 10000 })
     );
@@ -150,21 +160,21 @@ export class ChoiceListPropertiesComponentPo {
   }
 
   async getAddMultipleButton(): Promise<Locator> {
-    const elem = this.elements.addMultiple;
-    await expect(elem).toBeVisible(10000);
+    const elem = this.addMultiple;
+    await expect(elem).isVisible(10000);
     return elem;
   }
 
   async clickAddMultipleButton(): Promise<any> {
     await (await this.getAddMultipleButton()).click();
-    return (await expect(this.addMultipleModal.getModal()).toBeVisible(
+    return (await expect(this.addMultipleModal.getModal()).isVisible(
       10000
     )) as Promise<any>;
   }
 
   async getVerticalChoicesOfQuestion(): Promise<any> {
-    const elem = this.elements.verticalQuestionChoices;
-    await expect(elem).toBeVisible(10000);
+    const elem = this.verticalQuestionChoices;
+    await expect(elem).isVisible(10000);
     return elem;
   }
 }

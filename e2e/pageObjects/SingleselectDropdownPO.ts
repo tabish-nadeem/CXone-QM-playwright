@@ -2,6 +2,9 @@
 import {expect, Locator, Page} from "@playwright/test";
 
 export class SingleselectDropdownPO {
+    pageByLabelWithoutSearchBox(label: string) {
+        throw new Error("Method not implemented.");
+    }
     public readonly page:Page;
     anscestor: Locator;
 

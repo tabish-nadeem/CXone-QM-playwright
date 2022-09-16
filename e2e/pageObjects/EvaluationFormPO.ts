@@ -1,4 +1,4 @@
-import { SingleselectDropdownPO } from './singleselect-dropdown.po';
+import { SingleselectDropdownPO } from './SingleselectDropdownPO';
 import { Page, Locator } from "@playwright/test";
 import { Utils } from '../common/utils';
 
