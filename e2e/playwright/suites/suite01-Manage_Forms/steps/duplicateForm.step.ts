@@ -1,7 +1,7 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
-import { DuplicateFormModalPO } from '../../../../pageObjects/duplicate-form-modal.po';
+import { ManageFormsPO } from "../../../../pageObjects/ManageFormsPO";
+import { DuplicateFormModalPO } from '../../../../pageObjects/DuplicateFormModalPO';
 import { OnPrepare } from "../../../../playwright.config";
 import { LoginPage } from "../../../../common/login";
 import { Utils } from '../../../../common/utils';
@@ -56,7 +56,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
     context = await browser.newContext();
     page = await context.newPage();
     manageFormsPO = new ManageFormsPO(page.locator(`#ng2-manage-forms-page`));
-    duplicateFormModalPO = new DuplicateFormModalPO();
+    duplicateFormModalPO = new DuplicateFormModalPO(page);
     userDetails = await newGlobalTenantUtils.getDefaultTenantCredentials();
     utils = new Utils(page);
     newOnPrepare = new OnPrepare();
