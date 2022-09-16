@@ -17,48 +17,49 @@ export class ManageFormsPO {
     readonly utils:Utils;
     readonly page:Page;
     readonly uiConstants: UIConstants;
-    readonly elements: any;
     // elements: { container: any; gridComponent: any; header: any; newFormBtn: any; currentUserName: any; publishBtn: any; unpublishBtn: any; bulkDeleteBtn: any; spinner: any; delPublishFormPopover: any; clickConfirmDelete: any; confirmCancelBtn: any; row: any; noMatchfoundMsg: any; };
+    public container: Locator;
+    public gridComponent: Locator;
+    public header: Locator;
+    public newFormBtn: Locator;
+    public currentUserName: Locator;
+    public publishBtn: Locator;
+    public unpublishBtn: Locator;
+    public bulkDeleteBtn: Locator;
+    public spinner: Locator;
+    public delPublishFormPopover: Locator;
+    public clickConfirmDelete: Locator;
+    public confirmCancelBtn: Locator;
+    public row: Locator;
+    public noMatchfoundMsg: Locator;
 
     public constructor(page?: Page, defaultTimeoutInMillis = 20000) {
         this.defaultTimeoutInMillis = defaultTimeoutInMillis;
         this.page = page;
         this.utils = new Utils(page);
         this.uiConstants = new UIConstants();
-        this.elements = {
-            container: this.page.locator('#ng2-manage-forms-page'),
-            gridComponent: this.page.locator('cxone-grid'),
-            header: this.page.locator('#manage-forms-page-title'),
-            newFormBtn: this.page.locator('#createForm'),
-            currentUserName: this.page.locator('#simple-dropdown div.titleText'),
-            publishBtn: this.page.locator('#bulk-btn-activate'),
-            unpublishBtn: this.page.locator('#bulk-btn-deactivate'),
-            bulkDeleteBtn: this.page.locator('#bulk-btn-delete'),
-            spinner: this.page.locator('.cxonespinner .spinner.spinner-bounce-middle'),
-            delPublishFormPopover: this.page.locator('popover-container.tooltip-popover-style'),
-            clickConfirmDelete: this.page.locator('button, input[type="button"], input[type="submit"] >> text = "Yes"'),
-            confirmCancelBtn: this.page.locator('#popup-cancel'),
-            row: this.page.locator('#manage-forms-grid div.ag-center-cols-viewport div[row-index]'),
-            noMatchfoundMsg: this.page.locator('#manage-forms-grid span.no-rows-overlay-text')
-        };
+            this.container = this.page.locator('#ng2-manage-forms-page');
+            this.gridComponent = this.page.locator('cxone-grid');
+            this.header = this.page.locator('#manage-forms-page-title');
+            this.newFormBtn = this.page.locator('#createForm');
+            this.currentUserName = this.page.locator('#simple-dropdown div.titleText');
+            this.publishBtn = this.page.locator('#bulk-btn-activate');
+            this.unpublishBtn = this.page.locator('#bulk-btn-deactivate');
+            this.bulkDeleteBtn = this.page.locator('#bulk-btn-delete');
+            this.spinner = this.page.locator('.cxonespinner .spinner.spinner-bounce-middle');
+            this.delPublishFormPopover = this.page.locator('popover-container.tooltip-popover-style');
+            this.clickConfirmDelete = this.page.locator('button, input[type="button"], input[type="submit"] >> text = "Yes"');
+            this.confirmCancelBtn = this.page.locator('#popup-cancel');
+            this.row = this.page.locator('#manage-forms-grid div.ag-center-cols-viewport div[row-index]');
+            this.noMatchfoundMsg = this.page.locator('#manage-forms-grid span.no-rows-overlay-text');
     }
 
-<<<<<<< HEAD
-    // need to update this functions
-    // public async refresh() {
-    //     return await navigateQuicklyTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'), fdUtils.getPageIdentifierUrls('qp.qpPlanManager'));
-    // }
-
-    async navigateTo() {        
-        return await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
-=======
     async navigate() {
         let baseUrl = this.uiConstants.URLS.LOCALHOST
         await this.page.goto(baseUrl + URLs.qualityManagement.manageforms);
         await this.page.waitForURL('**\/#/manageForms');
         await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await this.page.waitForSelector(`#ng2-manage-forms-page`);
->>>>>>> 1961cf90ebb21ec79673ba61addfefa3e122d962
     }
 
      async navigateToWithWarningModal() {
@@ -69,11 +70,11 @@ export class ManageFormsPO {
     }
 
    getNewFormButton(): Locator {
-        return this.elements.newFormBtn;
+        return this.newFormBtn;
     }
 
      async getHeaderText(): Promise<string> {
-        return await this.elements.header.textContent();
+        return await this.header.textContent();
     }
 
      getGridRow(rowIndex: number) {
@@ -126,14 +127,14 @@ export class ManageFormsPO {
 
     async getCurrentUserName(): Promise<string> {
         await expect(this.page.locator('header.nice-header')).toBeVisible(this.defaultTimeoutInMillis);
-        return await this.elements.currentUserName.textContent();
+        return await this.currentUserName.textContent();
     }
 
     async getBulkOperationsButtonEnabledStates(): Promise<{ activate: boolean; deactivate: boolean; delete: boolean }> {
         const obj = {
-            activate: await this.elements.publishBtn.isEnabled(),
-            deactivate: await this.elements.publishBtn.isEnabled(),
-            delete: await this.elements.publishBtn.isEnabled()
+            activate: await this.publishBtn.isEnabled(),
+            deactivate: await this.publishBtn.isEnabled(),
+            delete: await this.publishBtn.isEnabled()
         };
         return obj;
     }
@@ -151,20 +152,20 @@ export class ManageFormsPO {
     }
 
     async clickUnpublishButton() {
-        const isEnabled = await this.elements.unpublishBtn.isEnabled();
+        const isEnabled = await this.unpublishBtn.isEnabled();
         if (!isEnabled) {
-            await expect(this.elements.unpublishBtn).toBeEnabled(this.defaultTimeoutInMillis);
+            await expect(this.unpublishBtn).toBeEnabled(this.defaultTimeoutInMillis);
         }
-        return await this.elements.unpublishBtn.click();
+        return await this.unpublishBtn.click();
     }
 
     async clickBulkDeleteButton() {
-        const isEnabled = await this.elements.bulkDeleteBtn.isEnabled();
+        const isEnabled = await this.bulkDeleteBtn.isEnabled();
         if (!isEnabled) {
-            await expect(this.elements.bulkDeleteBtn).toBeEnabled(this.defaultTimeoutInMillis);
+            await expect(this.bulkDeleteBtn).toBeEnabled(this.defaultTimeoutInMillis);
 
         }
-        return await this.elements.bulkDeleteBtn.click();
+        return await this.bulkDeleteBtn.click();
     }
 
      async clickConfirmBtn(btnName: any) {
@@ -178,7 +179,7 @@ export class ManageFormsPO {
         if (!timeToWait) {
             timeToWait = 60000;
         }
-        return await this.utils.waitUntilNotVisible(this.elements.spinner, timeToWait);
+        return await this.utils.waitUntilNotVisible(this.spinner, timeToWait);
     }
 
     async verifyHamburgerMenu(value: any) {
@@ -221,8 +222,8 @@ export class ManageFormsPO {
             const row = await this.getGridRowOfMatchingText(value);
             const actionDelete = row.locator('button.action-btn.action-delete svg');
             await actionDelete.hover();
-            await expect(this.elements.delPublishFormPopover).toBeVisible(10000);
-            return this.elements.delPublishFormPopover.textContent();
+            await expect(this.delPublishFormPopover).toBeVisible(10000);
+            return this.delPublishFormPopover.textContent();
         } catch (ex) {
             console.error('Failed to get hover message', ex);
         }
@@ -230,36 +231,36 @@ export class ManageFormsPO {
 
      async bulkDelete() {
         await this.page.waitForSelector('#bulk-btn-delete');
-        return this.elements.bulkDeleteBtn.click();
+        return this.bulkDeleteBtn.click();
     }
 
     async clickConfirmDeleteBtn(skipWaitForSpinner?: any) {
         await this.page.waitForSelector('button, input[type="button"], input[type="submit"] >> text = "Yes"')
-        await this.elements.clickConfirmDelete.click();
+        await this.clickConfirmDelete.click();
         if (!skipWaitForSpinner) {
             await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         }
     }
 
     async getNumberOfRows() {
-        return await this.elements.row.count();
+        return await this.row.count();
     }
 
     async getNoMatchFoundMsg() {
-        return await this.elements.noMatchfoundMsg.textContent();
+        return await this.noMatchfoundMsg.textContent();
     }
 
     async clickConfirmCancel() {
         await this.page.waitForSelector('#popup-cancel');
-        return this.elements.confirmCancelBtn.click();
+        return this.confirmCancelBtn.click();
     }
 
      async bulkActivateForms(formNames: string[]) {
         for (let i = 0; i < formNames.length; i++) {
             await this.selectParticularForm(formNames[i]);
         }
-        await this.utils.waitForItemToBeClickable(this.elements.publishBtn, 5000);
-        await this.elements.publishBtn.click();
+        await this.utils.waitForItemToBeClickable(this.publishBtn, 5000);
+        await this.publishBtn.click();
         await expect(this.page.locator('popover-container.bulk-operations')).toBeVisible(5000);
         await this.clickConfirmBtn('publish');
         return CommonUIUtils.waitUntilIconLoaderDone(this.page);
@@ -269,11 +270,11 @@ export class ManageFormsPO {
         const promises:any = [];
         formNames.forEach(formName => promises.push(this.selectParticularForm(formName)));
         await Promise.all(promises);
-        const isEnabled = await this.elements.unpublishBtn.isEnabled();
+        const isEnabled = await this.unpublishBtn.isEnabled();
         if (!isEnabled) {
-            await expect(this.elements.unpublishBtn).toBeEnabled(this.defaultTimeoutInMillis);
+            await expect(this.unpublishBtn).toBeEnabled(this.defaultTimeoutInMillis);
         }
-        await this.elements.unpublishBtn.click();
+        await this.unpublishBtn.click();
         await expect(this.page.locator('popover-container.bulk-operations')).toBeVisible(5000);
         await this.clickConfirmBtn('unpublish');
         return CommonUIUtils.waitUntilIconLoaderDone(this.page);
