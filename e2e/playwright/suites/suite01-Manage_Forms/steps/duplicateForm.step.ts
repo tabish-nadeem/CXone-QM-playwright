@@ -13,10 +13,10 @@ import { ModuleExports } from "../../../../common/qmDefaultData";
 
 let browser : any, 
     utils : any, 
-    manageFormsPO : any, 
-    duplicateFormModalPO : any, 
+    manageFormsPO : ManageFormsPO, 
+    duplicateFormModalPO : DuplicateFormModalPO, 
     newOnPrepare : any, 
-    loginPage : any, 
+    loginPage : LoginPage, 
     userDetails : any, 
     userToken : any, 
     dateFormat: any, 

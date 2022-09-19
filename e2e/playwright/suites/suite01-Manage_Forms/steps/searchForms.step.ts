@@ -14,13 +14,13 @@ import { OnPrepare } from '../../../../playwright.config';
 let browser: any,
     userToken:any,
     userDetails:any,
-    loginPage: any,
+    loginPage: LoginPage,
     sampleFormData: any,
     newOnPrepare:any,
     formDetails:any,
-    utils:any,
-    manageFormsPO: any,
-    omnibarPO: any,
+    utils:Utils,
+    manageFormsPO: ManageFormsPO,
+    omnibarPO: OmnibarPO,
     formNames: any = {},
     createForms :any= []
 let page: Page;

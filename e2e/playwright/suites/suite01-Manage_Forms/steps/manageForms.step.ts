@@ -12,9 +12,9 @@ import { OmnibarPO } from "../../../../pageObjects/OmnibarPO";
 import { ManageFormsPO } from "../../../../pageObjects/ManageFormsPO";
 
 let browser: any,
-    utils: any,
-    manageFormsPO: any,
-    omnibarPO: any,
+    utils: Utils,
+    manageFormsPO: ManageFormsPO,
+    omnibarPO: OmnibarPO,
     newOnPrepare: any,
     loginPage: any,
     userDetails: any,

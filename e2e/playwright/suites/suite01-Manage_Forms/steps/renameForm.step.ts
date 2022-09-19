@@ -13,12 +13,12 @@ import { RenameFormModalPO } from '../../../../pageObjects/RenameFormModalPO';
 import { OnPrepare } from "../../../../playwright.config";
 
 let browser: any,
-    utils: any,
-    omnibarPO: any,
-    manageFormsPO:any,
-    renameFormModalPO: any,
+    utils: Utils,
+    omnibarPO: OmnibarPO,
+    manageFormsPO:ManageFormsPO,
+    renameFormModalPO: RenameFormModalPO,
     newOnPrepare:any,
-    loginPage: any,
+    loginPage: LoginPage,
     userDetails: any,
     formDetails: any,
     userToken: any,
