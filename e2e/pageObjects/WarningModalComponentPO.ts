@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { Page ,expect} from "@playwright/test";
-import { ExpectedCondition as EC } from 'expected-condition-playwright';
 import { Utils } from '../common/utils';
 
 let browser: any;

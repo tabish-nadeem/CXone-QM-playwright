@@ -1,7 +1,7 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "cucumber";
 import { BrowserContext, Page, expect, chromium } from "@playwright/test";
-import { OmnibarPO } from "../../../../pageObjects/omnibar.po";
-import { ManageFormsPO } from "../../../../pageObjects/manage-forms.po";
+import { OmnibarPO } from "../../../../pageObjects/OmnibarPO";
+import { ManageFormsPO } from "../../../../pageObjects/ManageFormsPO";
 import { Utils } from '../../../../common/utils';
 import { AccountUtils } from '../../../../common/AccountUtils';
 import { CommonQMNoUIUtils } from '../../../../common/CommonQMNoUIUtils';
@@ -66,7 +66,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
         await browser.close();
 });
 
-Given("should create multiple forms and search form by numbers on grid : P1", { timeout: 60 * 1000 }, async () => {
+Given("Should create multiple forms and search form by numbers on grid : P1", { timeout: 60 * 1000 }, async () => {
 
         formDetails = [
             {
@@ -123,12 +123,12 @@ Given("should create multiple forms and search form by numbers on grid : P1", { 
         expect(await omnibarPO.getItemCountLabel()).toEqual([await manageFormsPO.getNumberOfRows() + ' form']);
 });
 
-When("should create multiple forms and search form by alphabets on grid : P1" , { timeout: 60 * 1000 }, async () => {
+When("Should create multiple forms and search form by alphabets on grid : P1" , { timeout: 60 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid('Form1');
     expect(await omnibarPO.getItemCountLabel()).toEqual([await manageFormsPO.getNumberOfRows() + ' forms']);
 })
 
-Then("should  verify that appropriate message should be displayed on grid if no matches found to user for his search string : P1" ,{ timeout: 60 * 1000 }, async () => {
+Then("Should  verify that appropriate message should be displayed on grid if no matches found to user for his search string : P1" ,{ timeout: 60 * 1000 }, async () => {
     await manageFormsPO.searchFormInGrid('Forms');
     expect(await manageFormsPO.getNoMatchFoundMsg()).toEqual(utils.getExpectedString('manageFormsPage.noItemsOverlay'));
 })
