@@ -70,7 +70,7 @@ export class MultiSelectDropdownPo {
     }
 
     public async selectMulitpleItemsByLabels(labels: string | any[],searchEnabled?: any) {
-        let promiseArray = [];
+        let promiseArray:any = [];
         await this.open();
         for (let i = 0; i < labels.length; i += 1) {
             if (searchEnabled) {    
