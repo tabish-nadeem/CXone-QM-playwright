@@ -4,7 +4,6 @@ import { SingleselectDropdownPO } from './SingleselectDropdownPO';
 
 export class ScoringModalComponentPo {
     readonly page: Page;
-    public elements : any;
     public locators : any;
     public modalWrapper;
     public scoringModalTitle;
@@ -66,73 +65,73 @@ export class ScoringModalComponentPo {
 
 
     getScoringModal() {
-        return this.elements.modalWrapper;
+        return this.modalWrapper;
     }
 
     async getValidationMessages(): Promise<string> {
-        return this.elements.scoringValidationMsg.textContent();
+        return this.scoringValidationMsg.textContent();
     }
 
     async getResetButton(): Promise<Locator> {
-        await expect(this.elements.resetButton).toBeVisible(10000);
-        return this.elements.resetButton;
+        await expect(this.resetButton).toBeVisible(10000);
+        return this.resetButton;
     }
 
     async clickResetButton(): Promise<any> {
-        await expect(this.elements.resetButton).toBeVisible(10000);
-        await this.elements.resetButton.click();
+        await expect(this.resetButton).toBeVisible(10000);
+        await this.resetButton.click();
     }
 
     async clickEnableScoring(): Promise<any> {
-        await expect(this.elements.enableScoringCheckbox).toBeVisible(10000);
-        await this.page.evaluate('arguments[0].click();',this.elements.enableScoringCheckbox)
+        await expect(this.enableScoringCheckbox).toBeVisible(10000);
+        await this.page.evaluate('arguments[0].click();',this.enableScoringCheckbox)
         await expect(this.page.locator('.modal-body-wrapper *[disabled="false"]')).toBeVisible(10000);
     }
 
     async clickEnableRanking(): Promise<any> {
-        await expect(this.elements.enableRankingCheckbox).toBeVisible(10000);
-        await this.page.evaluate('arguments[0].click();',this.elements.enableRankingCheckbox);
+        await expect(this.enableRankingCheckbox).toBeVisible(10000);
+        await this.page.evaluate('arguments[0].click();',this.enableRankingCheckbox);
     }
 
     async getSaveButton(): Promise<Locator> {
-        return this.elements.saveBtn;
+        return this.saveBtn;
     }
 
     async clickSaveButton(): Promise<any> {
-        await expect(this.elements.saveBtn).toBeVisible(10000);
-        await this.elements.saveBtn.click();
-        await expect(this.elements.saveBtn).toBeHidden(10000);
+        await expect(this.saveBtn).toBeVisible(10000);
+        await this.saveBtn.click();
+        await expect(this.saveBtn).toBeHidden(10000);
     }
 
     async clickCloseModalButton(isDirty:boolean, clickOnYes:boolean): Promise<any> {
-        await this.elements.closeButton.click();
+        await this.closeButton.click();
         if (isDirty) {
-            await expect(this.elements.closeWarning).toBeVisible(10000);
+            await expect(this.closeWarning).toBeVisible(10000);
             if (clickOnYes) {
-                await this.elements.closeYesPopup.click();
+                await this.closeYesPopup.click();
             } else {
-                return this.elements.closeNoPopup.click();
+                return this.closeNoPopup.click();
             }
         }
-        await expect(this.elements.modalWrapper).toBeHidden(10000);
+        await expect(this.modalWrapper).toBeHidden(10000);
     }
 
     async getCancelModalButton(): Promise<any> {
-        return this.elements.cancelBtn;
+        return this.cancelBtn;
     }
 
     async clickCancelModalButton(isDirty:boolean, clickOnYes:boolean): Promise<any> {
-        await this.elements.cancelBtn.click();
+        await this.cancelBtn.click();
         if (isDirty) {
             if (clickOnYes) {
-                await expect(this.elements.cancelYesPopup).toBeVisible(10000);
-                await this.elements.cancelYesPopup.click();
+                await expect(this.cancelYesPopup).toBeVisible(10000);
+                await this.cancelYesPopup.click();
             } else {
-                await expect(this.elements.cancelNoPopup).toBeVisible(10000);
-                return this.elements.cancelNoPopup.click();
+                await expect(this.cancelNoPopup).toBeVisible(10000);
+                return this.cancelNoPopup.click();
             }
         }
-        await expect(this.elements.modalWrapper).toBeHidden(10000);
+        await expect(this.modalWrapper).toBeHidden(10000);
 
     }
 
@@ -164,8 +163,8 @@ export class ScoringModalComponentPo {
     }
 
     async clickAddARangeButton(): Promise<any> {
-        await expect(this.elements.addRange).toBeVisible(10000);
-        await this.elements.addRange.click();
+        await expect(this.addRange).toBeVisible(10000);
+        await this.addRange.click();
     }
 
     async addARange(index:any, fromRange:any, toRange:any, displayText:string): Promise<any> {
@@ -192,7 +191,7 @@ export class ScoringModalComponentPo {
     }
 
     private async getQuestionElement(questionText:string): Promise<Locator> {
-        let allElements = await this.elements.formElements;
+        let allElements = await this.formElements;
         for (let elem of allElements) {
             if ((await elem.element(this.locators.questionText).textContent()).replace(/\n/g, ' ').includes(questionText)) {
                 return elem as Promise<Locator>;
@@ -246,22 +245,22 @@ export class ScoringModalComponentPo {
     }
 
     async clickSetRecordingTab(): Promise<any> {
-        await this.elements.modalWrapper.locator('.tab-title >> text = SET SCORING').click();
-        await expect(this.elements.enableScoringCheckbox).toBeVisible(10000);
+        await this.modalWrapper.locator('.tab-title >> text = SET SCORING').click();
+        await expect(this.enableScoringCheckbox).toBeVisible(10000);
         
     }
 
     async clickSetRankingTab(): Promise<any> {
-        await this.elements.modalWrapper.locator('.tab-title', 'SET RANKING').click();
-        await expect(this.elements.enableRankingCheckbox).toBeVisible(10000);
+        await this.modalWrapper.locator('.tab-title', 'SET RANKING').click();
+        await expect(this.enableRankingCheckbox).toBeVisible(10000);
     }
 
     async getCalculatedScore(): Promise<string> {
-        return (await this.elements.calculatedScore.textContent()).replace(/\n/g, ' ');
+        return (await this.calculatedScore.textContent()).replace(/\n/g, ' ');
     }
 
     async getCurrentPoints(): Promise<string> {
-        return (await this.elements.currentPoints.textContent()).replace(/\n/g, ' ');
+        return (await this.currentPoints.textContent()).replace(/\n/g, ' ');
     }
 
     async clickQuestionOption(questionText:string, optionIndex:any): Promise<any> {

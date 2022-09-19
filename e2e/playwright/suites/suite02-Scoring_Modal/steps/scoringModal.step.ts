@@ -59,7 +59,7 @@ BeforeAll({ timeout: 300 * 1000 }, async () => {
 AfterAll({ timeout: 400 * 1000}, async () =>{
     await FeatureToggleUtils.removeTenantFromFeature(FEATURE_TOGGLES.angular8_migration_spring20, userDetails.orgName, userToken);
     await loginPage.logout();
-})
+});
 
 
 
