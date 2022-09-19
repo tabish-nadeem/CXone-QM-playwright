@@ -1,44 +1,66 @@
 import {expect, Locator, Page} from "@playwright/test";
 
-import { SingleselectDropdownPO } from './singleselect-dropdown.po';
+import { SingleselectDropdownPO } from './SingleselectDropdownPO';
 
 export class ScoringModalComponentPo {
     readonly page: Page;
     public elements : any;
     public locators : any;
-
+    public modalWrapper;
+    public scoringModalTitle;
+    public resetButton;
+    public saveBtn;
+    public cancelBtn;
+    public cancelWarning;
+    public cancelNoPopup;
+    public cancelYesPopup;
+    public closeButton;
+    public closeWarning;
+    public closeNoPopup;
+    public closeYesPopup;
+    public enableScoringCheckbox;
+    public enableRankingCheckbox;
+    public rankingLabel;
+    public addRange;
+    public scoringValidationMsg;
+    public calculatedScore;
+    public currentPoints;
+    public formElements;
+    public questionText;
+    public scorableCheckbox;
+    public maxPointSeletionLabel;
+    public options;
+    public scoreTextBox;
+    public sectionScore;
+    public requiredIcon;
     constructor(){
-        this.elements = {
-            modalWrapper: this.page.locator('.scoring-modal-wrapper * .cxone-modal-wrapper'),
-            scoringModalTitle: this.page.locator('.headerTitle'),
-            resetButton: this.page.locator('#scoring-modal-reset-btn'),
-            saveBtn: this.page.locator('#scoring-modal-footer-save-btn'),
-            cancelBtn: this.page.locator('#scoring-modal-footer-cancel-btn'),
-            cancelWarning: this.page.locator('cancel-popover-wrapper'),
-            cancelNoPopup: this.page.locator('#popup-cancel-no'),
-            cancelYesPopup: this.page.locator('#popup-cancel-yes'),
-            closeButton: this.page.locator('.modal-header-wrapper *.close-button'),
-            closeWarning: this.page.locator('.popover-content .closing-popup'),
-            closeNoPopup: this.page.locator('#close-popover'),
-            closeYesPopup: this.page.locator('#exit-yes-btn'),
-            enableScoringCheckbox: this.page.locator('[checkboxid="form-designer-enable-scoring-chk-box"] .cxone-checkbox input'),
-            enableRankingCheckbox: this.page.locator('[checkboxid="form-designer-ranking-enable-checkbox"] .cxone-checkbox'),
-            rankingLabel: this.page.locator('.note-ms-lbl'),
-            addRange: this.page.locator('#form-designer-ranking-add-btn'),
-            scoringValidationMsg: this.page.locator('[class*="error-label"]'),
-            calculatedScore: this.page.locator('.calculated-score'),
-            currentPoints: this.page.locator('.current-points'),
-            formElements: this.page.locator('.scoring-area .element-outer-wrapper')
-        }
-        this.locators = {
-            questionText: this.page.locator('.element-info-question'),
-            scorableCheckbox: this.page.locator('input[name*="scorableCheckbox"]'),
-            maxPointSeletionLabel: this.page.locator('.max-points-section'),
-            options: this.page.locator('.choice-row * input[id*="form-designer"]'),
-            scoreTextBox: this.page.locator('.numeric-selector-value'),
-            sectionScore: this.page.locator('.section-score-value'),
-            requiredIcon: this.page.locator('[class="icon mandatory"]')
-        }
+            this.modalWrapper= this.page.locator('.scoring-modal-wrapper * .cxone-modal-wrapper');
+            this.scoringModalTitle= this.page.locator('.headerTitle');
+            this.resetButton= this.page.locator('#scoring-modal-reset-btn');
+            this.saveBtn= this.page.locator('#scoring-modal-footer-save-btn');
+            this.cancelBtn= this.page.locator('#scoring-modal-footer-cancel-btn');
+            this.cancelWarning= this.page.locator('cancel-popover-wrapper');
+            this.cancelNoPopup= this.page.locator('#popup-cancel-no');
+            this.cancelYesPopup= this.page.locator('#popup-cancel-yes');
+            this.closeButton= this.page.locator('.modal-header-wrapper *.close-button');
+            this.closeWarning= this.page.locator('.popover-content .closing-popup');
+            this.closeNoPopup= this.page.locator('#close-popover');
+            this.closeYesPopup= this.page.locator('#exit-yes-btn');
+            this.enableScoringCheckbox= this.page.locator('[checkboxid="form-designer-enable-scoring-chk-box"] .cxone-checkbox input');
+            this.enableRankingCheckbox= this.page.locator('[checkboxid="form-designer-ranking-enable-checkbox"] .cxone-checkbox');
+            this.rankingLabel= this.page.locator('.note-ms-lbl');
+            this.addRange= this.page.locator('#form-designer-ranking-add-btn');
+            this.scoringValidationMsg= this.page.locator('[class*="error-label"]');
+            this.calculatedScore= this.page.locator('.calculated-score');
+            this.currentPoints= this.page.locator('.current-points');
+            this.formElements= this.page.locator('.scoring-area .element-outer-wrapper');
+            this.questionText= this.page.locator('.element-info-question');
+            this.scorableCheckbox= this.page.locator('input[name*="scorableCheckbox"]');
+            this.maxPointSeletionLabel= this.page.locator('.max-points-section');
+            this.options= this.page.locator('.choice-row * input[id*="form-designer"]');
+            this.scoreTextBox= this.page.locator('.numeric-selector-value');
+            this.sectionScore= this.page.locator('.section-score-value'),
+            this.requiredIcon= this.page.locator('[class="icon mandatory"]')
 
     }
 
