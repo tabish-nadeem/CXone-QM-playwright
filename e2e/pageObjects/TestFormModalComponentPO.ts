@@ -1,56 +1,74 @@
 import {expect, Locator, Page} from "@playwright/test";
-import {MultiselectDropdownPO} from 'cxone-components/multiselect-dropdown.po';
+import { MultiSelectDropdownPo } from "./MultiselectDropdownPO";
 import { SingleselectDropdownPO } from "./SingleselectDropdownPO";
 
 
 export class TestFormModalComponentPo {
     readonly page:Page;
-    readonly elements:any;
-    readonly locators:any;
+    public modalWrapper: Locator;
+    public modalTitle: Locator;
+    public logo: Locator;
+    public score: Locator;
+    public validateButton: Locator;
+    public cancelButton: Locator;
+    public formElements: Locator;
+    public closeButton: Locator;
+    public headers: Locator;
+    public required: Locator;
+    public critical: Locator;
+    public choices: Locator;
+    public datePicker: Locator;
+    public timePicker: Locator;
+    public shortText: Locator;
+    public textArea: Locator;
+    public elementText: Locator;
+    public hyperlink: Locator;
+    public dropdown: Locator;
+    public errorMessage: Locator;
+    public sectionScore: Locator;
+
 
     constructor(){
 
-        this.elements = {
-            modalWrapper: this.page.locator('.test-form-modal-wrapper * .cxone-modal-wrapper'),
-            modalTitle: this.page.locator('.headerTitle'),
-            logo: this.page.locator('#form-designer-logo-theme-image'),
-            score: this.page.locator('.score-percentage'),
-            validateButton: this.page.locator('.save-btn'),
-            cancelButton: this.page.locator('.cancel-btn'),
-            formElements: this.page.locator('.preview-area [class*="form-element-div"] .elements-list-wrapper'),
-            closeButton: this.page.locator('.save-btn'),
-            headers: this.page.locator('.header-box')
-        }
-        this.locators = {
-            required: this.page.locator('span.mandatory'),
-            critical: this.page.locator('span.critical-question'),
-            choices: this.page.locator('.test-form-modal-wrapper .choice-row [id*="form-designer"]'),
-            datePicker: this.page.locator('.test-form-modal-wrapper * [id*="cxone-date-picker-"]'),
-            timePicker: this.page.locator('.test-form-modal-wrapper *.cxone-time-picker * input'),
-            shortText: this.page.locator('.test-form-modal-wrapper * #form-designer-answer-text-field * input'),
-            textArea: this.page.locator('.test-form-modal-wrapper * .form-element-textarea * textarea'),
-            elementText: this.page.locator('.element-info-question'),
-            hyperlink: this.page.locator('.test-form-modal-wrapper * .form-element-hyperlink * .element-text * span'),
-            dropdown: this.page.locator('.test-form-modal-wrapper * .form-designer-dropdown'),
-            errorMessage: this.page.locator('.form-designer-error-msg'),
-            sectionScore: this.page.locator('.section-score .current-points')
-        }
+            this.modalWrapper = this.page.locator('.test-form-modal-wrapper * .cxone-modal-wrapper');
+            this.modalTitle = this.page.locator('.headerTitle');
+            this.logo = this.page.locator('#form-designer-logo-theme-image');
+            this.score = this.page.locator('.score-percentage');
+            this.validateButton = this.page.locator('.save-btn');
+            this.cancelButton = this.page.locator('.cancel-btn');
+            this.formElements = this.page.locator('.preview-area [class*="form-element-div"] .elements-list-wrapper');
+            this.closeButton = this.page.locator('.save-btn');
+            this.headers = this.page.locator('.header-box');
+
+            this.required = this.page.locator('span.mandatory');
+            this.critical = this.page.locator('span.critical-question');
+            this.choices = this.page.locator('.test-form-modal-wrapper .choice-row [id*="form-designer"]');
+            this.datePicker = this.page.locator('.test-form-modal-wrapper * [id*="cxone-date-picker-"]');
+            this.timePicker = this.page.locator('.test-form-modal-wrapper *.cxone-time-picker * input');
+            this.shortText = this.page.locator('.test-form-modal-wrapper * #form-designer-answer-text-field * input');
+            this.textArea = this.page.locator('.test-form-modal-wrapper * .form-element-textarea * textarea');
+            this.elementText = this.page.locator('.element-info-question');
+            this.hyperlink = this.page.locator('.test-form-modal-wrapper * .form-element-hyperlink * .element-text * span');
+            this.dropdown = this.page.locator('.test-form-modal-wrapper * .form-designer-dropdown');
+            this.errorMessage = this.page.locator('.form-designer-error-msg');
+            this.sectionScore = this.page.locator('.section-score .current-points');
+        
     }
 
 
     getTestFormModal() {
-        return this.elements.modalWrapper;
+        return this.modalWrapper;
     }
 
     getLogo() {
-        return this.elements.logo;
+        return this.logo;
     }
 
     async getQuestionElement(questionText): Promise<Locator> {
-        let allElements = await this.elements.formElements;
+        let allElements = await this.formElements;
         for (let elem of allElements) {
             if (elem.isDisplayed()) {
-                if ((await elem.element(this.locators.elementText).textContent()).replace(/\n/g, ' ').includes(questionText)) {
+                if ((await elem.element(this.elementText).textContent()).replace(/\n/g, ' ').includes(questionText)) {
                     await this.page.evaluate('arguments[0].scrollIntoView()', elem.getWebElement());
                     return elem as Promise<Locator>;
                 }
@@ -73,11 +91,11 @@ export class TestFormModalComponentPo {
 
     async selectChoices(questionText, choiceIndex): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        await this.page.evaluate('arguments[0].click();', (await elem.all(this.locators.choices))[choiceIndex]);
+        await this.page.evaluate('arguments[0].click();', (await elem.all(this.choices))[choiceIndex]);
     }
 
     async getHeaders(): Promise<string> {
-        let headers = await this.elements.headers.textContent();
+        let headers = await this.headers.textContent();
         // @ts-ignore
         return headers.map(header => {
             return header.replace('\n', '');
@@ -86,62 +104,62 @@ export class TestFormModalComponentPo {
 
     async selectDate(questionText, date): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        await elem.element(this.locators.datePicker).clear();
-        await elem.element(this.locators.datePicker).type(date);
+        await elem.element(this.datePicker).clear();
+        await elem.element(this.datePicker).type(date);
     }
 
     async selectTime(questionText, time): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        await elem.element(this.locators.datePicker).clear();
-        await elem.element(this.locators.datePicker).type(time);
+        await elem.element(this.datePicker).clear();
+        await elem.element(this.datePicker).type(time);
     }
 
     async enterShortText(questionText, text): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        await elem.element(this.locators.shortText).clear();
-        await elem.element(this.locators.shortText).type(text);
+        await elem.element(this.shortText).clear();
+        await elem.element(this.shortText).type(text);
     }
 
     async enterTextArea(questionText, text): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        await elem.element(this.locators.textArea).clear();
-        await elem.element(this.locators.textArea).type(text);
+        await elem.element(this.textArea).clear();
+        await elem.element(this.textArea).type(text);
     }
 
     async clickHyperLink(questionText): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        await elem.element(this.locators.hyperlink).click();
+        await elem.element(this.hyperlink).click();
     }
 
     async getErrorMessage(questionText): Promise<string> {
         const elem = await this.getQuestionElement(questionText);
-        return elem.element(this.locators.errorMessage).textContent();
+        return elem.element(this.errorMessage).textContent();
     }
 
     async selectSingleSelectDropDown(questionText, labelToSelect): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        let dropdownPO = new SingleselectDropdownPO(elem.element(this.locators.dropdown));
+        let dropdownPO = new SingleselectDropdownPO(elem.element(this.dropdown));
         return dropdownPO.selectItem(labelToSelect);
     }
 
     async selectMultiSelectDropDown(questionText, labelToSelect): Promise<any> {
         const elem = await this.getQuestionElement(questionText);
-        let dropdownPO = new MultiselectDropdownPO(elem.element(this.locators.dropdown));
-        return dropdownPO.selectItem(labelToSelect, false);
+        let dropdownPO = new MultiSelectDropdownPo(elem.element(this.dropdown));
+        return dropdownPO.selectMulitpleItemsByLabels(labelToSelect, false);
     }
 
     async clickOnValidateButton() {
-        await expect(this.elements.validateButton).toBeVisible(10000);
-        return this.elements.validateButton.click();
+        await expect(this.validateButton).toBeVisible(10000);
+        return this.validateButton.click();
     }
 
     async getScore() {
-        return this.elements.score.textContent();
+        return this.score.textContent();
     }
 
     async getSectionScore(questionText) {
         const elem = await this.getQuestionElement(questionText);
-        return elem.element(this.locators.sectionScore).textContent();
+        return elem.element(this.sectionScore).textContent();
 
     }
 }
