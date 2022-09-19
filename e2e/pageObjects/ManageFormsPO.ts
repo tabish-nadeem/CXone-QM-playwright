@@ -17,7 +17,22 @@ export class ManageFormsPO {
     readonly utils:Utils;
     readonly page:Page;
     readonly uiConstants: UIConstants;
-    readonly elements: any;
+      public container :Locator
+      public gridComponent:Locator
+      public header:Locator
+      public newFormBtn:Locator
+      public currentUserName:Locator
+      public publishBtn:Locator
+      public unpublishBtn:Locator
+      public bulkDeleteBtn:Locator
+      public spinner:Locator
+      public delPublishFormPopover:Locator
+      public clickConfirmDelete:Locator
+      public confirmCancelBtn:Locator
+      public row:Locator
+      public noMatchfoundMsg:Locator
+    
+
     // elements: { container: any; gridComponent: any; header: any; newFormBtn: any; currentUserName: any; publishBtn: any; unpublishBtn: any; bulkDeleteBtn: any; spinner: any; delPublishFormPopover: any; clickConfirmDelete: any; confirmCancelBtn: any; row: any; noMatchfoundMsg: any; };
 
     public constructor(page?: Page, defaultTimeoutInMillis = 20000) {
@@ -25,22 +40,21 @@ export class ManageFormsPO {
         this.page = page;
         this.utils = new Utils(page);
         this.uiConstants = new UIConstants();
-        this.elements = {
-            container: this.page.locator('#ng2-manage-forms-page'),
-            gridComponent: this.page.locator('cxone-grid'),
-            header: this.page.locator('#manage-forms-page-title'),
-            newFormBtn: this.page.locator('#createForm'),
-            currentUserName: this.page.locator('#simple-dropdown div.titleText'),
-            publishBtn: this.page.locator('#bulk-btn-activate'),
-            unpublishBtn: this.page.locator('#bulk-btn-deactivate'),
-            bulkDeleteBtn: this.page.locator('#bulk-btn-delete'),
-            spinner: this.page.locator('.cxonespinner .spinner.spinner-bounce-middle'),
-            delPublishFormPopover: this.page.locator('popover-container.tooltip-popover-style'),
-            clickConfirmDelete: this.page.locator('button, input[type="button"], input[type="submit"] >> text = "Yes"'),
-            confirmCancelBtn: this.page.locator('#popup-cancel'),
-            row: this.page.locator('#manage-forms-grid div.ag-center-cols-viewport div[row-index]'),
-            noMatchfoundMsg: this.page.locator('#manage-forms-grid span.no-rows-overlay-text')
-        };
+         this.container = this.page.locator('#ng2-manage-forms-page'),
+            this.gridComponent = this.page.locator('cxone-grid'),
+            this.header = this.page.locator('#manage-forms-page-title'),
+            this.newFormBtn = this.page.locator('#createForm'),
+            this.currentUserName = this.page.locator('#simple-dropdown div.titleText'),
+            this.publishBtn = this.page.locator('#bulk-btn-activate'),
+            this.unpublishBtn = this.page.locator('#bulk-btn-deactivate'),
+            this.bulkDeleteBtn = this.page.locator('#bulk-btn-delete'),
+            this.spinner = this.page.locator('.cxonespinner .spinner.spinner-bounce-middle'),
+            this.delPublishFormPopover = this.page.locator('popover-container.tooltip-popover-style'),
+            this.clickConfirmDelete =this.page.locator('button, input[type="button"], input[type="submit"] >> text = "Yes"'),
+            this.confirmCancelBtn= this.page.locator('#popup-cancel'),
+            this.row = this.page.locator('#manage-forms-grid div.ag-center-cols-viewport div[row-index]'),
+            this.noMatchfoundMsg = this.page.locator('#manage-forms-grid span.no-rows-overlay-text')
+     
     }
 
 <<<<<<< HEAD
@@ -49,8 +63,8 @@ export class ManageFormsPO {
     //     return await navigateQuicklyTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'), fdUtils.getPageIdentifierUrls('qp.qpPlanManager'));
     // }
 
-    async navigateTo() {        
-        return await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
+    // async navigateTo() {        
+    //     return await navigateTo(fdUtils.getPageIdentifierUrls('forms.form_Manager'), this.page.locator('#ng2-manage-forms-page #manage-forms-grid'));
 =======
     async navigate() {
         let baseUrl = this.uiConstants.URLS.LOCALHOST

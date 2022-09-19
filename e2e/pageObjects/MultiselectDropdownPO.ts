@@ -12,27 +12,27 @@ import { UIConstants } from "../common/uiConstants"
 import { URLs } from "../common/pageIdentifierURLs"
 
 export class MultiSelectDropdownPo {
-    selectItem(arg0: string) {
-        throw new Error("Method not implemented.");
-    }
-    getDisplayedSelection() {
-        throw new Error("Method not implemented.");
-    }
+   
     public elements:Locator
     readonly page:Page;
     utils: Utils;
+   public caret             :Locator
+   public allChoiceRows:Locator
+   public choicesLabels:Locator
+   public inputText:Locator
+   public placeholder:Locator
+    
 
-    public constructor(ancestorElement?: any) {
+    public constructor(page:Page) {
         this.page = Page;
         this.utils = new Utils(this.page);
         this.page = Locator || this.page.locator(('.cxone-multiselect-dropdown'));
-        this.elements = {,
-            caret: this.page.locator(('.icon-carat')),
-            allChoiceRows: this.page.locator(('.item-row:not([class~="active"])')),
-            choicesLabels: this.page.locator(('.option-content')),
-            inputText: this.page.locator(('.search-wrapper input')),
-            placeholder: this.page.locator(('[class~="button-text"]'))
-        };
+        this.caret = this.page.locator(('.icon-carat')),
+        this.allChoiceRows = this.page.locator(('.item-row:not([class~="active"])')),
+        this.choicesLabels =this.page.locator(('.option-content')),
+        this.inputText = this.page.locator(('.search-wrapper input')),
+        this.placeholder = this.page.locator(('[class~="button-text"]'))
+       
     }
 
     public async isOpen() {
@@ -40,7 +40,7 @@ export class MultiSelectDropdownPo {
     }
 
     public async toggleOpened() {
-        return await this.elements.caret.click();
+        return await this.caret.click();
     }
 
     public async getSelectedCount() {
@@ -51,16 +51,16 @@ export class MultiSelectDropdownPo {
     public async open() {
         let temp = await this.isOpen();
         if (!temp) {
-            await this.elements.caret.click();
+            await this.caret.click();
             await Utils.waitUntilVisible(this.page.locator(('.options-wrapper')));
         }
     }
 
     public async selectItemByLabel(label: any) {
         await this.open();
-        await this.elements.inputText.clear();
-        await this.elements.inputText.sendKeys(label);
-        return await this.elements.allChoiceRows.first().click();
+        await this.inputText.fill('');
+        await this.inputText.type(label);
+        return await this.allChoiceRows.first().click();
     }
 
     public async selectItemByLabelNoSearch(label: any) {
@@ -73,7 +73,7 @@ export class MultiSelectDropdownPo {
         let promiseArray = [];
         await this.open();
         for (let i = 0; i < labels.length; i += 1) {
-            if (searchEnabled) {
+            if (searchEnabled) {    
                 promiseArray.push(this.selectItemByLabel(labels[i]));
             } else {
                 promiseArray.push(this.selectItemByLabelNoSearch(labels[i]));
@@ -83,7 +83,7 @@ export class MultiSelectDropdownPo {
     }
 
     public async getPlaceholderText() {
-        return await this.elements.placeholder.getText();
+        return await this.placeholder.getText();
     }
 
     public async selectAllClick() {
@@ -99,7 +99,7 @@ export class MultiSelectDropdownPo {
     public async close() {
         let isOpened = await this.isOpen();
         if (isOpened) {
-            await this.elements.caret.click();
+            await this.caret.click();
         }
     }
 }

@@ -2,11 +2,6 @@ import { RadioPO } from 'cxone-components/radio.po';
 import {expect, Locator, Page} from "@playwright/test";
 import { Utils } from "../common/utils";
 
-
-
-
-
-
 export class EvaluationTypePO {
     public collaborativeRadio: RadioPO;
     public standardRadio: RadioPO;

@@ -95,7 +95,7 @@ AfterAll({ timeout: 60 * 1000 }, async () => {
     await browser.close();
 });
 
-Given("Step-1: should check if Category Manager has loaded successfully", { timeout: 60 * 1000 }, async () => {
+Given(" should check if Category Manager has loaded successfully", { timeout: 60 * 1000 }, async () => {
 
     let currentElement:any;
     currentElement = categoryManager.getCategoryFolder(categories.customCategories);
@@ -111,7 +111,7 @@ Given("Step-1: should check if Category Manager has loaded successfully", { time
 
 })
 
-When("Step-2: should be able to create a new category under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
+When(" should be able to create a new category under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
 
     let data = {
         categoryName: 'My Custom Category',
@@ -126,7 +126,7 @@ When("Step-2: should be able to create a new category under Custom Categories Gr
 
 });
 
-Then("Step-3: should be able to edit a category under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
+Then(" should be able to edit a category under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
 
     let data = {
         oldCategoryName: 'My Custom Category',
@@ -146,7 +146,7 @@ Then("Step-3: should be able to edit a category under Custom Categories Group", 
 
 });
 
-Then("Step-4: should be able to delete a category under Custom Categories", { timeout: 60 * 1000 }, async () => {
+Then(" should be able to delete a category under Custom Categories", { timeout: 60 * 1000 }, async () => {
 
     let data = {
         categoryName: 'My New Category',
@@ -164,7 +164,7 @@ Then("Step-4: should be able to delete a category under Custom Categories", { ti
 
 });
 
-Then("Step-5: should be able to create a new category folder under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
+Then("should be able to create a new category folder under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
 
     await categoryManager.navigate();
     let data = {
@@ -181,7 +181,7 @@ Then("Step-5: should be able to create a new category folder under Custom Catego
 
 });
 
-Then("Step-6: should be able to edit a category group under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
+Then(" should be able to edit a category group under Custom Categories Group", { timeout: 60 * 1000 }, async () => {
 
     let data = {
         oldFolderName: 'My Custom Folder',
@@ -200,7 +200,7 @@ Then("Step-6: should be able to edit a category group under Custom Categories Gr
 
 });
 
-Then("Step-7: should be able to delete a category folder", { timeout: 60 * 1000 }, async () => {
+Then("should be able to delete a category folder", { timeout: 60 * 1000 }, async () => {
 
     let data = {
         folderName: 'My New Custom Folder'

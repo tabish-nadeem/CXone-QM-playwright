@@ -3,13 +3,14 @@ import {CheckboxPO} from 'cxone-components/checkbox.po';
 import {Utils} from '../common/utils';
 
 export class FeedbackFilterPo {
-    ancestor: Locator;
+    
     readonly page:Page;
     readonly utils: Utils;
 
 
-    public constructor(ancestor?: Locator) {
-        this.ancestor = ancestor || this.page.locator('.csat-score-filter');
+    public constructor(page:Page) {
+        this.page = page
+        // ancestor || this.page.locator('.csat-score-filter');
     }
 
     public async toggleFeedbackCheckBox(label: string) {

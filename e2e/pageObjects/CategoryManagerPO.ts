@@ -148,4 +148,4 @@ export class CategoryManagerPO {
         await CommonUIUtils.waitUntilIconLoaderDone(this.page);
         await this.page.waitForSelector(`.nice-cat-category-list`);
     }
-}
+}   

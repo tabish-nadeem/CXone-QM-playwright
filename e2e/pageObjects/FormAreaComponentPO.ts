@@ -5,62 +5,101 @@ import { Utils } from '../common/utils';
 
 
 export class FormAreaComponentPo {
-    readonly elements: any;
     readonly page: Page;
     readonly elementLocators: any;
     readonly utils: Utils;
     readonly spinner = new SpinnerPO('.apphttpSpinner .cxonespinner');
-
-    constructor() {
+    public  formArea                      :Locator
+    public  sectionDroppableArea:Locator
+    public  dropAreaForm:Locator
+    public  inlineToolbar:Locator
+    public  formQuestionElements:Locator
+    public  sectionQuestionElements:Locator
+    public  elementsTooltipBody:Locator
+    public  elementsTooltipTitle:Locator
+    public  elementsTooltipContent:Locator
+    public  elementNumber:Locator
+    public  froalaBold:Locator
+    public  froalaItalic:Locator
+    public  froalaUnderline:Locator
+    public  froalaFontFamily:Locator
+    public  froalaFontSize:Locator
+    public  froalaColorPicker:Locator
+    public  froalaAlignment:Locator
+    public  froalaColorInputField:Locator
+    public  froalaColorCodeSubmit:Locator
+    public  questionElement:Locator
+    public  requiredIcon:Locator
+    public  criticalQuestionIcon:Locator
+    public  questionText:Locator
+    public  timeElement:Locator
+    public  addRulesIcon:Locator
+    public  autoResponseIcon:Locator
+    public  copyElementIcon:Locator
+    public  saveElementIcon:Locator
+    public  deleteElementIcon:Locator
+    public  hintText:Locator
+    public  instructionsText:Locator
+    public  sectionDropArea:Locator
+    public  singleSelectDropDown:Locator
+    public  multiSelectDropDown:Locator
+    public  textBox:Locator
+    public  textArea:Locator
+    public  checkboxWrappers:Locator
+    public  yesNoWrappers:Locator
+    public  radioWrappers:Locator
+    public  datePickerWrapper:Locator
+    public  timePickerWrapper:Locator
+    public  requiredText:Locator
+    constructor(page:Page) {
+        this.page = page
         this.page  = this.page.locator('.form-area-wrapper')
-        this.elements = {
-            formArea: this.page.locator('#form-designer-form-area'),
-            sectionDroppableArea: this.page.locator('.section-droppable-area section-style'),
-            dropAreaForm: this.page.locator('#droppable-area'),
-            inlineToolbar: this.page.locator('xpath=//*[contains(@class,"fr-toolbar") and contains(@style, "display: block")]'),
-            formQuestionElements: this.page.locator('.form-element-div'),
-            sectionQuestionElements: this.page.locator('.section-form-element-div'),
-            elementsTooltipBody: this.page.locator('.popover-body'),
-            elementsTooltipTitle: this.page.locator('.components-tooltip-title'),
-            elementsTooltipContent: this.page.locator('.components-tooltip-content'),
-            elementNumber: this.page.locator('.element-numbering'),
-            froalaBold: this.page.locator('[id*="bold-"] i'),
-            froalaItalic: this.page.locator('[id*="italic-"] i'),
-            froalaUnderline: this.page.locator('[id*="underline-"] i'),
-            froalaFontFamily: this.page.locator('[id*="fontFamily-"] i'),
-            froalaFontSize: this.page.locator('[id*="fontSize-"] i'),
-            froalaColorPicker: this.page.locator('[id*="color-"] i'),
-            froalaAlignment: this.page.locator('[id*="align-"] i'),
-            froalaColorInputField: this.page.locator('[id*="fr-color-hex-layer-text"]'),
-            froalaColorCodeSubmit: this.page.locator('.fr-submit >> text = OK')
-        };
-        this.elementLocators = {
-            questionElement: this.page.locator('[class*="form-element-div"]'),
-            formArea: this.page.locator('#form-designer-form-area'),
-            requiredIcon: this.page.locator('[class="icon mandatory"]'),
-            criticalQuestionIcon: this.page.locator('[class="icon critical-question"]'),
-            questionText: this.page.locator('.element-info-question'),
-            timeElement: this.page.locator('.time-element'),
-            addRulesIcon: this.page.locator('[iconname="icon-Logic"]'),
-            autoResponseIcon: this.page.locator('[iconname="icon-Auto-Answer"]'),
-            copyElementIcon: this.page.locator('[iconname="icon-copy"]'),
-            saveElementIcon: this.page.locator('[iconname="icon-save"]'),
-            deleteElementIcon: this.page.locator('[iconname="icon-delete"]'),
-            hintText: this.page.locator('.textAreaSubTextForCharLimit'),
-            instructionsText: this.page.locator('.sub-text'),
-            sectionDropArea: this.page.locator('.section-droppable-area'),
-            singleSelectDropDown: this.page.locator('.cxone-singleselect-dropdown'),
-            multiSelectDropDown: this.page.locator('.cxone-multiselect-dropdown'),
-            textBox: this.page.locator('#form-designer-answer-text-field'),
-            textArea: this.page.locator('.answer-text-area-in-form-area ng-untouched'),
-            checkboxWrappers: this.page.locator('.designer-checkbox'),
-            yesNoWrappers: this.page.locator('.yesno-radio-btn'),
-            radioWrappers: this.page.locator('[ng-reflect-radio-id*="form-designer-radio-option"]'),
-            datePickerWrapper: this.page.locator('.cxone-datepicker-container'),
-            timePickerWrapper: this.page.locator('.cxone-time-picker'),
-            requiredText: this.page.locator('.element-info-attributes'),
-            actualQuestionText: this.page.locator('.fr-wrapper')
-        };
+        
+           this. formArea= this.page.locator('#form-designer-form-area'),
+           this. sectionDroppableArea = this.page.locator('.section-droppable-area section-style'),
+           this. dropAreaForm = this.page.locator('#droppable-area'),
+           this. inlineToolbar = this.page.locator('xpath=//*[contains(@class,"fr-toolbar") and contains(@style, "display: block")]'),
+           this. formQuestionElements = this.page.locator('.form-element-div'),
+           this. sectionQuestionElements = this.page.locator('.section-form-element-div'),
+           this. elementsTooltipBody = this.page.locator('.popover-body'),
+           this. elementsTooltipTitle = this.page.locator('.components-tooltip-title'),
+           this. elementsTooltipContent = this.page.locator('.components-tooltip-content'),
+           this. elementNumber = this.page.locator('.element-numbering'),
+           this. froalaBold = this.page.locator('[id*="bold-"] i'),
+           this. froalaItalic = this.page.locator('[id*="italic-"] i'),
+           this. froalaUnderline = this.page.locator('[id*="underline-"] i'),
+           this. froalaFontFamily = this.page.locator('[id*="fontFamily-"] i'),
+           this. froalaFontSize = this.page.locator('[id*="fontSize-"] i'),
+           this. froalaColorPicker = this.page.locator('[id*="color-"] i'),
+           this. froalaAlignment = this.page.locator('[id*="align-"] i'),
+           this. froalaColorInputField =this.page.locator('[id*="fr-color-hex-layer-text"]'),
+           this. froalaColorCodeSubmit = this.page.locator('.fr-submit >> text = OK')
+      
+           this. questionElement = this.page.locator('[class*="form-element-div"]'),
+           this. formArea = this.page.locator('#form-designer-form-area'),
+           this. requiredIcon = this.page.locator('[class="icon mandatory"]'),
+           this. criticalQuestionIcon = this.page.locator('[class="icon critical-question"]'),
+           this. questionText =this.page.locator('.element-info-question'),
+           this. timeElement = this.page.locator('.time-element'),
+           this. addRulesIcon =this.page.locator('[iconname="icon-Logic"]'),
+           this. autoResponseIcon = this.page.locator('[iconname="icon-Auto-Answer"]'),
+           this. copyElementIcon =this.page.locator('[iconname="icon-copy"]'),
+           this. saveElementIcon = this.page.locator('[iconname="icon-save"]'),
+           this. deleteElementIcon = this.page.locator('[iconname="icon-delete"]'),
+           this. hintText = this.page.locator('.textAreaSubTextForCharLimit'),
+           this. instructionsText = this.page.locator('.sub-text'),
+           this. sectionDropArea = this.page.locator('.section-droppable-area'),
+           this. singleSelectDropDown = this.page.locator('.cxone-singleselect-dropdown'),
+           this. multiSelectDropDown = this.page.locator('.cxone-multiselect-dropdown'),
+           this. textBox = this.page.locator('#form-designer-answer-text-field'),
+           this. textArea =this.page.locator('.answer-text-area-in-form-area ng-untouched'),
+           this. checkboxWrappers =this.page.locator('.designer-checkbox'),
+           this. yesNoWrappers = this.page.locator('.yesno-radio-btn'),
+           this. radioWrappers = this.page.locator('[ng-reflect-radio-id*="form-designer-radio-option"]'),
+           this. datePickerWrapper = this.page.locator('.cxone-datepicker-container'),
+           this. timePickerWrapper =this.page.locator('.cxone-time-picker'),
+           this. requiredText = this.page.locator('.element-info-attributes')
+       
     }
 
     /*
@@ -73,7 +112,7 @@ export class FormAreaComponentPo {
         let currentElement: any;
         let finalElemType = (elementType.toLowerCase() === 'date' || elementType.toLowerCase() === 'time')
             ? 'datetime' : elementType.toLowerCase();
-        let allElements = await this.elements.formArea.all(this.page.locator('[class*="form-element-div"][element-type=' + finalElemType + ']'));
+        let allElements = await this.page.formArea.all(this.page.locator('[class*="form-element-div"][element-type=' + finalElemType + ']'));
         for (let elem of allElements) {
             currentElement = elem;
             if (elementType.toLowerCase() === 'time') {
@@ -96,7 +135,7 @@ export class FormAreaComponentPo {
         let currentElement;
         let finalElemType = (elementType.toLowerCase() === 'date' || elementType.toLowerCase() === 'time')
             ? 'datetime' : elementType.toLowerCase();
-        let allElements = await this.elements.formArea.all(this.page.locator('[class*="section-form-element-div"][element-type=' + finalElemType + ']'));
+        let allElements = await this.page.formArea.all(this.page.locator('[class*="section-form-element-div"][element-type=' + finalElemType + ']'));
         for (let elem of allElements) {
             currentElement = elem;
             if (elementType.toLowerCase() === 'time') {
@@ -129,7 +168,7 @@ export class FormAreaComponentPo {
     }
 
     async getActualQuestionTextOfAnElement(index:any): Promise<string> {
-        let elem = this.elements.formQuestionElements.get(index);
+        let elem = this.page.formQuestionElements.get(index);
         return elem.element(this.elementLocators.actualQuestionText).getText() as Promise<string>;
     }
 
@@ -196,7 +235,7 @@ export class FormAreaComponentPo {
     }
 
     async getHintText(elementText:string, elementType:string): Promise<string> {
-        return (await this.getHintTextElement(elementText, elementType)).getText() as Promise<string>;
+        return (await this.getHintTextElement(elementText, elementType)).textContent() as Promise<string>;
     }
 
     async getInstructionsTextElement(elementText:string, elementType:string): Promise<Locator> {
@@ -205,12 +244,12 @@ export class FormAreaComponentPo {
     }
 
     async getInstructionText(elementText:string, elementType:string): Promise<string> {
-        return (await this.getInstructionsTextElement(elementText, elementType)).getText() as Promise<string>;
+        return (await this.getInstructionsTextElement(elementText, elementType)).textContent() as Promise<string>;
     }
 
     async getFormArea(): Promise<Locator> {
-        await expect(this.elements.formArea).toBeVisible(10000);
-        return this.elements.formArea;
+        await expect(this.page.formArea).isVisible(10000);
+        return this.page.formArea;
     }
 
     async clickFormArea(): Promise<any> {
@@ -219,19 +258,19 @@ export class FormAreaComponentPo {
 
     async mouseHoverOnElement(elementType): Promise<any> {
         let elem = '.components-panel *[element-type="' + elementType + '"]';
-        await expect(this.page.locator(elem)).toBeVisible(30000);
+        await expect(this.page.locator(elem)).isVisible(30000);
         await this.page.mouse.move(this.page.locator(elem));
         await this.page.locator(elem).hover();
     }
 
     async getElementTooltipTitle(): Promise<string> {
-        await expect(this.elements.elementsTooltipBody).toBeVisible(5000);
-        return await this.elements.elementsTooltipTitle.getText();
+        await expect(this.page.pageTooltipBody).isVisible(5000);
+        return await this.page.pageTooltipTitle.textContent();
     }
 
     async getElementTooltipContent(): Promise<string> {
-        await expect(this.elements.elementsTooltipBody).toBeVisible(5000);
-        return await this.elements.elementsTooltipContent.getText();
+        await expect(this.page.pageTooltipBody).isVisible(5000);
+        return await this.page.pageTooltipContent.textContent();
     }
 
     // async simulateDragDrop(from: WebElement, to: WebElement) {
@@ -252,7 +291,7 @@ export class FormAreaComponentPo {
 
     async dragElementToFormArea(elementType: string): Promise<any> {
         const from = await this.page.locator(`.cxone-form-element .draggable-item.cdk-drag[element-type="${elementType}"]`).getWebElement();
-        const to = await (this.elements.dropAreaForm).getWebElement();
+        const to = await (this.page.dropAreaForm).getWebElement();
         await this.simulateDragDrop(from, to);
     }
 
@@ -267,14 +306,14 @@ export class FormAreaComponentPo {
     async dragElementFromFormAreaToSection(elementType:any, sectionName:string): Promise<any> {
         const from = await this.page.locator(`.form-element-div.cdk-drag[element-type="${elementType}"]`).getWebElement();
         const sectionElementDropArea = (await this.getElementOnFormArea(sectionName, 'section')).element(this.elementLocators.sectionDropArea);
-        await expect(sectionElementDropArea).toBeVisible(10000);
+        await expect(sectionElementDropArea).isVisible(10000);
         await sectionElementDropArea.click();
         await this.simulateDragDrop(from, sectionElementDropArea);
     }
 
     async dragElementOutsideSection(fromElementText:string, fromElementType:any): Promise<any> {
         const from = (await this.getElementOnFormArea(fromElementText, fromElementType)).getWebElement();
-        const to = await (this.elements.dropAreaForm).getWebElement();
+        const to = await (this.page.dropAreaForm).getWebElement();
         await this.simulateDragDrop(from, to);
     }
 
@@ -287,8 +326,8 @@ export class FormAreaComponentPo {
     }
 
     async moveElementIndexToIndex(startIndex:number, endIndex:number): Promise<any> {
-        let start = this.elements.formQuestionElements.get(startIndex);
-        let end = this.elements.formQuestionElements.get(endIndex);
+        let start = this.page.formQuestionElements.get(startIndex);
+        let end = this.page.formQuestionElements.get(endIndex);
         await this.page.mouse.move(start).down();
         await this.page.mouse.move(end);
         await this.page.mouse.move(0,5);
@@ -298,11 +337,11 @@ export class FormAreaComponentPo {
     }
 
     async getCountOfElementsInForm(): Promise<any> {
-        return await this.elements.formQuestionElements.count();
+        return await this.page.formQuestionElements.count();
     }
 
     async getCountOfSectionElementsInForm(): Promise<any> {
-        return await this.elements.sectionQuestionElements.count();
+        return await this.page.sectionQuestionElements.count();
     }
 
     async getAllElementInsideASection(sectionName): Promise<Locator[]> {
@@ -314,7 +353,7 @@ export class FormAreaComponentPo {
         await this.utils.delay(1000);
         await this.page.mouse.down()
         await this.page.keyboard.down('Control+a');
-        await expect(this.elements.inlineToolbar).toBeVisible(10000);
+        await expect(this.page.inlineToolbar).toBeVisible(10000);
         return await this.page.keyboard.up('Control') as Promise<any>;
     }
 
@@ -330,7 +369,7 @@ export class FormAreaComponentPo {
     }
 
     async getNumbering(index:number): Promise<any> {
-        return await this.elements.elementNumber.get(index).getText();
+        return await this.page.elementNumber.get(index).textContent();
     }
 
     async getQuestionSubElements(elementText:string, elementType:string): Promise<any> {
@@ -369,28 +408,28 @@ export class FormAreaComponentPo {
     async froalaSetBold(elementText:string, elementType:string): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaBold.click();
+        await this.page.froalaBold.click();
         await this.utils.delay(500);
     }
 
     async froalaSetItalic(elementText:string, elementType:string): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaItalic.click();
+        await this.page.froalaItalic.click();
         await this.utils.delay(500);
     }
 
     async froalaSetUnderLine(elementText:string, elementType:string): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaUnderline.click();
+        await this.page.froalaUnderline.click();
         await this.utils.delay(500);
     }
 
     async froalaSetFontFamily(elementText:string, elementType:string, fontFamily:string): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaFontFamily.click();
+        await this.page.froalaFontFamily.click();
         await this.selectFromFroalaDropdown(fontFamily);
         await this.utils.delay(500);
     }
@@ -398,31 +437,31 @@ export class FormAreaComponentPo {
     async froalaSetFontSize(elementText:string, elementType:string, fontSize:any): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaFontSize.click();
+        await this.page.froalaFontSize.click();
         await this.selectFromFroalaDropdown(fontSize);
     }
 
     async froalaSetFontAlignment(elementText:string, elementType:string, fontAlignment:any): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaAlignment.click();
+        await this.page.froalaAlignment.click();
         await this.selectFromFroalaDropdown(fontAlignment);
     }
 
     private async selectFromFroalaDropdown(optionToSelect:any): Promise<any> {
         let elem = this.page.locator('.fr-dropdown-list *[role="option"][title="' + optionToSelect + '"]');
-        await expect(elem).toBeVisible(10000);
+        await expect(elem).isVisible(10000);
         await elem.click();
     }
 
     async froalaSetFontColor(elementText:string, elementType:string, colorHexCode:any): Promise<any> {
         await this.clickQuestionTextOfAnElement(elementText, elementType);
         await this.selectQuestionText();
-        await this.elements.froalaColorPicker.click();
-        await expect(this.elements.froalaColorInputField).toBeVisible(10000);
-        await this.page.evaluate('arguments[0].value=""', this.elements.froalaColorInputField);
-        await this.page.evaluate('arguments[0].value="' + colorHexCode + '"', this.elements.froalaColorInputField);
-        await this.elements.froalaColorCodeSubmit.click();
+        await this.page.froalaColorPicker.click();
+        await expect(this.page.froalaColorInputField).isVisible(10000);
+        await this.page.evaluate('arguments[0].value=""', this.page.froalaColorInputField);
+        await this.page.evaluate('arguments[0].value="' + colorHexCode + '"', this.page.froalaColorInputField);
+        await this.page.froalaColorCodeSubmit.click();
         await this.utils.delay(500);
     }
 

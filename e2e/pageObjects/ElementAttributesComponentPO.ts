@@ -1,3 +1,4 @@
+import { page } from '@playwright/test';
 
 
 // import {Locator, element, by, browser, ExpectedConditions} from 'protractor';
@@ -10,43 +11,58 @@ import { LogicPropertiesComponentPo } from "./LogicPropertiesComponentPO";
 
 export class ElementAttributesComponentPo {
     readonly page:Page;
-    readonly addMultipleModal = new AddMultipleModalPo();
-    readonly choicePropertiesElementAttributes = new ChoiceListPropertiesComponentPo();
-    readonly headerPropertiesAttributes = new HeaderPropertiesComponentPo();
-    readonly logicPropertiesAttributes = new LogicPropertiesComponentPo();
-    readonly imageUploadComponentPo = new ImageUploadComponentPo();
-    readonly elements : any;
+    readonly addMultipleModal :AddMultipleModalPo;
+    readonly choicePropertiesElementAttributes : ChoiceListPropertiesComponentPo;
+    readonly headerPropertiesAttributes: HeaderPropertiesComponentPo;
+    readonly logicPropertiesAttributes : LogicPropertiesComponentPo;
+    readonly imageUploadComponentPo : ImageUploadComponentPo;
+    // readonly elements : any;
+    public title                                           :Locator
+    public instructions:Locator
+    public requiredCheckbox:Locator
+    public hyperlink:Locator
+    public hintText:Locator
+    public characterLimitCheckbox:Locator
+    public characterLimitTextBox:Locator
+    public multipleSelectionRadio:Locator
+    public singleSelectionRadio:Locator
+    public verticalLayoutRadio:Locator
+    public horizontalLayoutRadio:Locator
+    public addMultipleValuesButton:Locator
+    public backgroundColorTextBox:Locator
+    public criticalQuestionHelpText:Locator
+    public criticalQuestionAnswerNotSelectedError:Locator
 
-    constructor() {
-        this.page = this.page.locator('.cxone-element-attributes');
-        this.elements = {
-            title: this.page.locator('#element-display-name'),
-            instructions: this.page.locator('#form-designer-subtext-text * input'),
-            requiredCheckbox: this.page.locator('#form-designer-mandatory-text'),
-            hyperlink: this.page.locator('#form-designer-input-hyperlink-url * input'),
-            hintText: this.page.locator('#hint-text-container * input'),
-            characterLimitCheckbox: this.page.locator('#form-designer-limit-character-checkbox'),
-            characterLimitTextBox: this.page.locator('#form-designer-limit-character-text-box * input'),
-            multipleSelectionRadio: this.page.locator('#form-designer-multi-select-dropdown'),
-            singleSelectionRadio: this.page.locator('#form-designer-single-select-dropdown'),
-            verticalLayoutRadio: this.page.locator('#form-designer-vertical * input'),
-            horizontalLayoutRadio: this.page.locator('#form-designer-horizontal * input'),
-            addMultipleValuesButton: this.page.locator('#form-designer-add-multiple'),
-            backgroundColorTextBox: this.page.locator('.cxone-color-picker * input'),
-            criticalQuestionHelpText: this.page.locator('.form-designer-critical-question-help-text'),
-            criticalQuestionAnswerNotSelectedError: this.page.locator('.critical-question-invalid')
+    constructor(page:Page) {
+         this.page = page
+        // this.page = this.page.locator('.cxone-element-attributes');
+        
+            this.title = this.page.locator('#element-display-name'),
+            this.instructions = this.page.locator('#form-designer-subtext-text * input'),
+            this.requiredCheckbox = this.page.locator('#form-designer-mandatory-text'),
+            this.hyperlink = this.page.locator('#form-designer-input-hyperlink-url * input'),
+            this.hintText = this.page.locator('#hint-text-container * input'),
+            this.characterLimitCheckbox = this.page.locator('#form-designer-limit-character-checkbox'),
+            this.characterLimitTextBox = this.page.locator('#form-designer-limit-character-text-box * input'),
+            this.multipleSelectionRadio = this.page.locator('#form-designer-multi-select-dropdown'),
+            this.singleSelectionRadio = this.page.locator('#form-designer-single-select-dropdown'),
+            this.verticalLayoutRadio = this.page.locator('#form-designer-vertical * input'),
+            this.horizontalLayoutRadio = this.page.locator('#form-designer-horizontal * input'),
+            this.addMultipleValuesButton =this.page.locator('#form-designer-add-multiple'),
+            this.backgroundColorTextBox =this.page.locator('.cxone-color-picker * input'),
+            this.criticalQuestionHelpText = this.page.locator('.form-designer-critical-question-help-text'),
+            this.criticalQuestionAnswerNotSelectedError = this.page.locator('.critical-question-invalid')
 
-        };
     }
 
     async getTitle(): Promise<string> {
-        let elem = this.elements.title;
+        let elem = this.title;
         await expect(elem).toBeVisible(10000);
         return elem.textContent();
     }
 
     async getInstructionsTextBox(): Promise<Locator> {
-        let elem = this.elements.instructions;
+        let elem = this.instructions;
         await expect(elem).toBeVisible(10000);
         return elem;
     }
@@ -56,7 +72,7 @@ export class ElementAttributesComponentPo {
     }
 
     async getRequiredCheckbox(): Promise<Locator> {
-        let elem = this.elements.requiredCheckbox;
+        let elem = this.requiredCheckbox;
         await expect(this.page.locator(elem).waitFor({state:'attached',timeout:10000}));
         return elem;
     }
@@ -66,8 +82,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getHyperlinkTextBox(): Promise<Locator> {
-        let elem = this.elements.hyperlink;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.hyperlink;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -76,8 +92,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getHintTextTextBox(): Promise<Locator> {
-        let elem = this.elements.hintText;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.hintText;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -86,8 +102,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getCharacterLimitCheckbox(): Promise<Locator> {
-        let elem = this.elements.characterLimitCheckbox;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.characterLimitCheckbox;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -96,8 +112,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getCharacterLimitTextBox(): Promise<Locator> {
-        let elem = this.elements.characterLimitTextBox;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.characterLimitTextBox;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -106,8 +122,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getMultipleSelectionRadio(): Promise<Locator> {
-        let elem = this.elements.multipleSelectionRadio;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.multipleSelectionRadio;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -116,8 +132,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getSingleSelectionRadio(): Promise<Locator> {
-        let elem = this.elements.singleSelectionRadio;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.singleSelectionRadio;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -126,8 +142,8 @@ export class ElementAttributesComponentPo {
     }
 
     async getAddMultipleButton(): Promise<Locator> {
-        let elem = this.elements.addMultipleValuesButton;
-        await expect(elem).toBeVisible(10000);
+        let elem = this.addMultipleValuesButton;
+        await expect(elem).isVisible(10000);
         return elem;
     }
 
@@ -136,7 +152,7 @@ export class ElementAttributesComponentPo {
     }
 
     async getVerticalLayoutRadio(): Promise<Locator> {
-        let elem = this.elements.verticalLayoutRadio;
+        let elem = this.verticalLayoutRadio;
         await expect(this.page.locator(elem).waitFor({state:'attached',timeout:10000}))
         return elem;
     }
@@ -146,7 +162,7 @@ export class ElementAttributesComponentPo {
     }
 
     async getHorizontalLayoutRadio(): Promise<Locator> {
-        let elem = this.elements.horizontalLayoutRadio;
+        let elem = this.horizontalLayoutRadio;
         await expect(this.page.locator(elem).waitFor({state:'attached',timeout:10000}))
         return elem;
     }
@@ -157,7 +173,7 @@ export class ElementAttributesComponentPo {
     }
 
     async getBackgroundColorTextBox(): Promise<Locator> {
-        let elem = this.elements.backgroundColorTextBox;
+        let elem = this.backgroundColorTextBox;
         await expect(elem).toBeVisible(10000);
         return elem;
     }
@@ -168,22 +184,22 @@ export class ElementAttributesComponentPo {
     }
 
     async getCriticalQuestionHelpText(): Promise<any> {
-        await expect(this.elements.criticalQuestionHelpText).toBeVisible(10000);
-        return await this.elements.criticalQuestionHelpText.textContent();
+        await expect(this.criticalQuestionHelpText).isVisible(10000);
+        return await this.criticalQuestionHelpText.textContent();
     }
 
     async getCriticalQuestionAnswerNotSelectedError(): Promise<any> {
-        await expect(this.elements.criticalQuestionAnswerNotSelectedError).toBeVisible(10000);
-        return await this.elements.criticalQuestionAnswerNotSelectedError.textContent();
+        await expect(this.criticalQuestionAnswerNotSelectedError).isVisible(10000);
+        return await this.criticalQuestionAnswerNotSelectedError.textContent();
     }
 
     async clickLogicAttributesSection() {
         await this.page.locator('.tab-header .header >> text = LOGIC').click();
-        await expect(this.page.locator('.logic-properties-wrapper')).toBeVisible(10000);
+        await expect(this.page.locator('.logic-properties-wrapper')).isVisible(10000);
     }
 
     async clickPropertiesAttributesSection() {
         await this.page.locator('.tab-header .header >> text = PROPERTIES').click();
-        await expect(this.page.locator('.element-properties-wrapper')).toBeVisible(10000);
+        await expect(this.page.locator('.element-properties-wrapper')).isVisible(10000);
     }
 }

@@ -6,7 +6,7 @@ import { CategoryManagerPO } from 'cxone-qm-library/category-manager.po';
 import { SENTIMENT_TYPE } from '../../quality-plan-models';
 
 export class SentimentsPO {
-    public ancestor: Locator;
+  
     readonly page:Page;
     readonly utils: Utils;
     public highConfidenceCheckbox: CheckboxPO;
