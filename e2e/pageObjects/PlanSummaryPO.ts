@@ -1,29 +1,32 @@
-import { by, element, ElementFinder } from 'protractor';
+// import { by, element, ElementFinder } from 'protractor';
+import { expect, Locator, Page } from "@playwright/test";
 import { Utils } from '../common/utils';
 
 export class PlanSummaryPO {
-    public ancestor: ElementFinder;
+    // public ancestor: ElementFinder;
+    readonly page : Page
     public elements: {
     };
 
-    public constructor() {
-        this.ancestor = element(by.css('.plan-summary-wrapper'));
+    public constructor(page:Page) {
+        this.page = page
+        // this.ancestor = element(by.css('.plan-summary-wrapper'));
         this.elements = {};
     }
 
     public async getTotalEvaluationsInPlan() {
-        return await Utils.getText(this.ancestor.element(by.id('total-interactions')));
+        return await this.page.locator('#total-interactions').textContent();
     }
 
     public async getEvaluationsPerEvaluator() {
-        return await Utils.getText(this.ancestor.element(by.id('evals-per-day-per-evaluator')));
+        return await this.page.locator('evals-per-day-per-evaluator').textContent();
     }
 
     public async getTotalDaysInPlan() {
-        return await Utils.getText(this.ancestor.element(by.id('plan-days')));
+        return await this.page.locator('#plan-days').textContent();
     }
 
     public async getInteractionsPerAgent() {
-        return await Utils.getText(this.ancestor.element(by.id('interaction-per-agent')));
+        return await this.page.locator('#interaction-per-agent').textContent();
     }
 }

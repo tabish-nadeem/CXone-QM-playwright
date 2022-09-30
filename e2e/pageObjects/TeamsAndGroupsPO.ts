@@ -5,14 +5,14 @@ import { Utils } from '../common/utils';
 import { Page, Locator } from "@playwright/test";
 
 export class TeamsAndGroupsPO {
-    public ancestor: Locator;
+    // public ancestor: Locator;
     readonly page:Page;
     readonly utils: Utils;
     public teamsDropdown: MultiselectDropdownPO;
     public groupsDropdown: MultiselectDropdownPO;
 
     public constructor() {
-        this.ancestor = this.page.locator('.teams-and-groups-container');
+        // this.ancestor = this.page.locator('.teams-and-groups-container');
         this.teamsDropdown = new MultiselectDropdownPO('teams-dropdown');
         this.groupsDropdown = new MultiselectDropdownPO('groups-dropdown');
     }

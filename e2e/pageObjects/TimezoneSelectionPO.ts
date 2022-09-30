@@ -4,7 +4,7 @@ import {Utils} from '../common/utils';
 import { Page, Locator } from "@playwright/test";
 
 export class TimezoneSelectionPO {
-    public ancestor: Locator;
+    // public ancestor: Locator;
     readonly page:Page;
     readonly utils: Utils;
     public elements: {
@@ -14,7 +14,7 @@ export class TimezoneSelectionPO {
     selector: string;
 
     public constructor() {
-        this.ancestor = this.page.locator('.timezone-selection-container');
+        // this.ancestor = this.page.locator('.timezone-selection-container');
         this.timezoneSelectionDropdown = new SingleselectDropdownPO('timezone-selection-dropdown');
         this.selector = 'cxone-singleselect-dropdown[id="timezone-selection-dropdown"] .cxone-singleselect-dropdown';
     }

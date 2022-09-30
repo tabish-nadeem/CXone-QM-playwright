@@ -14,14 +14,14 @@ export class SentimentsPO {
     public categoryManagerPO: CategoryManagerPO;
 
     public constructor() {
-        this.ancestor = this.page.locator('.sentiment-filter');
+       // this.ancestor = this.page.locator('.sentiment-filter');
         this.highConfidenceCheckbox = new CheckboxPO('enable-duration-checkbox');
         this.operationDropdown = new SingleselectDropdownPO('operation-dropdown');
         this.categoryManagerPO = new CategoryManagerPO(this.page.locator('.category-list-modal-wrapper'));
     }
 
     public async isFilterPresent() {
-        return await Utils.isPresent(this.ancestor);
+       // return await Utils.isPresent(this.ancestor);
     }
 
     public async clearFilter() {

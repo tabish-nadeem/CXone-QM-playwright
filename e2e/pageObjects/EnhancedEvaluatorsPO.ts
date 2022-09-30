@@ -1,7 +1,3 @@
-// import {OmnibarPO} from 'cxone-components/omnibar.po';
-// import {ElementFinder, by, element} from 'protractor';
-// import {Utils} from '../../../../../../tests/protractor/common/utils';
-
 import { Utils } from '../common/utils';
 import { Page, Locator } from "@playwright/test";
 import { Helpers } from "../playwright.helpers";
